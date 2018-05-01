@@ -1,2 +1,2 @@
-# flowR
-flowR is reactive event based orchestration framework for distributed computing in java. Draft version available after Q1,2018.
+flowR is reactive event based orchestration framework for distributed computing in java. 
+In progress draft version.  Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
