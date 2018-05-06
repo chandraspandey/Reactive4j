@@ -17,6 +17,7 @@ import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.Autonomic;
 import org.flowr.framework.core.node.EndPoint;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.process.callback.Callback;
 import org.flowr.framework.core.process.callback.RunnableCallback;
 
@@ -30,12 +31,13 @@ import org.flowr.framework.core.process.callback.RunnableCallback;
 public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<ServiceEndPoint, EndPointStatus>>, 
 	Autonomic<String,Boolean> {
 
-	private EndPointStatus endPointStatus 				= EndPointStatus.UNREACHABLE;
-	private boolean isNegotiated 						= false;
-	private ServiceConfiguration serviceConfiguration 	= null;	
-	private boolean keepRunning 						= true;
-	private Timestamp lastUpdated;
-	private String endPointType							= null;
+	private EndPointStatus endPointStatus 									= EndPointStatus.UNREACHABLE;
+	private boolean isNegotiated 											= false;
+	private ServiceConfiguration serviceConfiguration 						= null;	
+	private boolean keepRunning 											= true;
+	private Timestamp lastUpdated											= null;
+	private String endPointType												= null;
+	private NotificationProtocolType notificationProtocolType				= null;
 	private Callback<SimpleEntry<ServiceEndPoint, EndPointStatus>> callback = null;
 	
 	public ServiceEndPoint(ServiceConfiguration serviceConfiguration){
@@ -66,12 +68,17 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 			con.setReadTimeout((int)this.serviceConfiguration.getTimeout());
 			con.connect();		
 			isNegotiated = true;
-		} catch ( SocketTimeoutException s) {
-			s.printStackTrace();
+		} catch ( SocketTimeoutException e) {
+			
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			
+			System.out.println(e.getMessage());
+			//e.printStackTrace();
 		}
 		
 		this.lastUpdated 		=  Timestamp.from(Instant.now());
@@ -120,7 +127,8 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 				
 				Thread.sleep(1000);
 			} catch (ConfigurationException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println(e.getLocalizedMessage());
 				endPointStatus 	= EndPointStatus.UNREACHABLE;
 				keepRunning = false;
 			} catch (InterruptedException e) {

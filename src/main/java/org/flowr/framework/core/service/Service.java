@@ -3,28 +3,32 @@ package org.flowr.framework.core.service;
 /**
  * Marker interface for service definition, concrete implementation provides the behavior for service operation.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Service extends ServiceLifecycle{
 	
-	public enum ServiceType{
-		FRAMEWORK,
+	public enum ServiceType{		
+		ADMINISTRATION,
 		BUS,
-		PROVIDER,
-		PROCESS,
-		SERVER,
+		CONFIGURATION,
 		EVENT,
+		FRAMEWORK,
 		NOTIFICATION,
 		PROMISE,
 		PROMISE_PHASED,
 		PROMISE_SCHEDULED,
-		PROMISE_STAGED,
+		PROMISE_STAGE,
+		PROMISE_MAP,
 		PROMISE_STTREAM,
+		PROVIDER,
+		PROCESS,
 		REGISTRY,
 		ROUTING,
+		SERVER,
 		MANAGEMENT,
 		SUBSCRIPTION,
+		SECURITY,
 		API
 	}
 		

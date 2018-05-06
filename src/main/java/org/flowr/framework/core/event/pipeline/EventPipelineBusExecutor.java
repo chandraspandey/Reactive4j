@@ -1,5 +1,6 @@
 package org.flowr.framework.core.event.pipeline;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -7,7 +8,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.notification.NotificationBufferQueue;
 import org.flowr.framework.core.service.Service.ServiceStatus;
 import org.flowr.framework.core.service.ServiceLifecycle;
@@ -19,7 +19,7 @@ import org.flowr.framework.core.service.ServiceLifecycle;
  * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecycle {
+public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecycle,Runnable {
 
 	private ExecutorService service 	= Executors.newCachedThreadPool();
 	private EventBus eventBus			= null;
@@ -28,10 +28,11 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 	
 	public EventPipelineBusExecutor(EventBus bus) {
 		eventBus = bus; 
+		service.execute(this);
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> serviceListener) {
+	public void addServiceListener(EventPublisher serviceListener) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -52,32 +53,62 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 	@Override
 	public NotificationBufferQueue process() {
 				
-		NotificationBufferQueue notificationBufferQueue = null;
+		NotificationBufferQueue notificationBufferQueue = new NotificationBufferQueue();
 		
-		task	= new EventPipelineTask(eventBus);
-		
-		System.out.println("EventPipelineBusExecutor : eventBus : "+eventBus);
-		
-		Future<NotificationBufferQueue> future = service.submit(task);
-		
-		while(!future.isDone()) {
+		List<EventPipeline> pipelineList = eventBus.getAllPipelines();
 			
-			try {
-				
-				Thread.sleep(100);
-				
-				if(future.isDone()) {
+			pipelineList.forEach(
 					
-					notificationBufferQueue = future.get();
-				}
-			
-			} catch (ExecutionException | InterruptedException e) {
+				(p) -> {
 
-				e.printStackTrace();
-			}
-		}
+						
+					if(!p.isEmpty()) {
+					
+	
+						task	= new EventPipelineTask(p);
+						
+						System.out.println("EventPipelineBusExecutor : eventBus : "+eventBus);
+						
+						Future<NotificationBufferQueue> future = service.submit(task);
+						
+						while(!future.isDone()) {
+							
+							try {
+								
+								Thread.sleep(100);
+								
+								if(future.isDone()) {
+									notificationBufferQueue.setEventType(p.getEventType());
+									notificationBufferQueue.addAll(future.get());
+								}
+							
+							} catch (ExecutionException | InterruptedException e) {
+				
+								e.printStackTrace();
+							}
+						}
+					}
+
+				}
+			);
 		
 		return notificationBufferQueue;
 	}
+	
+	@Override
+	public void run() {
+		
+		while(serviceStatus != ServiceStatus.STOPPED) {
+			
+			try {
+				process();
+				
+				Thread.sleep(1000);
+			} catch ( InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	
 }

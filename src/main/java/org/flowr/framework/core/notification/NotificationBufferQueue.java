@@ -2,7 +2,7 @@ package org.flowr.framework.core.notification;
 
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
-
+import org.flowr.framework.core.event.Event.EventType;
 /**
  * Concrete implementation & extension of DelayQueue for storing in process
  * listener I/O capabilities.
@@ -13,7 +13,7 @@ import java.util.concurrent.Delayed;
 public class NotificationBufferQueue extends DelayQueue<Delayed> implements NotificationQueue{
 
 	private QueueType queueType	= QueueType.FIFO;
-
+	private EventType eventType =null; 
 
 	@Override
 	public void setQueueType(QueueType queueType) {
@@ -26,10 +26,20 @@ public class NotificationBufferQueue extends DelayQueue<Delayed> implements Noti
 		return this.queueType;
 	}
 	
+	public EventType getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
+	}
+	
 	public String toString() {
 		
-		return "NotificationBufferQueue { "+queueType+" | "+super.toString()+" } ";
+		return "NotificationBufferQueue { "+queueType+" | "+eventType+" | "+super.toString()+" } ";
 	}
+
+
 	
 }
 

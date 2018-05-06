@@ -1,6 +1,5 @@
 package org.flowr.framework.core.service.extension;
 
-import org.flowr.framework.core.context.EventContext;
 import org.flowr.framework.core.context.RouteContext;
 import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.exception.ConfigurationException;
@@ -44,17 +43,17 @@ public interface NotificationService extends ServiceFrameworkComponent{
 		HEALTHCHECK
 	}
 	
-	public void publishEvent() throws ClientException;
+	public void publishEvent(NotificationBufferQueue notificationBufferQueue) throws ClientException;
 
 	public void setNotificationRouteContext(RouteContext routeContext) throws ConfigurationException;
 
-	public void notify(EventContext eventContext) throws ClientException;
+	//public void notify(EventContext eventContext) throws ClientException;
 	
 	public boolean isEnabled();
 
 	public void setEnabled(boolean isEnabled);
 	
-	public void notify(NotificationBufferQueue notificationBufferQueue);
+	public void notify(NotificationBufferQueue notificationBufferQueue) throws ClientException;
 
 	public static NotificationService getInstance() {
 		
@@ -75,6 +74,4 @@ public interface NotificationService extends ServiceFrameworkComponent{
 		}
 		
 	}
-
-
 }

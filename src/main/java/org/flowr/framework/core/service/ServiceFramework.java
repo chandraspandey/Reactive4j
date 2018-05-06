@@ -1,8 +1,7 @@
 package org.flowr.framework.core.service;
 
 import org.flowr.framework.core.exception.ServiceException;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.EventModel;
+import org.flowr.framework.core.flow.SingleEventPublisher;
 import org.flowr.framework.core.service.dependency.Dependency;
 import org.flowr.framework.core.service.dependency.DependencyLoop;
 import org.flowr.framework.core.service.extension.EventService;
@@ -13,7 +12,7 @@ import org.flowr.framework.core.service.extension.PromiseService;
 import org.flowr.framework.core.service.extension.RegistryService;
 import org.flowr.framework.core.service.extension.RoutingService;
 import org.flowr.framework.core.service.extension.ScheduledPromiseService;
-import org.flowr.framework.core.service.extension.StagedPromiseService;
+import org.flowr.framework.core.service.extension.StagePromiseService;
 import org.flowr.framework.core.service.extension.StreamPromiseService;
 import org.flowr.framework.core.service.extension.SubscriptionService;
 
@@ -21,10 +20,10 @@ import org.flowr.framework.core.service.extension.SubscriptionService;
  * Aggregation Service interface for defined service as Service registry supported as part of framework, 
  * concrete implementation provides the behavior for service lookup.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, DependencyLoop,EventPublisher<EventModel>{
+public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, DependencyLoop,SingleEventPublisher{
 
 	
 	public void addService(Service service) throws ServiceException;
@@ -57,7 +56,7 @@ public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, 
 
 	public ScheduledPromiseService<REQUEST,RESPONSE> getScheduledPromiseService();
 
-	public StagedPromiseService<REQUEST,RESPONSE> getStagedPromiseService();
+	public StagePromiseService<REQUEST,RESPONSE> getStagedPromiseService();
 	
 	public StreamPromiseService<REQUEST,RESPONSE> getStreamPromiseService();
 

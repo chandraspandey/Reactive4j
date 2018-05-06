@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
+import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.event.pipeline.EventBus;
 import org.flowr.framework.core.event.pipeline.EventPipeline;
 import org.flowr.framework.core.event.pipeline.EventPipelineBus;
 import org.flowr.framework.core.event.pipeline.EventPipelineBusExecutor;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.EventModel;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.service.ServiceFramework;
 
 /**
@@ -35,7 +35,7 @@ public class EventServiceImpl implements EventService{
 	private ServiceFramework<?,?> serviceFramework			= null;
 	
 	public EventRegistrationStatus registerEventPipeline(String pipelineName,PipelineType pipelineType, PipelineFunctionType 
-			pipelineFunctionType,EventPublisher<EventModel> eventPublisher) {		
+			pipelineFunctionType,EventPublisher eventPublisher) {		
 		
 		EventRegistrationStatus status = EventRegistrationStatus.UNREGISTERED;
 	
@@ -54,7 +54,7 @@ public class EventServiceImpl implements EventService{
 		return status;
 	}
 	
-	public void process() {
+	public void process() throws ClientException {
 		
 		this.serviceFramework.getNotificationService().notify(eventBusExecutor.process());
 	}
@@ -71,41 +71,55 @@ public class EventServiceImpl implements EventService{
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
 							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT);
+							processSubscriber.setEventType(EventType.SERVER);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
 						}case PIPELINE_PROMISE_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_EVENT);							
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_EVENT);	
+							processSubscriber.setEventType(EventType.CLIENT);
+							eventBus.addEventPipeline(processSubscriber);
+							break;
+						}case PIPELINE_PROMISE_DEFFERED_EVENT:{
+							EventPipeline processSubscriber  =  new EventPipeline();
+							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED);
+							processSubscriber.setPipelineType(PipelineType.TRANSFER);
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_DEFFERED_EVENT);	
+							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
 						}case PIPELINE_PROMISE_PHASED_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_PHASED);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_PHASED_EVENT);							
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_PHASED_EVENT);
+							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
 						}case PIPELINE_PROMISE_SCHEDULED_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_SCHEDULED);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_SCHEDULED_EVENT);							
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_SCHEDULED_EVENT);		
+							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
 						}case PIPELINE_PROMISE_STAGED_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STAGED);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_STAGED_EVENT);							
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_STAGED_EVENT);	
+							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
 						}case PIPELINE_PROMISE_STREAM_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STREAM);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_STREAM_EVENT);							
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_STREAM_EVENT);
+							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
 						}default:{
@@ -117,60 +131,6 @@ public class EventServiceImpl implements EventService{
 		);
 		
 		eventBusExecutor = new EventPipelineBusExecutor(eventBus);
-		
-		/*
-		ManagedProcessHandler managedProcessHandler = new ManagedProcessHandler();
-		EventPipeline subscriberManagedProcess  =  new EventPipeline();
-		subscriberManagedProcess.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT);
-		eventBus.addEventPipeline(subscriberManagedProcess);
-		managedProcessHandler.subscribe(subscriberManagedProcess);
-		
-		EventPipeline subscriberPromise =  new EventPipeline();
-		subscriberManagedProcess.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE);
-		eventBus.addEventPipeline(subscriberPromise);
-		//promiseHandler.subscribe(subscriberPromise);		
-		
-		
-		EventPipeline subscriberPhasedPromise =  new EventPipeline();
-		subscriberManagedProcess.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_PHASED);
-		eventBus.addEventPipeline( subscriberPhasedPromise);
-		//phasedPromiseHandler.subscribe(subscriberPhasedPromise);
-		
-		
-		EventPipeline subscriberScheduledPromise  =  new EventPipeline();
-		subscriberManagedProcess.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_SCHEDULED);
-		eventBus.addEventPipeline(subscriberScheduledPromise);
-		//scheduledPromiseHandler.subscribe(subscriberScheduledPromise);
-		
-		
-		boolean keepRunning = true;
-		
-		Runnable r = new Runnable() {
-	
-			@Override
-			public void run() {
-				
-				while(keepRunning) {
-										
-					try {
-						System.out.println("Runnable");
-						eventBusExecutor.process();
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
-				}
-				
-			}
-			
-		};
-		
-		Thread t = new Thread(r);
-		
-		t.start();
-		
-		return eventBus;*/
 	}
 	
 	@Override
@@ -229,7 +189,7 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> engineListener) {
+	public void addServiceListener(EventPublisher engineListener) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -252,5 +212,6 @@ public class EventServiceImpl implements EventService{
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		this.serviceFramework = serviceFramework;
 	}
+
 
 }

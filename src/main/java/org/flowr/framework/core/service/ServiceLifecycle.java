@@ -3,7 +3,6 @@ package org.flowr.framework.core.service;
 import java.util.Properties;
 
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.service.Service.ServiceStatus;
 
 /**
@@ -23,7 +22,7 @@ public interface ServiceLifecycle {
 	public void publishServiceChange(NotificationTask notificationTask); 
 	 */
 	
-	public void addServiceListener(EventPublisher<MetaData> serviceListener);
+	public void addServiceListener(EventPublisher serviceListener);
 	
 	/**
 	 * Provides hookup services for start up

@@ -1,4 +1,4 @@
-package org.flowr.framework.core.promise;
+package org.flowr.framework.core.security;
 
 import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
@@ -12,10 +12,10 @@ import org.flowr.framework.core.promise.PromiseTypeClient.ClientType;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class ClientIdentity {
+public class ClientIdentity implements Identity{
 
 	private String clientApplicationName;	  	
 	private Timestamp registrationTime;

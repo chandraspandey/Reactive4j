@@ -7,14 +7,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.promise.ClientIdentity;
+import org.flowr.framework.core.security.ClientIdentity;
 import org.flowr.framework.core.service.ServiceResponse;
 
 /**
  * Provides Route Mapping capabilities associated with service routing capabilities for different mapped route part of
  * ServiceRequest associated with ServiceResponse.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ServiceRouteMapping<K,V> {

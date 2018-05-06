@@ -6,7 +6,6 @@ import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.context.SubscriptionContext;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionType;
 import org.flowr.framework.core.notification.subscription.Subscription;
 import org.flowr.framework.core.notification.subscription.SubscriptionHelper;
@@ -138,7 +137,7 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> serviceListener) {
+	public void addServiceListener(EventPublisher serviceListener) {
 		// TODO Auto-generated method stub
 		
 	}

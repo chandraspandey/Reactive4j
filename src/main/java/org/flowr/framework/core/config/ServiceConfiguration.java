@@ -2,6 +2,8 @@ package org.flowr.framework.core.config;
 
 import java.util.concurrent.TimeUnit;
 
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
+
 /**
  * 
  * 
@@ -11,11 +13,11 @@ import java.util.concurrent.TimeUnit;
 
 public class ServiceConfiguration implements Configuration{
 
+	private NotificationProtocolType notificationProtocolType;
 	private String configName;
 	private String filePath;
 	private String serverName;
 	private String notificationEndPoint;
-	private String endPointType;
 	private int serverPort;
 	private long timeout;
 	private TimeUnit timeoutTimeUnit;
@@ -31,7 +33,7 @@ public class ServiceConfiguration implements Configuration{
 		
 		boolean isValid = false;
 		
-		if(configName != null && endPointType != null && (timeout >= (defaultTimeout) ) && timeoutTimeUnit != null && 
+		if(configName != null && notificationProtocolType != null && (timeout >= (defaultTimeout) ) && timeoutTimeUnit != null && 
 				heartbeatInterval > 0 &&	heartbeatTimeUnit != null){
 			
 			isValid = true;
@@ -169,18 +171,19 @@ public class ServiceConfiguration implements Configuration{
 		}
 	}
 	
-	public String getEndPointType() {
-		return endPointType;
+	public NotificationProtocolType getNotificationProtocolType() {
+		return this.notificationProtocolType;
 	}
-	public void setEndPointType(String endPointType) {
-		this.endPointType = endPointType;
+	public void setNotificationProtocolType(NotificationProtocolType notificationProtocolType) {
+		
+		this.notificationProtocolType = notificationProtocolType;			
 	}
 	
 	public String toString(){
 		
 		return "ServiceConfiguration{"+
 				" configName : "+configName+	
-				" | endPointType : "+endPointType+	
+				" | notificationProtocolType : "+notificationProtocolType+	
 				" | filePath : "+filePath+	
 				" | serverName : "+serverName+				
 				" | notificationEndPoint : "+notificationEndPoint+

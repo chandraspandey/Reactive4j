@@ -19,7 +19,7 @@ import org.flowr.framework.core.event.ChangeEventEntity;
 import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.exception.PromiseException;
-import org.flowr.framework.core.flow.EventPublisher;
+import org.flowr.framework.core.flow.SingleEventPublisher;
 import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.node.BackPressureExecutorService;
@@ -43,8 +43,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class PhasedPromiseHandler<REQUEST, RESPONSE> implements 
-	PhasedPromise<REQUEST, RESPONSE>,EventPublisher<EventModel>{
+public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<REQUEST, RESPONSE>,SingleEventPublisher{
 	
 	private String flowName 							= PhasedPromise.class.getSimpleName();
 	private boolean isEnabled							= true;

@@ -1,12 +1,13 @@
 package org.flowr.framework.core.promise;
 
 import org.flowr.framework.core.context.PromiseContext;
+import org.flowr.framework.core.security.ClientIdentity;
 import org.flowr.framework.core.service.ServiceRequest;
 
 /**
  * Defines Model which encloses ProgressScale & Promisable. 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class PromiseRequest<REQUEST,RESPONSE> implements ServiceRequest{

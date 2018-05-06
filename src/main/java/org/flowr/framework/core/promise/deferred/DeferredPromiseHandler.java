@@ -15,13 +15,12 @@ import org.flowr.framework.core.event.ChangeEventEntity;
 import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.exception.PromiseException;
-import org.flowr.framework.core.flow.EventPublisher;
+import org.flowr.framework.core.flow.SingleEventPublisher;
 import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.node.BackPressureExecutorService;
 import org.flowr.framework.core.node.BackPressureExecutors;
 import org.flowr.framework.core.process.management.ProcessHandler;
-import org.flowr.framework.core.promise.Promise;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;
 import org.flowr.framework.core.promise.PromiseTypeServer;
@@ -38,8 +37,8 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class DeferredPromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST,RESPONSE>,
-	EventPublisher<EventModel>{
+public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise<REQUEST,RESPONSE>,
+	SingleEventPublisher{
 
 	private String flowName 							= DeferredPromiseHandler.class.getSimpleName();
 	private boolean isEnabled							= true;
@@ -78,7 +77,6 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST
 		PromiseResponse<RESPONSE> promiseResponse = null;
 				
 		if(ifValid(promiseRequest)){
-			
 			startup();
 			promiseResponse = then(promiseRequest); 			
 		}else{
@@ -387,7 +385,7 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST
 	@Override
 	public void publishEvent(Event<EventModel> event) {
 		
-		System.out.println("PromiseHandler : publishEvent = "+event);
+		//System.out.println("DeferredPromiseHandler : publishEvent = "+event);
 		this.subscriber.onNext(event);
 	}
 

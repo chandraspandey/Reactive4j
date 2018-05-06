@@ -4,20 +4,19 @@ import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.service.ServiceFramework;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class StreamPromiseServiceImpl<REQUEST,RESPONSE> implements StreamPromiseService<REQUEST,RESPONSE>{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String dependencyName			= StagedPromiseService.class.getSimpleName();
+	private String dependencyName			= StagePromiseService.class.getSimpleName();
 	private DependencyType dependencyType 	= DependencyType.MANDATORY;
 	private String serviceName				= FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STREAM;
 	private ServiceType serviceType			= ServiceType.PROMISE_STTREAM;
@@ -86,7 +85,7 @@ public class StreamPromiseServiceImpl<REQUEST,RESPONSE> implements StreamPromise
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> engineListener) {
+	public void addServiceListener(EventPublisher engineListener) {
 		// TODO Auto-generated method stub
 		
 	}

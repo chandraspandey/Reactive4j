@@ -179,6 +179,56 @@ public class NotificationAdapterMapping<K,V> {
 		return adapterList;
 	}
 	
+	public ArrayList<NotificationServiceAdapter> getRoute(EventType eventType) throws ServerException{
+			
+		ArrayList<NotificationServiceAdapter> adapterList = new ArrayList<NotificationServiceAdapter>();
+		
+		
+		if(!notificationRouteSet.isEmpty()){
+			
+			Iterator<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeIterator = 
+					notificationRouteSet.iterator();
+			
+			while(routeIterator.hasNext()){
+				
+				NotificationRoute<NotificationServiceAdapter, NotificationProtocolType> notificationRoute = 
+						routeIterator.next();
+				
+				//System.out.println("NotificationAdapterMapping : notificationRouteSet : "+notificationRouteSet);
+				
+				//System.out.println("NotificationAdapterMapping : "+notificationProtocolType +" | "+notificationRoute);
+				
+				if(notificationRoute.getKey().getNotificationServiceAdapterType().equals(eventType)){
+						
+					
+					adapterList.add(notificationRoute.getKey());
+
+					/*System.out.println("NotificationAdapterMapping : "+notificationRoute.getKey().getNotificationServiceAdapterType() +" : "+eventType+
+							" | adapterList : "+adapterList);*/
+				}								
+			}
+
+		}else{
+			ServerException serverException = new ServerException(
+					ExceptionConstants.ERR_SERVER_PROCESSING,
+					ExceptionMessages.MSG_SERVER_PROCESSING,
+					"Notification Route Not defined for processing : routeSet : "+notificationRouteSet);
+			throw serverException;
+		}
+		
+		if(adapterList.isEmpty()){
+			
+			//System.out.println(" NotificationAdapterMapping : "+eventType+	" | adapterList : "+adapterList);
+			
+			ServerException serverException = new ServerException(
+					ExceptionConstants.ERR_SERVER_PROCESSING,
+					ExceptionMessages.MSG_SERVER_PROCESSING,
+					"Notification Route Not defined for event type : "+eventType);
+			throw serverException;
+		}
+		System.out.println(" NotificationAdapterMapping : "+eventType+	" | adapterList : "+adapterList);
+		return adapterList;
+	}
 
 	
 	public String toString(){

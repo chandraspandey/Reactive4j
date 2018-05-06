@@ -12,10 +12,9 @@ import org.flowr.framework.core.exception.PromiseException;
 
 public interface Promisable<REQUEST,RESPONSE> {
 
-	// Sequence & staged not implemented
 	public enum PromisableType{
 		PROMISE,
-		PROMISE_SEQUENCE,
+		PROMISE_DEFFERED,
 		PROMISE_PHASED,
 		PROMISE_SCHEDULED,
 		PROMISE_STAGED

@@ -16,10 +16,8 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletResponse;
 
 import org.flowr.framework.core.config.ServiceConfiguration;
-import org.flowr.framework.core.context.EventContext;
 import org.flowr.framework.core.context.PromiseContext;
 import org.flowr.framework.core.context.ServerContext;
-import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.PromiseException;
 import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
@@ -79,8 +77,8 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 									response = this.getPromiseService().getPromise().handle(promiseRequest);
 									break;
 								}case PROMISE_DEFFERED:{
-									this.getPromiseService().getPromise().setReactiveTarget(reactiveTarget);
-									response = this.getPromiseService().getPromise().handle(promiseRequest);
+									this.getDefferedPromiseService().getPromise().setReactiveTarget(reactiveTarget);
+									response = this.getDefferedPromiseService().getPromise().handle(promiseRequest);
 									break;
 								}case PROMISE_PHASED:{
 									
@@ -187,7 +185,6 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 		
 		try {
 
-				update( serverContext);
 				loadConfiguration(configProperties);
 			
 		} catch (ConfigurationException e) {
@@ -196,7 +193,6 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 		}
 		serverContext.setServiceState(ServiceState.STARTING);
 		serverContext.setServiceStatus(ServiceStatus.STARTED);
-		update( serverContext);		
 		
 		return ServiceStatus.STARTED;
 	}
@@ -208,7 +204,7 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 		serverContext.setServiceState(ServiceState.STOPPING);
 		serverContext.setNotificationProtocolType(ServerNotificationProtocolType.INFORMATION);
 		
-		update( serverContext);
+		
 		
 		this.getPromiseService().shutdown(configProperties);
 		this.getPhasedPromiseService().getPromise().shutdown();
@@ -216,7 +212,6 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 
 
 		serverContext.setServiceStatus(ServiceStatus.STOPPED);
-		update( serverContext);
 		
 		super.getNotificationService().shutdown(configProperties);
 		
@@ -225,10 +220,10 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 		return ServiceStatus.STOPPED;
 	}
 	
-	public void update( Object change) {
+	/*public void update( Object change) {
 		
-		/*System.out.println("ProcessServerProvider |  change : "+
-		change.getClass().getSimpleName()+" | update recieved : "+change);*/
+		System.out.println("ProcessServerProvider |  change : "+
+		change.getClass().getSimpleName()+" | update recieved : "+change);
 
 		EventContext eventContext = new EventContext();
 		
@@ -247,6 +242,6 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 		}		
 		
 		this.getEventService().process();
-	}
+	}*/
 
 }

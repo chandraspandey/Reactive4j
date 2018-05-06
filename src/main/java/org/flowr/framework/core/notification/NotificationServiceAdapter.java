@@ -1,8 +1,7 @@
 package org.flowr.framework.core.notification;
 
 import org.flowr.framework.core.event.Event.EventType;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.EventModel;
+import org.flowr.framework.core.flow.BatchEventPublisher;
 import org.flowr.framework.core.service.ServiceLifecycle;
 
 /**
@@ -11,7 +10,7 @@ import org.flowr.framework.core.service.ServiceLifecycle;
  * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface NotificationServiceAdapter extends EventPublisher<EventModel>, ServiceLifecycle{
+public interface NotificationServiceAdapter extends BatchEventPublisher, ServiceLifecycle{
 
 	/*
 	 * Provides Event handling integration capability based on the Event type qualified as CLIENT or SERVER

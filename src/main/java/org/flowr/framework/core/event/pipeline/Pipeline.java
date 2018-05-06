@@ -19,8 +19,15 @@ public interface Pipeline<Event> extends EventSubscriber{
 		BUS
 	}
 	
+	/**
+	 * ALL : is reserved for client side usage for option to process all the function types as a proxy at the edge points.
+	 * 
+	 *
+	 */
 	public enum PipelineFunctionType{
+		ALL,
 		PIPELINE_PROMISE_EVENT,
+		PIPELINE_PROMISE_DEFFERED_EVENT,
 		PIPELINE_PROMISE_PHASED_EVENT,
 		PIPELINE_PROMISE_SCHEDULED_EVENT,
 		PIPELINE_PROMISE_STAGED_EVENT,

@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
 import org.flowr.framework.core.notification.Notification.NotificationDeliveryType;
+import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.promise.RequestScale;
 import org.flowr.framework.core.promise.Scale;
 import org.flowr.framework.core.promise.Promisable.PromisableType;
@@ -125,7 +127,10 @@ public interface Configuration {
 				
 				config.setServerName(prop.get(STRING,CONFIG_CLIENT_SERVICE_ENDPOINT_NAME+"."+index));
 				config.setNotificationEndPoint(prop.get(STRING,CONFIG_CLIENT_SERVICE_ENDPOINT_URL+"."+index));
-				config.setEndPointType(prop.get(STRING,CONFIG_CLIENT_SERVICE_ENDPOINT_TYPE+"."+index));
+				
+				
+				config.setNotificationProtocolType( ClientNotificationProtocolType.valueOf(prop.get(STRING,CONFIG_CLIENT_SERVICE_ENDPOINT_TYPE+"."+index)));
+
 				configurationList.add(config);
 				config.setConfigAsProperties(prop);
 				
@@ -164,7 +169,8 @@ public interface Configuration {
 				
 				config.setServerName(prop.get(STRING,CONFIG_SERVER_SERVICE_ENDPOINT_NAME+"."+index));
 				config.setNotificationEndPoint(prop.get(STRING,CONFIG_SERVER_SERVICE_ENDPOINT_URL+"."+index));
-				config.setEndPointType(prop.get(STRING,CONFIG_SERVER_SERVICE_ENDPOINT_TYPE+"."+index));
+				config.setNotificationProtocolType( ServerNotificationProtocolType.valueOf(prop.get(STRING,CONFIG_CLIENT_SERVICE_ENDPOINT_TYPE+"."+index)));
+
 				configurationList.add(config);
 				config.setConfigAsProperties(prop);
 			}			

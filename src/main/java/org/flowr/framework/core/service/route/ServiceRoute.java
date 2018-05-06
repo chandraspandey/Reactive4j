@@ -1,13 +1,13 @@
 package org.flowr.framework.core.service.route;
 
 import org.flowr.framework.core.model.Model;
-import org.flowr.framework.core.promise.ClientIdentity;
+import org.flowr.framework.core.security.ClientIdentity;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ServiceRoute<V> implements Model {

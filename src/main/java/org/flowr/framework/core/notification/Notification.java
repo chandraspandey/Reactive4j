@@ -47,17 +47,19 @@ public interface Notification extends Model{
 	public enum ServerNotificationProtocolType implements NotificationProtocolType{
 		ALL,
 		INFORMATION,
+		INTEGRATION,
 		HEALTHCHECK
 	}
 	
 	/**
-	 * Client should expilictly register for different types of Protocol type for decoupled & manageable architecture
+	 * Client should explicitly register for different types of Protocol type for decoupled & manageable architecture
 	 *  
 	 */
 	public enum ClientNotificationProtocolType implements NotificationProtocolType{		
 		EMAIL,
 		SMS,
 		PUSH_NOTIFICATION,
+		INTEGRATION,
 		HEALTHCHECK
 	}
 	

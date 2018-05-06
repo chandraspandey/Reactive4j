@@ -13,7 +13,7 @@ import org.flowr.framework.core.model.EventModel;
  */
 
 
-public interface EventPublisher<E> extends EventFlow, Publisher<Event<E>>{
+public interface EventPublisher extends EventFlow, Publisher<Event<EventModel>>{
 	
 	public void setFlowName(String flowName) ;
 	
@@ -36,8 +36,5 @@ public interface EventPublisher<E> extends EventFlow, Publisher<Event<E>>{
 	public boolean isEnabled();
 
 	public boolean isSubscribed();
-
-	//public void update(Observable arg0, Object arg1) ;
 	
-	public void publishEvent(Event<EventModel> event); 
 }

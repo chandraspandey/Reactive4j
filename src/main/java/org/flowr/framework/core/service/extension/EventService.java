@@ -2,8 +2,8 @@ package org.flowr.framework.core.service.extension;
 
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
@@ -21,9 +21,9 @@ public interface EventService extends ServiceFrameworkComponent{
 	}
 	
 	public EventRegistrationStatus registerEventPipeline(String pipelineName,PipelineType pipelineType, PipelineFunctionType 
-			pipelineFunctionType,EventPublisher<EventModel> eventPublisher);
+			pipelineFunctionType,EventPublisher eventPublisher);
 	
-	public void process();
+	public void process() throws ClientException;
 	
 	public static EventService getInstance() {
 		

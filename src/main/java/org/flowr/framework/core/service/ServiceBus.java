@@ -14,16 +14,18 @@ import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.model.EventModel;
-import org.flowr.framework.core.model.MetaData;
+import org.flowr.framework.core.service.extension.DefferedPromiseService;
 import org.flowr.framework.core.service.extension.EventService;
 import org.flowr.framework.core.service.extension.ManagedService;
+import org.flowr.framework.core.service.extension.MapPromiseService;
 import org.flowr.framework.core.service.extension.NotificationService;
 import org.flowr.framework.core.service.extension.PhasedPromiseService;
 import org.flowr.framework.core.service.extension.PromiseService;
 import org.flowr.framework.core.service.extension.RegistryService;
 import org.flowr.framework.core.service.extension.RoutingService;
 import org.flowr.framework.core.service.extension.ScheduledPromiseService;
-import org.flowr.framework.core.service.extension.StagedPromiseService;
+import org.flowr.framework.core.service.extension.SecurityService;
+import org.flowr.framework.core.service.extension.StagePromiseService;
 import org.flowr.framework.core.service.extension.StreamPromiseService;
 import org.flowr.framework.core.service.extension.SubscriptionService;
 
@@ -31,7 +33,7 @@ import org.flowr.framework.core.service.extension.SubscriptionService;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<REQUEST,RESPONSE>,
@@ -57,10 +59,14 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	private RegistryService	registryService					= RegistryService.getInstance();	
 	private RoutingService routingService					= RoutingService.getInstance();
 	private SubscriptionService subscriptionService			= SubscriptionService.getInstance();
+	private SecurityService securityService					= SecurityService.getInstance();
 	private ManagedService managedService					= ManagedService.getInstance();
 	@SuppressWarnings("unchecked")
 	private PromiseService<REQUEST,RESPONSE> promiseService 					= 
 			(PromiseService<REQUEST, RESPONSE>) PromiseService.getInstance();
+	@SuppressWarnings("unchecked")
+	private DefferedPromiseService<REQUEST,RESPONSE> defferedPromiseService 	= 
+			(DefferedPromiseService<REQUEST, RESPONSE>) DefferedPromiseService.getInstance();
 	@SuppressWarnings("unchecked")
 	private PhasedPromiseService<REQUEST,RESPONSE> phasedPromiseService 		= 
 			(PhasedPromiseService<REQUEST, RESPONSE>) PhasedPromiseService.getInstance();
@@ -68,11 +74,14 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	private ScheduledPromiseService<REQUEST,RESPONSE> scheduledPromiseService 	= 
 			(ScheduledPromiseService<REQUEST, RESPONSE>) ScheduledPromiseService.getInstance();
 	@SuppressWarnings("unchecked")
-	private StagedPromiseService<REQUEST,RESPONSE> stagedPromiseService 		= 
-			(StagedPromiseService<REQUEST, RESPONSE>) StagedPromiseService.getInstance();
+	private StagePromiseService<REQUEST,RESPONSE> stagePromiseService 		= 
+			(StagePromiseService<REQUEST, RESPONSE>) StagePromiseService.getInstance();
 	@SuppressWarnings("unchecked")
 	private StreamPromiseService<REQUEST,RESPONSE> streamPromiseService 		= 
 			(StreamPromiseService<REQUEST, RESPONSE>) StreamPromiseService.getInstance();
+	@SuppressWarnings("unchecked")
+	private MapPromiseService<REQUEST,RESPONSE> mapPromiseService 		= 
+			(MapPromiseService<REQUEST, RESPONSE>) MapPromiseService.getInstance();
 
 	
 	public ServiceBus(){
@@ -80,26 +89,32 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		eventService.setServiceFramework(this);
 		notificationService.setServiceFramework(this);
 		promiseService.setServiceFramework(this);
+		defferedPromiseService.setServiceFramework(this);
 		phasedPromiseService.setServiceFramework(this);
 		scheduledPromiseService.setServiceFramework(this);
-		stagedPromiseService.setServiceFramework(this);
+		stagePromiseService.setServiceFramework(this);
 		streamPromiseService.setServiceFramework(this);
 		registryService.setServiceFramework(this);
 		routingService.setServiceFramework(this);
 		subscriptionService.setServiceFramework(this);
 		managedService.setServiceFramework(this);
+		securityService.setServiceFramework(this);
+		mapPromiseService.setServiceFramework(this);
 		
 		this.serviceList.add(eventService);
 		this.serviceList.add(notificationService);
 		this.serviceList.add(promiseService);
+		this.serviceList.add(defferedPromiseService);
 		this.serviceList.add(phasedPromiseService);
 		this.serviceList.add(scheduledPromiseService);
-		this.serviceList.add(stagedPromiseService);
+		this.serviceList.add(stagePromiseService);
 		this.serviceList.add(streamPromiseService);
 		this.serviceList.add(registryService);
 		this.serviceList.add(routingService);
 		this.serviceList.add(subscriptionService);
 		this.serviceList.add(managedService);
+		this.serviceList.add(securityService);
+		this.serviceList.add(mapPromiseService);
 	}
 
 	@Override
@@ -200,7 +215,7 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> serviceListener) {
+	public void addServiceListener(EventPublisher serviceListener) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -303,6 +318,10 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	public PromiseService<REQUEST, RESPONSE> getPromiseService() {
 		return promiseService;
 	}
+	
+	public DefferedPromiseService<REQUEST, RESPONSE> getDefferedPromiseService() {
+		return defferedPromiseService;
+	}
 
 
 	public PhasedPromiseService<REQUEST, RESPONSE> getPhasedPromiseService() {
@@ -315,8 +334,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	}
 
 
-	public StagedPromiseService<REQUEST, RESPONSE> getStagedPromiseService() {
-		return stagedPromiseService;
+	public StagePromiseService<REQUEST, RESPONSE> getStagedPromiseService() {
+		return stagePromiseService;
 	}
 	
 
@@ -342,6 +361,14 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 
 	public ManagedService getManagedService() {
 		return managedService;
+	}
+	
+	public SecurityService getSecurityService() {
+		return securityService;
+	}
+
+	public MapPromiseService<REQUEST, RESPONSE> getMapPromiseService() {
+		return mapPromiseService;
 	}
 	
 
@@ -409,6 +436,5 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 				
 		return (this.subscriber != null);
 	}
-
 
 }

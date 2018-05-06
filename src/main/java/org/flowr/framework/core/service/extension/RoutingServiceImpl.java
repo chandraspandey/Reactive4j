@@ -5,9 +5,8 @@ import java.util.Properties;
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
-import org.flowr.framework.core.promise.ClientIdentity;
 import org.flowr.framework.core.promise.PromiseRequest;
+import org.flowr.framework.core.security.ClientIdentity;
 import org.flowr.framework.core.service.ServiceFramework;
 import org.flowr.framework.core.service.ServiceResponse;
 import org.flowr.framework.core.service.route.ServiceRouteMapping;
@@ -16,7 +15,7 @@ import org.flowr.framework.core.service.route.ServiceRouteMapping;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class RoutingServiceImpl implements RoutingService{
@@ -118,7 +117,7 @@ public class RoutingServiceImpl implements RoutingService{
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> serviceListener) {
+	public void addServiceListener(EventPublisher serviceListener) {
 		// TODO Auto-generated method stub
 		
 	}

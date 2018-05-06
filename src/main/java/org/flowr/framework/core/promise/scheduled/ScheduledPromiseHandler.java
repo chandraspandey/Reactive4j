@@ -15,7 +15,7 @@ import org.flowr.framework.core.event.ChangeEventEntity;
 import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.exception.PromiseException;
-import org.flowr.framework.core.flow.EventPublisher;
+import org.flowr.framework.core.flow.SingleEventPublisher;
 import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.node.BackPressureExecutorService;
@@ -39,7 +39,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
  */
 
 public class ScheduledPromiseHandler<REQUEST, RESPONSE> implements ScheduledPromise<REQUEST, RESPONSE>,
-	EventPublisher<EventModel>{
+	SingleEventPublisher{
 
 	private String flowName 							= ScheduledPromise.class.getSimpleName();
 	private boolean isEnabled							= true;

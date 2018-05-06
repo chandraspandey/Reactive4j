@@ -3,6 +3,7 @@ package org.flowr.framework.core.node;
 import java.util.Collection;
 
 import org.flowr.framework.core.context.NotificationContext;
+import org.flowr.framework.core.event.pipeline.EventPipeline;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.service.ServiceEndPoint;
 import org.flowr.framework.core.service.extension.NotificationService.NotificationServiceStatus;
@@ -16,7 +17,8 @@ import org.flowr.framework.core.service.extension.NotificationService.Notificati
 
 public interface EndPointDispatcher {
 
-	public void configure(NotificationProtocolType notificationProtocolType, Collection<ServiceEndPoint> serviceEndPointList);
+	public void configure(NotificationProtocolType notificationProtocolType, Collection<ServiceEndPoint> serviceEndPointList
+		, EventPipeline eventPipeline);
 	
 	public NotificationServiceStatus dispatch(NotificationContext notificationContext);
 	

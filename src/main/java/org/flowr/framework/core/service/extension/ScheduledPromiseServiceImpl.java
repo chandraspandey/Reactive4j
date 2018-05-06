@@ -6,7 +6,6 @@ import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.promise.scheduled.ScheduledPromise;
 import org.flowr.framework.core.promise.scheduled.ScheduledPromiseHandler;
@@ -110,7 +109,7 @@ public class ScheduledPromiseServiceImpl<REQUEST,RESPONSE> implements ScheduledP
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> engineListener) {
+	public void addServiceListener(EventPublisher engineListener) {
 		// TODO Auto-generated method stub
 		
 	}

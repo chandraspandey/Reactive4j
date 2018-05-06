@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.process.management.ManagedRegistry;
 import org.flowr.framework.core.process.management.ProcessHandler;
 import org.flowr.framework.core.service.ServiceFramework;
@@ -113,7 +112,7 @@ public class ManagedServiceImpl implements ManagedService{
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> serviceListener) {
+	public void addServiceListener(EventPublisher serviceListener) {
 		// TODO Auto-generated method stub
 		
 	}

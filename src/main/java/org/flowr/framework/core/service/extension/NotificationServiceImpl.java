@@ -5,15 +5,11 @@ import java.util.HashSet;
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.context.EventContext;
 import org.flowr.framework.core.context.RouteContext;
-import org.flowr.framework.core.event.ChangeEvent;
 import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.ServerException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.EventModel;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.notification.NotificationBufferQueue;
 import org.flowr.framework.core.notification.NotificationEventHelper;
@@ -39,10 +35,10 @@ public class NotificationServiceImpl implements NotificationService{
 	private ServiceType serviceType								= ServiceType.NOTIFICATION;
 	
 	private NotificationHelper notificationHelper				= new NotificationEventHelper();	
-	private static NotificationBufferQueue notificationQueue 	= new NotificationBufferQueue();
+	//private static NotificationBufferQueue notificationQueue 	= new NotificationBufferQueue();
 	private boolean isEnabled 									= true;
 	@SuppressWarnings("unused")
-	private EventPublisher<MetaData> notificationServiceListener= null;
+	private EventPublisher 	notificationServiceListener			= null;
 	@SuppressWarnings("unused")
 	private ServiceFramework<?,?> serviceFramework				= null;
 	
@@ -57,65 +53,34 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public void publishEvent() throws ClientException {
-		
-		// Correct he removal from queue
-		if(! notificationQueue.isEmpty()){
-			
-			//System.out.println("NotificationEngine : notificationQueue : "+notificationQueue);
-			
-			@SuppressWarnings("unchecked")
-			ChangeEvent<EventModel> event = (ChangeEvent<EventModel>) notificationQueue.poll();				
-				
-			
-			System.out.println("NotificationEngine : event : "+event);	
-			
-			ArrayList<NotificationServiceAdapter> adapterList = null;
-			
-			try {
-							
-			
-				adapterList = notificationHelper.getNotificationRoute(event);
-				
-				adapterList.forEach((k)-> ((NotificationServiceAdapter)k).publishEvent(event));
-				
-			} catch (ServerException serverException) {
-				System.err.println("NotificationEngine : ServerException : "+serverException.getContextMessage());	
-				serverException.printStackTrace();
-			} 
-			
-			
-		}
-				
-	}
+	public void publishEvent(NotificationBufferQueue notificationBufferQueue) throws ClientException{
 
-	@Override
-	public void notify(NotificationBufferQueue bufferQueue) {
-		
-		notificationQueue.addAll(bufferQueue);
-	}
+		//System.out.println("NotificationServiceImpl : notificationBufferQueue : "+notificationBufferQueue);
 	
-	@Override
-	public void notify(EventContext eventContext) throws ClientException {
-		
-		ChangeEvent<EventModel> event;
+		ArrayList<NotificationServiceAdapter> adapterList = null;
 		
 		try {
+						
+		
+			adapterList = notificationHelper.getNotificationRoute(notificationBufferQueue.getEventType());
 			
-			event = notificationHelper.convert(eventContext);
-			System.out.println("NotificationEngine : event : "+event);				
+			adapterList.forEach((k)-> ((NotificationServiceAdapter)k).publishEvent(notificationBufferQueue));
 			
-			notificationQueue.add(event);
-			
-			publishEvent();
 		} catch (ServerException serverException) {
-			System.err.println("NotificationEngine : ServerException :"+serverException.getContextMessage());
+			System.err.println("NotificationEngine : ServerException : "+serverException.getContextMessage());	
 			serverException.printStackTrace();
 		}
+		
 	}
 
 	@Override
-	public void addServiceListener(EventPublisher<MetaData> notificationServiceListener) {
+	public void notify(NotificationBufferQueue bufferQueue) throws ClientException {
+		
+		publishEvent(bufferQueue);
+	}
+
+	@Override
+	public void addServiceListener(EventPublisher notificationServiceListener) {
 		this.notificationServiceListener = notificationServiceListener;
 	}
 

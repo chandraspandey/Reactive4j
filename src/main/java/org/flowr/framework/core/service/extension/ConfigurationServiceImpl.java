@@ -4,7 +4,6 @@ import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.model.MetaData;
 import org.flowr.framework.core.service.ServiceFramework;
 
 /**
@@ -14,21 +13,22 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class StagedPromiseServiceImpl<REQUEST,RESPONSE> implements StagedPromiseService<REQUEST,RESPONSE>{
+public class ConfigurationServiceImpl implements ConfigurationService{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String dependencyName			= StagedPromiseService.class.getSimpleName();
+	private String dependencyName			= RegistryService.class.getSimpleName();
 	private DependencyType dependencyType 	= DependencyType.MANDATORY;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_STAGED;
-	private ServiceType serviceType			= ServiceType.PROMISE_STAGED;
+	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_CONFIGURATION;
+	private ServiceType serviceType			= ServiceType.CONFIGURATION;
+
 	@SuppressWarnings("unused")
-	private ServiceFramework<REQUEST,RESPONSE> serviceFramework			= null;
+	private ServiceFramework<?,?> serviceFramework			= null;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
+		this.serviceFramework = serviceFramework;
 	}
+	
 	
 	@Override
 	public void setServiceType(ServiceType serviceType) {
@@ -41,7 +41,6 @@ public class StagedPromiseServiceImpl<REQUEST,RESPONSE> implements StagedPromise
 		
 		return this.serviceType;
 	}
-	
 	@Override
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
@@ -84,23 +83,24 @@ public class StagedPromiseServiceImpl<REQUEST,RESPONSE> implements StagedPromise
 		
 		return status;
 	}
-
-	@Override
-	public void addServiceListener(EventPublisher<MetaData> engineListener) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
-		return null;
+		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Properties configProperties) {
 		// TODO Auto-generated method stub
-		return null;
+		return ServiceStatus.STOPPED;
 	}
+
+	@Override
+	public void addServiceListener(EventPublisher serviceListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

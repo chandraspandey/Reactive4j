@@ -8,6 +8,7 @@ import java.util.concurrent.Flow.Subscription;
 import org.flowr.framework.core.config.Configuration;
 import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.event.Event;
+import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.model.EventModel;
 
 /**
@@ -21,6 +22,7 @@ public class EventPipeline extends DelayQueue<Event<EventModel>> implements Pipe
 
 	private FlowSubscriberType flowSubscriberType		= FlowSubscriberType.FLOW_SUBSCRIBER_CLIENT;
 	private PipelineType pipelineType 					= PipelineType.TRANSFER;
+	private EventType eventType 						= null; 
 	private PipelineFunctionType pipelineFunctionType	= null;
 	private String pipelineName							= null;
 	private Subscription subscription					= null;
@@ -59,7 +61,7 @@ public class EventPipeline extends DelayQueue<Event<EventModel>> implements Pipe
 	
 	@Override
 	public void onNext(Event<EventModel> event) {
-		System.out.println("EventPipeline : Event : "+event);
+		//System.out.println("EventPipeline : Event : "+event);
 		this.add(event);
 	}	
 
@@ -108,11 +110,21 @@ public class EventPipeline extends DelayQueue<Event<EventModel>> implements Pipe
 	public PipelineFunctionType getPipelineFunctionType() {
 		return this.pipelineFunctionType;
 	}
+	
+	public EventType getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(EventType eventType) {
+		this.eventType = eventType;
+	}
 
 	public String toString() {
 		
 		return "EventPipeline { flowSubscriberType : "+flowSubscriberType+" | "+pipelineName+" | "+pipelineType+" | "+
-				pipelineFunctionType+" | "+super.toString()+" | "+pipelineConfiguration+" } ";
+				eventType+" | "+pipelineFunctionType+" | "+super.toString()+" | "+pipelineConfiguration+" } ";
 	}
+
+
 
 }
