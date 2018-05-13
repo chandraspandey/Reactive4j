@@ -19,7 +19,7 @@ import org.flowr.framework.core.exception.ConfigurationException;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ConfigProperties extends Properties{
@@ -56,6 +56,25 @@ public class ConfigProperties extends Properties{
 					ERR_CONFIG,
 					MSG_CONFIG, 
 					"Invalid configuration file : "+fileName+" or file path :"+filePath);
+		}
+	}
+	
+	public ConfigProperties(String filePath) throws ConfigurationException{
+
+		
+		//System.out.println("ConfigProperties : configPath : "+configPath);
+		try {
+			InputStream inputStream = new FileInputStream(filePath);
+			Reader inputStreamReader = new InputStreamReader(inputStream);
+			this.load(inputStreamReader);
+			//System.out.println("configProperties : "+this);
+		} catch ( IOException ioException) {
+			System.err.println(ioException.getMessage());
+			ioException.printStackTrace();
+			throw new ConfigurationException(
+					ERR_CONFIG,
+					MSG_CONFIG, 
+					"Invalid configuration file path :"+filePath);
 		}
 	}
 	

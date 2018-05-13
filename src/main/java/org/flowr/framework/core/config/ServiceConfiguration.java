@@ -2,18 +2,22 @@ package org.flowr.framework.core.config;
 
 import java.util.concurrent.TimeUnit;
 
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ServiceConfiguration implements Configuration{
 
 	private NotificationProtocolType notificationProtocolType;
+	
+	// Value is assigned at run time for creation of pipeline
+	private PipelineFunctionType pipelineFunctionType;	
 	private String configName;
 	private String filePath;
 	private String serverName;
@@ -33,7 +37,8 @@ public class ServiceConfiguration implements Configuration{
 		
 		boolean isValid = false;
 		
-		if(configName != null && notificationProtocolType != null && (timeout >= (defaultTimeout) ) && timeoutTimeUnit != null && 
+		if(configName != null && notificationProtocolType != null &&
+				(timeout >= (defaultTimeout) ) && timeoutTimeUnit != null && 
 				heartbeatInterval > 0 &&	heartbeatTimeUnit != null){
 			
 			isValid = true;
@@ -179,11 +184,20 @@ public class ServiceConfiguration implements Configuration{
 		this.notificationProtocolType = notificationProtocolType;			
 	}
 	
+	public PipelineFunctionType getPipelineFunctionType() {
+		return pipelineFunctionType;
+	}
+
+	public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
+		this.pipelineFunctionType = pipelineFunctionType;
+	}
+	
 	public String toString(){
 		
 		return "ServiceConfiguration{"+
 				" configName : "+configName+	
 				" | notificationProtocolType : "+notificationProtocolType+	
+				" | pipelineFunctionType : "+pipelineFunctionType+	
 				" | filePath : "+filePath+	
 				" | serverName : "+serverName+				
 				" | notificationEndPoint : "+notificationEndPoint+
@@ -197,6 +211,8 @@ public class ServiceConfiguration implements Configuration{
 				" | configAsProperties : "+configAsProperties+
 				"}";
 	}
+
+
 
 
 

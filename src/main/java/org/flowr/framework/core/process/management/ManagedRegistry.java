@@ -9,11 +9,12 @@ import org.flowr.framework.core.process.ProcessRegistry;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 public class ManagedRegistry implements ProcessRegistry<String, ProcessHandler> {
 
-	private static HashMap<String,ProcessHandler> handlerMap = new HashMap<String,ProcessHandler>();
+	private static HashMap<String,ProcessHandler> handlerMap 	= new HashMap<String,ProcessHandler>();
+	private RegistryType registryType							= RegistryType.LOCAL;
 	
 	@Override
 	public void bind(String name, ProcessHandler handler) {
@@ -56,6 +57,16 @@ public class ManagedRegistry implements ProcessRegistry<String, ProcessHandler> 
 	public HashMap<String, ProcessHandler> restore() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public RegistryType getRegistryType() {
+		return this.registryType;
+	}
+
+	@Override
+	public void setRegistryType(RegistryType registryType) {
+		this.registryType = registryType;
 	}
 
 }

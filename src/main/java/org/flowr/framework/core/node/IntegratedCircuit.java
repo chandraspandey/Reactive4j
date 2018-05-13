@@ -1,10 +1,9 @@
 package org.flowr.framework.core.node;
 
-import java.util.AbstractMap.SimpleEntry;
-
 import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,18 +15,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.flowr.framework.core.config.Configuration;
+import org.flowr.framework.core.config.Configuration.ConfigurationType;
+import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.config.ServiceConfiguration;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.process.callback.Callback;
 import org.flowr.framework.core.service.ServiceEndPoint;
+import org.flowr.framework.core.service.ServiceFramework;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
   
@@ -38,7 +41,35 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 	private CircuitStatus circuitStatus							= CircuitStatus.UNAVAILABLE; 
 	
 	@Override
-	public Collection<ServiceEndPoint> getAvailableServiceEndPoints(String endPointType){
+	public Collection<ServiceEndPoint> getAllServiceEndPoints(){
+				
+		return circuitMap.keySet();
+	}
+	
+	
+	@Override
+	public Collection<ServiceEndPoint> getAllAvailableServiceEndPoints(){
+		
+		Collection<ServiceEndPoint> endPointList = new ArrayList<ServiceEndPoint>();
+		
+		Iterator<Entry<ServiceEndPoint, EndPointStatus>> endPointIterator = circuitMap.entrySet().iterator();
+		
+		while(endPointIterator.hasNext()){
+			
+			Entry<ServiceEndPoint, EndPointStatus> endPointEntry = endPointIterator.next();
+			
+			if( endPointEntry.getValue() == EndPointStatus.REACHABLE ){
+				
+				endPointList.add(endPointEntry.getKey());
+			}			
+			
+		}
+		
+		return endPointList;
+	}
+	
+	@Override
+	public Collection<ServiceEndPoint> getAvailableServiceEndPoints(NotificationProtocolType notificationProtocolType){
 		
 		Collection<ServiceEndPoint> endPointList = new ArrayList<ServiceEndPoint>();
 		
@@ -50,7 +81,7 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 			
 			if(
 				endPointEntry.getValue() == EndPointStatus.REACHABLE && 
-				endPointEntry.getKey().getEndPointType().equals(endPointType)){
+				endPointEntry.getKey().getNotificationProtocolType().equals(notificationProtocolType)){
 				
 				endPointList.add(endPointEntry.getKey());
 			}			
@@ -60,6 +91,35 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 		return endPointList;
 	}
 	
+
+	
+	@Override
+	public Collection<ServiceEndPoint> getAvailableServiceEndPoints(NotificationProtocolType notificationProtocolType,
+		PipelineFunctionType pipelineFunctionType){
+		
+		Collection<ServiceEndPoint> endPointList = new ArrayList<ServiceEndPoint>();
+		
+		Iterator<Entry<ServiceEndPoint, EndPointStatus>> endPointIterator = circuitMap.entrySet().iterator();
+		
+		while(endPointIterator.hasNext()){
+			
+			Entry<ServiceEndPoint, EndPointStatus> endPointEntry = endPointIterator.next();
+			
+			if(
+				endPointEntry.getValue() == EndPointStatus.REACHABLE && 
+				endPointEntry.getKey().getNotificationProtocolType().equals(notificationProtocolType) &&
+				endPointEntry.getKey().getPipelineFunctionType().equals(pipelineFunctionType)
+			){
+				
+				endPointList.add(endPointEntry.getKey());
+			}			
+			
+		}
+		
+		return endPointList;
+	}
+	
+	@Override
 	public CircuitStatus getCircuitStatus(){
 		
 		if(!circuitMap.isEmpty()){
@@ -83,44 +143,57 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 	}
 	
 	@Override
-	public void buildCircuit(String configName, String filePath) throws ConfigurationException, 
+	public void buildCircuit(ConfigurationType configurationType) throws ConfigurationException, 
 		InterruptedException, ExecutionException{
+				
+		List<PipelineConfiguration> pipelineConfigurationList = ServiceFramework.getInstance().getConfigurationService().getPipelineConfiguration(configurationType);
 		
-		List<ServiceConfiguration> configurationList = Configuration.ClientEndPointConfiguration(configName,filePath);
+		if(pipelineConfigurationList != null && !pipelineConfigurationList.isEmpty()){
 		
-		if(configurationList != null && !configurationList.isEmpty()){
+			Iterator<PipelineConfiguration> pipelineConfigIterator = pipelineConfigurationList.iterator();
 			
-			Iterator<ServiceConfiguration> serviceConfigIterator = configurationList.iterator();
+			while(pipelineConfigIterator.hasNext()){
+				
+				PipelineConfiguration pipelineConfiguration = pipelineConfigIterator.next();
 			
-			while(serviceConfigIterator.hasNext()){
+				List<ServiceConfiguration> configurationList = pipelineConfiguration.getConfigurationList();
 				
-				ServiceConfiguration serviceConfiguration = serviceConfigIterator.next();
-				
-				if(serviceConfiguration.isValid()){
-				
-					ServiceEndPoint serviceEndPoint = new ServiceEndPoint(serviceConfiguration);
+				if(configurationList != null && !configurationList.isEmpty()){
 					
-					handleEndPoint(serviceEndPoint);
-	
+					Iterator<ServiceConfiguration> serviceConfigIterator = configurationList.iterator();
+					
+					while(serviceConfigIterator.hasNext()){
+						
+						ServiceConfiguration serviceConfiguration = serviceConfigIterator.next();
+						
+						if(serviceConfiguration.isValid()){
+						
+							ServiceEndPoint serviceEndPoint = new ServiceEndPoint(serviceConfiguration);
+							
+							handleEndPoint(serviceEndPoint);
+			
+						}else{
+							
+							throw new ConfigurationException(
+									ERR_CONFIG,
+									MSG_CONFIG, 
+									"Service EndPoint Configurations not valid. configName "+serviceConfiguration);
+		
+						}
+					}
+		
 				}else{
 					
 					throw new ConfigurationException(
 							ERR_CONFIG,
 							MSG_CONFIG, 
-							"Service EndPoint Configurations not provided. configName "+configName+" filePath : "+filePath);
-
-				}
+							"Service EndPoint Configurations not provided. configName "+configurationType);
+				}	
+				
+				heartbeat();
 			}
-			
-			heartbeat();
-
-		}else{
-			
-			throw new ConfigurationException(
-					ERR_CONFIG,
-					MSG_CONFIG, 
-					"Service EndPoint Configurations not provided. configName "+configName+" filePath : "+filePath);
-		}		
+		
+		}
 	}
 	
 	@Override

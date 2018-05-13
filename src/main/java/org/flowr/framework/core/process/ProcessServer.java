@@ -10,17 +10,17 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.flowr.framework.core.config.ConfigProperties;
-import org.flowr.framework.core.config.Configuration;
+import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.context.NotificationContext;
 import org.flowr.framework.core.context.RouteContext;
 import org.flowr.framework.core.context.SubscriptionContext;
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
+import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.notification.NotificationRoute;
 import org.flowr.framework.core.notification.NotificationServiceAdapter;
 import org.flowr.framework.core.notification.NotificationTask;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionStatus;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionType;
@@ -31,13 +31,12 @@ import org.flowr.framework.core.service.ServiceProvider;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 public class ProcessServer<REQ,RES>{
 	
 	// Server Process configuration
 	private String serverSubscriptionId 					= null;	
-	private static final String serverConfig 				= "SERVER";
 	public static ConfigProperties SERVER_CONFIG 			= null;
 	private static ServiceConfiguration serverConfiguration = null;
 	private ServiceProvider<REQ,RES> processProvider;
@@ -57,7 +56,7 @@ public class ProcessServer<REQ,RES>{
 	public ProcessServer<REQ,RES> withServerConfiguration(String filePath) 
 		throws ConfigurationException{
 			
-		serverConfiguration = Configuration.ServerConfiguration(serverConfig, filePath);
+		serverConfiguration = ((ServiceFramework<?,?>)processProvider).getConfigurationService().getServiceConfiguration(ConfigurationType.SERVER); 
 		SERVER_CONFIG		= serverConfiguration.getConfigAsProperties();
 		return this;
 	}

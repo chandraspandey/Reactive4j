@@ -7,7 +7,7 @@ import org.flowr.framework.core.exception.PromiseException;
  * Defines Promisable as a type which can return PromiseResponse on invocation.
  * The concrete implementation provides the underlying functionality. 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Promisable<REQUEST,RESPONSE> {

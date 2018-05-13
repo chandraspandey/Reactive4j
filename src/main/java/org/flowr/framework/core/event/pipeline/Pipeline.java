@@ -6,7 +6,7 @@ import org.flowr.framework.core.flow.EventSubscriber;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Pipeline<Event> extends EventSubscriber{
@@ -28,9 +28,10 @@ public interface Pipeline<Event> extends EventSubscriber{
 		ALL,
 		PIPELINE_PROMISE_EVENT,
 		PIPELINE_PROMISE_DEFFERED_EVENT,
+		PIPELINE_PROMISE_MAP_EVENT,
 		PIPELINE_PROMISE_PHASED_EVENT,
 		PIPELINE_PROMISE_SCHEDULED_EVENT,
-		PIPELINE_PROMISE_STAGED_EVENT,
+		PIPELINE_PROMISE_STAGE_EVENT,
 		PIPELINE_PROMISE_STREAM_EVENT,
 		PIPELINE_MANAGEMENT_EVENT,
 		PIPELINE_NOTIFICATION_EVENT

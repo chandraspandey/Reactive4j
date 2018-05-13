@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.AbstractMap.SimpleEntry;
 
 import org.flowr.framework.core.config.ServiceConfiguration;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.Autonomic;
 import org.flowr.framework.core.node.EndPoint;
@@ -25,7 +26,7 @@ import org.flowr.framework.core.process.callback.RunnableCallback;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<ServiceEndPoint, EndPointStatus>>, 
@@ -36,13 +37,15 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 	private ServiceConfiguration serviceConfiguration 						= null;	
 	private boolean keepRunning 											= true;
 	private Timestamp lastUpdated											= null;
-	private String endPointType												= null;
 	private NotificationProtocolType notificationProtocolType				= null;
+	private PipelineFunctionType pipelineFunctionType						= null;
 	private Callback<SimpleEntry<ServiceEndPoint, EndPointStatus>> callback = null;
 	
 	public ServiceEndPoint(ServiceConfiguration serviceConfiguration){
 		
-		this.serviceConfiguration = serviceConfiguration;
+		this.serviceConfiguration 		= serviceConfiguration;
+		this.notificationProtocolType 	= serviceConfiguration.getNotificationProtocolType();
+		this.pipelineFunctionType		= serviceConfiguration.getPipelineFunctionType();
 	}
 	
 	@Override
@@ -51,12 +54,12 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 		return endPointStatus;
 	}
 	
-	public void setEndPointType(String endPointType){
-		this.endPointType = endPointType;
+	public void setNotificationProtocolType(NotificationProtocolType notificationProtocolType){
+		this.notificationProtocolType = notificationProtocolType;
 	}
 	
-	public String getEndPointType(){
-		return this.endPointType;
+	public NotificationProtocolType getNotificationProtocolType(){
+		return this.notificationProtocolType;
 	}
 
 	@Override
@@ -164,11 +167,22 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 		return this.callback.doCallback(status);
 	}
 	
+	@Override
+	public PipelineFunctionType getPipelineFunctionType() {
+		return pipelineFunctionType;
+	}
+
+	@Override	
+	public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
+		this.pipelineFunctionType = pipelineFunctionType;
+	}
 	
 	public String toString(){
 		
 		return "ServiceEndPoint{"+
 				" endPointStatus : "+endPointStatus+	
+				" | notificationProtocolType : "+notificationProtocolType+	
+				" | pipelineFunctionType : "+pipelineFunctionType+	
 				" | isNegotiated : "+isNegotiated+	
 				" | keepRunning : "+keepRunning+				
 				" | lastUpdated : "+lastUpdated+
@@ -176,6 +190,10 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 				"}\n";
 
 	}
+
+
+
+
 
 
 }

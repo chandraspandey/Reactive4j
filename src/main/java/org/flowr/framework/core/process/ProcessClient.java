@@ -10,17 +10,17 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.flowr.framework.core.config.ConfigProperties;
-import org.flowr.framework.core.config.Configuration;
+import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.context.NotificationContext;
 import org.flowr.framework.core.context.RouteContext;
 import org.flowr.framework.core.context.SubscriptionContext;
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.notification.NotificationRoute;
 import org.flowr.framework.core.notification.NotificationServiceAdapter;
 import org.flowr.framework.core.notification.NotificationTask;
-import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionStatus;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionType;
@@ -30,13 +30,12 @@ import org.flowr.framework.core.service.ServiceProvider;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 public class ProcessClient<REQ,RES>{
 	
 	// Client configuration
 	public static String clientSubscriptionId 				= null;	
-	private static final String clientConfig 				= "CLIENT";
 	public static ConfigProperties CLIENT_CONFIG 			= null;
 	public static ServiceConfiguration clientConfiguration  = null;
 
@@ -57,7 +56,7 @@ public class ProcessClient<REQ,RES>{
 	public ProcessClient<REQ,RES> andClientConfiguration(String filePath) 
 			throws ConfigurationException{
 				
-		clientConfiguration = Configuration.ClientConfiguration(clientConfig, filePath);
+		clientConfiguration = ((ServiceFramework<?,?>)processProvider).getConfigurationService().getServiceConfiguration(ConfigurationType.CLIENT);
 		CLIENT_CONFIG 		= clientConfiguration.getConfigAsProperties();
 		return this;
 	}

@@ -1,10 +1,12 @@
 package org.flowr.framework.core.config;
 
+import java.util.List;
+
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class PipelineConfiguration implements Configuration{
@@ -15,6 +17,7 @@ public class PipelineConfiguration implements Configuration{
 	private boolean batchMode					= false;
 	private int batchSize						= 1;	
 	private ConfigProperties configAsProperties;
+	List<ServiceConfiguration> configurationList = null;
 
 	public PipelinePolicy getPipelinePolicy() {
 		return pipelinePolicy;
@@ -63,17 +66,28 @@ public class PipelineConfiguration implements Configuration{
 	public void setPipelineName(String pipelineName) {
 		this.pipelineName = pipelineName;
 	}
+	
+	public List<ServiceConfiguration> getConfigurationList() {
+		return configurationList;
+	}
+
+	public void setConfigurationList(List<ServiceConfiguration> configurationList) {
+		this.configurationList = configurationList;
+	}
 
 	public String toString(){
 		
-		return "PipelineConfiguration{"+
+		return "PipelineConfiguration{\n"+
 				" pipelineName : "+pipelineName+
 				" | pipelinePolicy : "+pipelinePolicy+	
 				" | batchMode : "+batchMode+	
 				" | batchSize : "+batchSize+	
 				" | configAsProperties : "+configAsProperties+
-				"}";
+				" | configurationList : "+configurationList+
+				"}\n";
 	}
+
+
 
 
 }

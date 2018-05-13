@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.context.RouteContext;
+import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.ServerException;
@@ -23,7 +24,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class NotificationServiceImpl implements NotificationService{
@@ -59,8 +60,7 @@ public class NotificationServiceImpl implements NotificationService{
 	
 		ArrayList<NotificationServiceAdapter> adapterList = null;
 		
-		try {
-						
+		try {						
 		
 			adapterList = notificationHelper.getNotificationRoute(notificationBufferQueue.getEventType());
 			
@@ -71,6 +71,18 @@ public class NotificationServiceImpl implements NotificationService{
 			serverException.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public ArrayList<NotificationServiceAdapter> getNotificationRoute(NotificationProtocolType notificationProtocolType,
+			EventType eventType) throws ServerException{
+		
+		return notificationHelper.getNotificationRoute(notificationProtocolType, eventType);
+	}
+	
+	@Override
+	public HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> getNotificationRoutes() {
+		return notificationHelper.getNotificationRoutes();
 	}
 
 	@Override

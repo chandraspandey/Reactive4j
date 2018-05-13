@@ -21,7 +21,7 @@ import org.flowr.framework.core.process.ProcessRegistry;
  * Defines SubscriptionRegistry as a Registry with 1:N association between Client & NotificationSubscription. 
 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class SubscriptionRegistry implements ProcessRegistry<String,NotificationSubscription>, 
@@ -29,6 +29,7 @@ public class SubscriptionRegistry implements ProcessRegistry<String,Notification
 
 	private static HashMap<String,NotificationSubscription> subscriptionMap = 
 			new HashMap<String,NotificationSubscription>();
+	private RegistryType registryType 										= RegistryType.LOCAL;
 	
 
 	@Override
@@ -178,12 +179,22 @@ public class SubscriptionRegistry implements ProcessRegistry<String,Notification
 		subscriptionMap.clear();
 	}
 
+
+	@Override
+	public RegistryType getRegistryType() {
+		return this.registryType;
+	}
+
+	@Override
+	public void setRegistryType(RegistryType registryType) {
+		this.registryType = registryType;
+	}
+
 	public String toString(){
 		
-		return "SubscriptionRegistry{"+
+		return "SubscriptionRegistry{  registryType : "+registryType+" | "+
 				"\n notificationMap : "+subscriptionMap+
 				"\n}\n";
 	}
-
 
 }

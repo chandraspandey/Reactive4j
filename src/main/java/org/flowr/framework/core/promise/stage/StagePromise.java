@@ -1,4 +1,4 @@
-package org.flowr.framework.core.promise.staged;
+package org.flowr.framework.core.promise.stage;
 
 /**
  * 

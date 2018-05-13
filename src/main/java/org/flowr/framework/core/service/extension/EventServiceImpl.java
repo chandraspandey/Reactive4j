@@ -19,7 +19,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class EventServiceImpl implements EventService{
@@ -106,11 +106,11 @@ public class EventServiceImpl implements EventService{
 							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;
-						}case PIPELINE_PROMISE_STAGED_EVENT:{
+						}case PIPELINE_PROMISE_STAGE_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
-							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STAGED);
+							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STAGE);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_STAGED_EVENT);	
+							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_PROMISE_STAGE_EVENT);	
 							processSubscriber.setEventType(EventType.CLIENT);
 							eventBus.addEventPipeline(processSubscriber);
 							break;

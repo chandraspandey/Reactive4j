@@ -3,7 +3,6 @@ package org.flowr.framework.core.process;
 import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
 
-import org.flowr.framework.core.config.Configuration;
 import org.flowr.framework.core.context.PromiseContext;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.promise.PromiseRequest;
@@ -15,7 +14,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 public class ProcessRequest<REQ,RES>{
 	
@@ -30,12 +29,8 @@ public class ProcessRequest<REQ,RES>{
 		this.promiseRequest = promiseRequest;
 		this.promiseServer 	= promiseServer;
 		
-		requestScale = Configuration.RequestScale(
-				ProcessClient.clientSubscriptionId, 
-				ProcessClient.clientConfiguration.getConfigName(),
-				ProcessClient.clientConfiguration.getFilePath()
-			);
-
+		requestScale = serviceFramework.getConfigurationService().getRequestScale(ProcessClient.clientSubscriptionId);
+		
 		//System.out.println("ProcessRequest : requestScale : "+requestScale);
 		
 		promiseContext = new PromiseContext<REQ>();

@@ -1,16 +1,24 @@
 package org.flowr.framework.core.service.extension;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.flowr.framework.core.context.RouteContext;
+import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.exception.ServerException;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.notification.NotificationBufferQueue;
+import org.flowr.framework.core.notification.NotificationRoute;
+import org.flowr.framework.core.notification.NotificationServiceAdapter;
 import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
  * Provides service definition for Event notification. Concrete implementation should be provided by the adapter 
  * classes. 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface NotificationService extends ServiceFrameworkComponent{
@@ -47,7 +55,10 @@ public interface NotificationService extends ServiceFrameworkComponent{
 
 	public void setNotificationRouteContext(RouteContext routeContext) throws ConfigurationException;
 
-	//public void notify(EventContext eventContext) throws ClientException;
+	public ArrayList<NotificationServiceAdapter> getNotificationRoute(NotificationProtocolType notificationProtocolType,
+			EventType eventType) throws ServerException;
+
+	public HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> getNotificationRoutes();
 	
 	public boolean isEnabled();
 
@@ -74,4 +85,5 @@ public interface NotificationService extends ServiceFrameworkComponent{
 		}
 		
 	}
+
 }

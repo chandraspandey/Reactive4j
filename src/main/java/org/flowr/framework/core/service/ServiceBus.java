@@ -14,6 +14,8 @@ import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.model.EventModel;
+import org.flowr.framework.core.service.extension.AdministrationService;
+import org.flowr.framework.core.service.extension.ConfigurationService;
 import org.flowr.framework.core.service.extension.DefferedPromiseService;
 import org.flowr.framework.core.service.extension.EventService;
 import org.flowr.framework.core.service.extension.ManagedService;
@@ -61,6 +63,9 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	private SubscriptionService subscriptionService			= SubscriptionService.getInstance();
 	private SecurityService securityService					= SecurityService.getInstance();
 	private ManagedService managedService					= ManagedService.getInstance();
+	private ConfigurationService configService				= ConfigurationService.getInstance();
+	private AdministrationService adminService				= AdministrationService.getInstance();
+	
 	@SuppressWarnings("unchecked")
 	private PromiseService<REQUEST,RESPONSE> promiseService 					= 
 			(PromiseService<REQUEST, RESPONSE>) PromiseService.getInstance();
@@ -100,6 +105,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		managedService.setServiceFramework(this);
 		securityService.setServiceFramework(this);
 		mapPromiseService.setServiceFramework(this);
+		configService.setServiceFramework(this);
+		adminService.setServiceFramework(this);
 		
 		this.serviceList.add(eventService);
 		this.serviceList.add(notificationService);
@@ -115,6 +122,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		this.serviceList.add(managedService);
 		this.serviceList.add(securityService);
 		this.serviceList.add(mapPromiseService);
+		this.serviceList.add(configService);
+		this.serviceList.add(adminService);
 	}
 
 	@Override
@@ -304,73 +313,85 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		return status;
 	}
 
-
+	@Override
 	public EventService getEventService() {
 		return eventService;
 	}
 
-
+	@Override
 	public NotificationService getNotificationService() {
 		return notificationService;
 	}
 
-
+	@Override
 	public PromiseService<REQUEST, RESPONSE> getPromiseService() {
 		return promiseService;
 	}
 	
+	@Override
 	public DefferedPromiseService<REQUEST, RESPONSE> getDefferedPromiseService() {
 		return defferedPromiseService;
 	}
 
-
+	@Override
 	public PhasedPromiseService<REQUEST, RESPONSE> getPhasedPromiseService() {
 		return phasedPromiseService;
 	}
 
-
+	@Override
 	public ScheduledPromiseService<REQUEST, RESPONSE> getScheduledPromiseService() {
 		return scheduledPromiseService;
 	}
 
-
+	@Override
 	public StagePromiseService<REQUEST, RESPONSE> getStagedPromiseService() {
 		return stagePromiseService;
 	}
 	
-
+	@Override
 	public StreamPromiseService<REQUEST, RESPONSE> getStreamPromiseService() {
 		return streamPromiseService;
 	}
 
-
+	@Override
 	public RegistryService getRegistryService() {
 		return registryService;
 	}
 
-
+	@Override
 	public RoutingService getRoutingService() {
 		return routingService;
 	}
-
 	
-
+	@Override
 	public SubscriptionService getSubscriptionService() {
 		return subscriptionService;
 	}
 
+	@Override
 	public ManagedService getManagedService() {
 		return managedService;
 	}
 	
+	@Override
 	public SecurityService getSecurityService() {
 		return securityService;
 	}
 
+	@Override
 	public MapPromiseService<REQUEST, RESPONSE> getMapPromiseService() {
 		return mapPromiseService;
 	}
-	
+
+	@Override
+	public ConfigurationService getConfigurationService() {
+		return configService;
+	}
+
+	@Override
+	public AdministrationService getAdministrationService() {
+		return adminService;
+	}
 
 	@Override
 	public void setFlowName(String flowName) {
@@ -436,5 +457,7 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 				
 		return (this.subscriber != null);
 	}
+
+
 
 }

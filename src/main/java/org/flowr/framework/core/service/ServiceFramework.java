@@ -1,17 +1,23 @@
 package org.flowr.framework.core.service;
 
+import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.SingleEventPublisher;
 import org.flowr.framework.core.service.dependency.Dependency;
 import org.flowr.framework.core.service.dependency.DependencyLoop;
+import org.flowr.framework.core.service.extension.AdministrationService;
+import org.flowr.framework.core.service.extension.ConfigurationService;
+import org.flowr.framework.core.service.extension.DefferedPromiseService;
 import org.flowr.framework.core.service.extension.EventService;
 import org.flowr.framework.core.service.extension.ManagedService;
+import org.flowr.framework.core.service.extension.MapPromiseService;
 import org.flowr.framework.core.service.extension.NotificationService;
 import org.flowr.framework.core.service.extension.PhasedPromiseService;
 import org.flowr.framework.core.service.extension.PromiseService;
 import org.flowr.framework.core.service.extension.RegistryService;
 import org.flowr.framework.core.service.extension.RoutingService;
 import org.flowr.framework.core.service.extension.ScheduledPromiseService;
+import org.flowr.framework.core.service.extension.SecurityService;
 import org.flowr.framework.core.service.extension.StagePromiseService;
 import org.flowr.framework.core.service.extension.StreamPromiseService;
 import org.flowr.framework.core.service.extension.SubscriptionService;
@@ -51,6 +57,8 @@ public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, 
 	public NotificationService getNotificationService();
 
 	public PromiseService<REQUEST,RESPONSE> getPromiseService();
+	
+	public DefferedPromiseService<REQUEST, RESPONSE> getDefferedPromiseService();
 
 	public PhasedPromiseService<REQUEST,RESPONSE> getPhasedPromiseService();
 
@@ -67,6 +75,16 @@ public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, 
 	public SubscriptionService getSubscriptionService();
 
 	public ManagedService getManagedService();
+	
+	public ConfigurationService getConfigurationService() ;
+
+	public AdministrationService getAdministrationService();
+	
+	public SecurityService getSecurityService();
+
+	public MapPromiseService<REQUEST, RESPONSE> getMapPromiseService();
+	
+	public void configure(String configurationFilePath) throws ConfigurationException;
 	
 	public static ServiceFramework<?,?> getInstance() {
 		
