@@ -6,7 +6,7 @@ import org.flowr.framework.core.notification.NotificationBufferQueue;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 public class EventPipelineTask implements PipelineTask {
 
@@ -35,11 +35,11 @@ public class EventPipelineTask implements PipelineTask {
 							notificationBufferQueue.addAll(eventPipeline.getBatch());
 						}			
 						
-						System.out.println("EventPipelineTask : notificationBufferQueue : "+notificationBufferQueue);
+						//System.out.println("EventPipelineTask : notificationBufferQueue : "+notificationBufferQueue);
 					}else {
 						
 						notificationBufferQueue.add(eventPipeline.take());
-						System.out.println("EventPipelineTask : notificationBufferQueue : "+notificationBufferQueue);
+						//System.out.println("EventPipelineTask : notificationBufferQueue : "+notificationBufferQueue);
 					}
 
 				} catch (InterruptedException e) {

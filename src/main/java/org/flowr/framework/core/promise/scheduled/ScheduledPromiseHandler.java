@@ -35,7 +35,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * Provides concrete implementation of ScheduledPromise. Overrides the what
  * implementation of PromiseHandler for scheduler implementation.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ScheduledPromiseHandler<REQUEST, RESPONSE> implements ScheduledPromise<REQUEST, RESPONSE>,
@@ -323,6 +323,7 @@ public class ScheduledPromiseHandler<REQUEST, RESPONSE> implements ScheduledProm
 		
 		ChangeEvent<EventModel> changeEvent = new ChangeEventEntity();
 		changeEvent.setEventTimestamp(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		changeEvent.setSubscriptionClientId(scale.getSubscriptionClientId());
 		
 		EventContext eventContext = new EventContext();
 		eventContext.setPromiseState(scale.getPromiseState());
@@ -332,21 +333,6 @@ public class ScheduledPromiseHandler<REQUEST, RESPONSE> implements ScheduledProm
 		eventContext.setNotificationDeliveryType(scale.getNotificationDeliveryType());	
 		
 		eventContext.setScheduleStatus(((ScheduledProgressScale) scale).getScheduleStatus());
-		
-		/*
-		 * Can be part of client dispatch logic as augmentation at the point of delivery 
-		 * 
-		 NotificationSubscription notificationSubscription = 
-				lookupNotificationSubscription(scale.getSubscriptionClientId());
-		
-		if(notificationSubscription != null){
-			
-			NotificationProtocolType notificationProtocolType = notificationSubscription.getNotificationProtocolType();
-			eventContext.setNotificationProtocolType(notificationProtocolType);
-		}else{
-			throw new ServerException(ERR_NOTIFICATION_SUBSCRIPTION,MSG_NOTIFICATION_SUBSCRIPTION, 
-					"NotificationSubscription does not exists for SubscriptionClientId : "+progressScale.getSubscriptionClientId());
-		}*/
 		
 		EventModel eventModel = new EventModel();
 		eventModel.setContext(eventContext);

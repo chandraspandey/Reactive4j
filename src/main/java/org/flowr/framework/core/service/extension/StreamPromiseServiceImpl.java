@@ -93,13 +93,13 @@ public class StreamPromiseServiceImpl<REQUEST,RESPONSE> implements StreamPromise
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
-		return null;
+		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Properties configProperties) {
 		// TODO Auto-generated method stub
-		return null;
+		return ServiceStatus.STOPPED;
 	}
 
 }

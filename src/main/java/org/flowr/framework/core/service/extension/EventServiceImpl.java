@@ -2,6 +2,8 @@ package org.flowr.framework.core.service.extension;
 
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.event.Event.EventType;
@@ -24,7 +26,7 @@ import org.flowr.framework.core.service.ServiceFramework;
 
 public class EventServiceImpl implements EventService{
 
-	private ServiceUnit serviceUnit 					= ServiceUnit.POOL;
+	private ServiceUnit serviceUnit 					= ServiceUnit.SINGELTON;
 	private String dependencyName						= EventService.class.getSimpleName();
 	private DependencyType dependencyType 				= DependencyType.MANDATORY;
 	private static EventBus eventBus					= new EventPipelineBus();
@@ -32,7 +34,8 @@ public class EventServiceImpl implements EventService{
 	private ServiceStatus serviceStatus					= ServiceStatus.UNUSED;
 	private ServiceType serviceType						= ServiceType.EVENT;
 	private EventPipelineBusExecutor eventBusExecutor 	= null;
-	private ServiceFramework<?,?> serviceFramework			= null;
+	private ServiceFramework<?,?> serviceFramework		= null;
+	private ExecutorService service 					= Executors.newSingleThreadExecutor();
 	
 	public EventRegistrationStatus registerEventPipeline(String pipelineName,PipelineType pipelineType, PipelineFunctionType 
 			pipelineFunctionType,EventPublisher eventPublisher) {		
@@ -131,6 +134,21 @@ public class EventServiceImpl implements EventService{
 		);
 		
 		eventBusExecutor = new EventPipelineBusExecutor(eventBus);
+		
+	}
+	
+	@Override
+	public void run() {
+		
+		while(serviceStatus != ServiceStatus.STOPPED) {
+			
+			try {
+				process();
+				Thread.sleep(FrameworkConstants.FRAMEWORK_PIPELINE_NOTIFICATION_TIME_UNIT);
+			} catch (ClientException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
@@ -197,6 +215,7 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		
+		service.execute(this);
 		serviceStatus = ServiceStatus.STARTED;
 		
 		return serviceStatus;
@@ -204,6 +223,8 @@ public class EventServiceImpl implements EventService{
 
 	@Override
 	public ServiceStatus shutdown(Properties configProperties) {
+		
+		service.shutdown();
 		serviceStatus = ServiceStatus.STOPPED;
 		return serviceStatus;
 	}
@@ -212,6 +233,8 @@ public class EventServiceImpl implements EventService{
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		this.serviceFramework = serviceFramework;
 	}
+
+
 
 
 }

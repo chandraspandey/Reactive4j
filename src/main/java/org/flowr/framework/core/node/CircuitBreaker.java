@@ -1,5 +1,8 @@
 package org.flowr.framework.core.node;
 
+import org.flowr.framework.api.Node;
+import org.flowr.framework.core.config.Configuration.ConfigurationType;
+import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
 import org.flowr.framework.core.service.extension.NotificationService.NotificationServiceStatus;
 
@@ -32,7 +35,7 @@ public interface CircuitBreaker {
 	 * Builds integrated circuit for redundant HA deployment
 	 * @return
 	 */
-	public Circuit buildCircuit();
+	public Circuit buildCircuit(Node node,ConfigurationType configurationType) throws ConfigurationException;
 	
 
 }

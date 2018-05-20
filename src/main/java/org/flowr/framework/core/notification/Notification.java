@@ -6,7 +6,7 @@ import org.flowr.framework.core.model.Model;
  * Defines the Notification characteristics to be applied for Notification purpose. Concerete implementation of 
  * notification should be based on the defined characteristics.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Notification extends Model{
@@ -45,10 +45,10 @@ public interface Notification extends Model{
 	 * HEALTHCHECK : Used for HealthCheck
 	 */
 	public enum ServerNotificationProtocolType implements NotificationProtocolType{
-		ALL,
-		INFORMATION,
-		INTEGRATION,
-		HEALTHCHECK
+		SERVER_ALL,
+		SERVER_INFORMATION,
+		SERVER_INTEGRATION,
+		SERVER_HEALTHCHECK
 	}
 	
 	/**
@@ -56,11 +56,20 @@ public interface Notification extends Model{
 	 *  
 	 */
 	public enum ClientNotificationProtocolType implements NotificationProtocolType{		
-		EMAIL,
-		SMS,
-		PUSH_NOTIFICATION,
-		INTEGRATION,
-		HEALTHCHECK
+		CLIENT_EMAIL,
+		CLIENT_SMS,
+		CLIENT_PUSH_NOTIFICATION,
+		CLIENT_INTEGRATION,
+		CLIENT_INTEGRATION_PIPELINE_NOTIFICATION_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_DEFFERED_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_MAP_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_PHASED_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_SCHEDULED_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_STAGE_EVENT,
+		CLIENT_INTEGRATION_PIPELINE_PROMISE_STREAM_EVENT,
+		CLIENT_HEALTHCHECK,
+		CLIENT_SERVICE
 	}
 	
 	/* INTERNAL : The delivery of notification marked for internal consumption

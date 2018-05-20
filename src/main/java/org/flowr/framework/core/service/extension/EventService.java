@@ -10,10 +10,10 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface EventService extends ServiceFrameworkComponent{
+public interface EventService extends ServiceFrameworkComponent, Runnable{
 
 	public enum EventRegistrationStatus{
 		REGISTERED,

@@ -15,7 +15,7 @@ import org.flowr.framework.core.model.EventModel;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class EventPipeline extends DelayQueue<Event<EventModel>> implements Pipeline<Event<EventModel>> {

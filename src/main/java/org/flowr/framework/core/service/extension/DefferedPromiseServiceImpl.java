@@ -15,7 +15,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPromiseService<REQUEST,RESPONSE>{
@@ -35,8 +35,6 @@ public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPro
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		
 		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
-		
-		System.out.println("PromiseServiceImpl : serviceFramework : "+serviceFramework);
 		
 		serviceFramework.getEventService().registerEventPipeline(
 				FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED,
@@ -118,13 +116,13 @@ public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPro
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
-		return null;
+		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Properties configProperties) {
 		// TODO Auto-generated method stub
-		return null;
+		return ServiceStatus.STOPPED;
 	}
 
 

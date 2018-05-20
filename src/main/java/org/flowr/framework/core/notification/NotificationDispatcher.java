@@ -1,6 +1,8 @@
 package org.flowr.framework.core.notification;
 
-import org.flowr.framework.core.context.NotificationContext;
+import java.util.HashMap;
+
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.service.extension.NotificationService.NotificationServiceStatus;
 
 
@@ -9,7 +11,7 @@ import org.flowr.framework.core.service.extension.NotificationService.Notificati
  * This requires both the usage of persistent event as mechanism & capability for scheduled lookup with aggregation 
  * from persistent store.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface NotificationDispatcher {
@@ -19,6 +21,6 @@ public interface NotificationDispatcher {
 		SCHEDULED
 	}
 	
-	public NotificationServiceStatus dispatch(NotificationContext notificationContext);
+	public HashMap<NotificationProtocolType, NotificationServiceStatus> dispatch(NotificationBufferQueue notificationBufferQueue);
 	
 }

@@ -57,20 +57,22 @@ public class NotificationServiceImpl implements NotificationService{
 	public void publishEvent(NotificationBufferQueue notificationBufferQueue) throws ClientException{
 
 		//System.out.println("NotificationServiceImpl : notificationBufferQueue : "+notificationBufferQueue);
+		
+		if(!notificationBufferQueue.isEmpty()) {
 	
-		ArrayList<NotificationServiceAdapter> adapterList = null;
-		
-		try {						
-		
-			adapterList = notificationHelper.getNotificationRoute(notificationBufferQueue.getEventType());
+			ArrayList<NotificationServiceAdapter> adapterList = null;
 			
-			adapterList.forEach((k)-> ((NotificationServiceAdapter)k).publishEvent(notificationBufferQueue));
+			try {						
 			
-		} catch (ServerException serverException) {
-			System.err.println("NotificationEngine : ServerException : "+serverException.getContextMessage());	
-			serverException.printStackTrace();
+				adapterList = notificationHelper.getNotificationRoute(notificationBufferQueue.getEventType());
+				
+				adapterList.forEach((k)-> ((NotificationServiceAdapter)k).publishEvent(notificationBufferQueue));
+				
+			} catch (ServerException serverException) {
+				System.err.println("NotificationServiceImpl : ServerException : "+serverException.getContextMessage());	
+				serverException.printStackTrace();
+			}
 		}
-		
 	}
 	
 	@Override
@@ -99,7 +101,7 @@ public class NotificationServiceImpl implements NotificationService{
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		
-		System.out.println("NotificationEngine : startup : "+configProperties);
+		System.out.println("NotificationServiceImpl : startup : "+configProperties);
 		
 		HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeSet = 
 				notificationHelper.getNotificationRoutes();

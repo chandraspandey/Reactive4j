@@ -4,16 +4,29 @@ import static org.flowr.framework.core.constants.ExceptionConstants.ERR_SERVICE_
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_SERVICE_ALREADY_EXISTS;
 import static org.flowr.framework.core.constants.FrameworkConstants.FRAMEWORK_SERVICE;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Flow.Subscriber;
 
+import org.flowr.framework.core.constants.FrameworkConstants;
+import org.flowr.framework.core.context.Context;
+import org.flowr.framework.core.context.ServerContext;
+import org.flowr.framework.core.event.ChangeEvent;
+import org.flowr.framework.core.event.ChangeEventEntity;
 import org.flowr.framework.core.event.Event;
+import org.flowr.framework.core.event.Event.EventType;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
 import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.model.EventModel;
+import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
+import org.flowr.framework.core.process.management.ManagedProcessHandler;
+import org.flowr.framework.core.promise.PromiseTypeServer;
 import org.flowr.framework.core.service.extension.AdministrationService;
 import org.flowr.framework.core.service.extension.ConfigurationService;
 import org.flowr.framework.core.service.extension.DefferedPromiseService;
@@ -41,8 +54,14 @@ import org.flowr.framework.core.service.extension.SubscriptionService;
 public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<REQUEST,RESPONSE>,
 	ServiceProvider<REQUEST,RESPONSE>{
 
+	private static ServerContext serverContext 				= Context.ServerContext(
+																PromiseTypeServer.ServerIdentifier(), 
+																ServiceMode.SERVER,
+																ServiceState.INITIALIZING,
+																ServerNotificationProtocolType.SERVER_INFORMATION);
+	private static ManagedProcessHandler processHandler		= ManagedService.getDefaultProcessHandler();
 	private ServiceUnit serviceUnit 						= ServiceUnit.REGISTRY;
-	private String dependencyName							= NotificationService.class.getSimpleName();
+	private String dependencyName							= ServiceBus.class.getSimpleName();
 	private DependencyType dependencyType 					= DependencyType.MANDATORY;
 	private String serviceName								= FRAMEWORK_SERVICE;
 	private boolean isEnabled		 						= true; 
@@ -124,6 +143,11 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		this.serviceList.add(mapPromiseService);
 		this.serviceList.add(configService);
 		this.serviceList.add(adminService);
+	}
+	
+	public void setServerSubscriptionIdentifier(String subscriptionIdentifier) {
+		
+		serverContext.setSubscriptionClientId(subscriptionIdentifier);
 	}
 
 	@Override
@@ -237,23 +261,51 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 			(s) -> {
 				
 				ServiceStatus serviceStatus = ((ServiceLifecycle)s).startup(configProperties);
+				System.out.println(s.getServiceName()+" | "+serviceStatus);
 				
-				while(
+				/*while(
 						serviceStatus != ServiceStatus.STARTED ||
 						serviceStatus != ServiceStatus.ERROR
 				) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				}
+				}*/
 				
 				if(serviceStatus == ServiceStatus.ERROR) {
 					frameworkServiceStatus = serviceStatus;
 				}
 			}
 		);
+		
+		if(frameworkServiceStatus != ServiceStatus.ERROR) {
+			frameworkServiceStatus = ServiceStatus.STARTED;
+		}
+
+		getEventService().registerEventPipeline(
+				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
+				PipelineType.TRANSFER, 
+				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT
+				,processHandler);
+		
+
+		serverContext.setServiceState(ServiceState.STARTING);
+		serverContext.setServiceStatus(frameworkServiceStatus);
+		
+		ChangeEvent<EventModel> changeEvent = new ChangeEventEntity();
+		changeEvent.setEventTimestamp(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		changeEvent.setSubscriptionClientId(PromiseTypeServer.ServerIdentifier());
+		
+		EventModel eventModel = new EventModel();
+		eventModel.setContext(serverContext);
+		changeEvent.setChangedModel(eventModel);
+		changeEvent.setEventType(EventType.SERVER);
+		
+		publishEvent(changeEvent);
+		
+		System.out.println(this.getServiceName()+" | "+frameworkServiceStatus);
 		
 		return frameworkServiceStatus;
 	}
@@ -266,9 +318,10 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 			(s) -> {
 				
 				ServiceStatus serviceStatus = ((ServiceLifecycle)s).shutdown(configProperties);
+				System.out.println(s.getServiceName()+" | "+serviceStatus);
 				
-				while(
-						serviceStatus != ServiceStatus.STARTED ||
+				/*while(
+						serviceStatus != ServiceStatus.STOPPED ||
 						serviceStatus != ServiceStatus.ERROR
 				) {
 					try {
@@ -276,13 +329,33 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				}
+				}*/
 				
 				if(serviceStatus == ServiceStatus.ERROR) {
 					frameworkServiceStatus = serviceStatus;
 				}
 			}
 		);
+		
+		if(frameworkServiceStatus != ServiceStatus.ERROR) {
+			frameworkServiceStatus = ServiceStatus.STOPPED;
+		}
+
+		serverContext.setServiceState(ServiceState.STOPPING);
+		serverContext.setServiceStatus(frameworkServiceStatus);
+		
+		ChangeEvent<EventModel> changeEvent = new ChangeEventEntity();
+		changeEvent.setEventTimestamp(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		changeEvent.setSubscriptionClientId(PromiseTypeServer.ServerIdentifier());
+		
+		EventModel eventModel = new EventModel();
+		eventModel.setContext(serverContext);
+		changeEvent.setChangedModel(eventModel);
+		changeEvent.setEventType(EventType.SERVER);
+		
+		publishEvent(changeEvent);
+		
+		System.out.println(this.getServiceName()+" | "+frameworkServiceStatus);
 		
 		return frameworkServiceStatus;
 	}
@@ -445,7 +518,9 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 
 	@Override
 	public void publishEvent(Event<EventModel> event) {
-		subscriber.onNext(event);
+		
+		processHandler.publishEvent(event);
+		//subscriber.onNext(event);
 	}
 
 	@Override

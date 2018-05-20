@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.concurrent.Flow.Subscriber;
 
-import org.flowr.framework.core.context.ProcessContext;
+import org.flowr.framework.core.context.Context;
 import org.flowr.framework.core.event.ChangeEvent;
 import org.flowr.framework.core.event.ChangeEventEntity;
 import org.flowr.framework.core.event.Event;
@@ -15,7 +15,7 @@ import org.flowr.framework.core.model.EventModel;
  * Concrete implementation of Process Handler capabilities as a managed process.
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ManagedProcessHandler implements ProcessHandler{
@@ -83,13 +83,13 @@ public class ManagedProcessHandler implements ProcessHandler{
 	}
 	
 	@Override
-	public void publishProcessEvent(EventType eventType, ProcessContext processContext) {
+	public void publishProcessEvent(EventType eventType, Context context) {
 		
 		ChangeEvent<EventModel> changeEvent = new ChangeEventEntity();
 		changeEvent.setEventTimestamp(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 		
 		EventModel eventModel = new EventModel();
-		eventModel.setContext(processContext);
+		eventModel.setContext(context);
 
 		changeEvent.setChangedModel(eventModel);
 		changeEvent.setEventType(eventType);

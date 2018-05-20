@@ -9,9 +9,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.flowr.framework.core.config.ConfigProperties;
-import org.flowr.framework.core.config.Configuration.ConfigurationType;
-import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.context.NotificationContext;
 import org.flowr.framework.core.context.RouteContext;
 import org.flowr.framework.core.context.SubscriptionContext;
@@ -37,8 +34,6 @@ public class ProcessServer<REQ,RES>{
 	
 	// Server Process configuration
 	private String serverSubscriptionId 					= null;	
-	public static ConfigProperties SERVER_CONFIG 			= null;
-	private static ServiceConfiguration serverConfiguration = null;
 	private ServiceProvider<REQ,RES> processProvider;
 	
 	ProcessServer(ServiceProvider<REQ,RES> processProvider){		
@@ -53,24 +48,12 @@ public class ProcessServer<REQ,RES>{
 		return this;
 	}
 	
-	public ProcessServer<REQ,RES> withServerConfiguration(String filePath) 
-		throws ConfigurationException{
-			
-		serverConfiguration = ((ServiceFramework<?,?>)processProvider).getConfigurationService().getServiceConfiguration(ConfigurationType.SERVER); 
-		SERVER_CONFIG		= serverConfiguration.getConfigAsProperties();
-		return this;
-	}
-	
 	public NotificationContext withServerNotificationSubscription(
 		HashMap<NotificationProtocolType,NotificationSubscription> notificationMap) throws ConfigurationException{
 	
 		NotificationContext serverNotificationContext = new NotificationContext();
 
 		ArrayList<SubscriptionContext> subscriptionContextList = new ArrayList<SubscriptionContext>();
-	
-		//System.out.println("ProcessServer : serviceConfiguration : "+serverConfiguration);
-		
-		serverNotificationContext.setServiceConfiguration(serverConfiguration);
 		
 		if(notificationMap!= null && !notificationMap.isEmpty()){			
 			
@@ -92,7 +75,7 @@ public class ProcessServer<REQ,RES>{
 					
 					if(notificationProtocolType != null && notificationProtocolType instanceof ServerNotificationProtocolType
 							&& notificationSubscription.getSubscriptionType() == SubscriptionType.SERVER && 
-							notificationSubscription.getNotificationProtocolType() == ServerNotificationProtocolType.ALL){
+							notificationSubscription.getNotificationProtocolType() == ServerNotificationProtocolType.SERVER_ALL){
 						
 						SubscriptionContext serverSubscriptionContext = new SubscriptionContext();		
 						
@@ -170,8 +153,7 @@ public class ProcessServer<REQ,RES>{
 			
 			serverRouteContext.setRouteSet(routeSet);
 			
-			notificationTask.setNotificationContext(serverNotificationContext);	
-			notificationServiceAdapter.setNotificationTask(notificationTask);
+			notificationServiceAdapter.configure(notificationTask);
 		}else{
 			throw new ConfigurationException(
 					ERR_CONFIG,

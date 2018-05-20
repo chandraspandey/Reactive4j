@@ -8,22 +8,20 @@ import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
 import java.util.HashMap;
 
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.notification.NotificationServiceAdapter;
 import org.flowr.framework.core.notification.NotificationTask;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ClientConfig<REQUEST, RESPONSE> {
 
-	private String CLIENT_CONFIG_PATH;
-	private String SERVER_CONFIG_PATH;
 	private HashMap<NotificationProtocolType,NotificationSubscription> clientSubscriptionList;
 	private NotificationServiceAdapter clientNotificationServiceAdapter;
 	private NotificationTask clientNotificationTask;
@@ -34,8 +32,7 @@ public class ClientConfig<REQUEST, RESPONSE> {
 	private RESPONSE RES;
 	
 	public ClientConfig(	
-		String CLIENT_CONFIG_PATH,
-		String SERVER_CONFIG_PATH,
+
 		HashMap<NotificationProtocolType,NotificationSubscription> clientSubscriptionList,
 		NotificationServiceAdapter clientNotificationServiceAdapter,
 		NotificationTask clientNotificationTask,
@@ -45,9 +42,7 @@ public class ClientConfig<REQUEST, RESPONSE> {
 		REQUEST REQ, 
 		RESPONSE RES
 	) throws ConfigurationException {
-					
-			this.CLIENT_CONFIG_PATH 				= CLIENT_CONFIG_PATH;
-			this.SERVER_CONFIG_PATH 				= SERVER_CONFIG_PATH;
+
 			this.clientSubscriptionList				= clientSubscriptionList;
 			this.clientNotificationServiceAdapter	= clientNotificationServiceAdapter;
 			this.clientNotificationTask				= clientNotificationTask;
@@ -58,9 +53,9 @@ public class ClientConfig<REQUEST, RESPONSE> {
 			this.RES								= RES;	
 
 			if( 
-				CLIENT_CONFIG_PATH != null  && clientSubscriptionList != null && !clientSubscriptionList.isEmpty() && 
+				clientSubscriptionList != null && !clientSubscriptionList.isEmpty() && 
 				clientNotificationServiceAdapter != null && clientNotificationTask != null && 
-				SERVER_CONFIG_PATH != null && serverSubscriptionList != null && !serverSubscriptionList.isEmpty() && 
+				serverSubscriptionList != null && !serverSubscriptionList.isEmpty() && 
 				serverNotificationServiceAdapter != null && serverNotificationTask != null && 
 				REQ != null && RES != null
 			){	
@@ -76,13 +71,6 @@ public class ClientConfig<REQUEST, RESPONSE> {
 			//System.out.println("ClientConfig : CLIENT_CONFIG_PATH = "+CLIENT_CONFIG_PATH);	
 	}
 
-	public String getCLIENT_CONFIG_PATH() {
-		return CLIENT_CONFIG_PATH;
-	}
-
-	public String getSERVER_CONFIG_PATH() {
-		return SERVER_CONFIG_PATH;
-	}
 
 	public HashMap<NotificationProtocolType, NotificationSubscription> getClientSubscriptionList() {
 		return clientSubscriptionList;
@@ -119,8 +107,6 @@ public class ClientConfig<REQUEST, RESPONSE> {
 	public String toString(){
 		
 		return "\n ClientConfig{"+
-				" CLIENT_CONFIG_PATH : "+CLIENT_CONFIG_PATH+"\n"+	
-				" SERVER_CONFIG_PATH : "+SERVER_CONFIG_PATH+"\n"+	
 				" clientSubscriptionList : "+clientSubscriptionList+"\n"+	
 				" clientNotificationAdapter : "+clientNotificationServiceAdapter+"\n"+	
 				" clientNotificationTask : "+clientNotificationTask+"\n"+	

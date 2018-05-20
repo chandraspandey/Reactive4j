@@ -35,6 +35,9 @@ public class FrameworkConstants {
 	public static final String FRAMEWORK_PIPELINE_PROMISE_MAP		= "FRAMEWORK_PIPELINE_PROMISE_MAP";
 	public static final String FRAMEWORK_PIPELINE_PROMISE_STREAM	= "FRAMEWORK_PIPELINE_PROMISE_STREAM";
 	public static final String FRAMEWORK_PIPELINE_MANAGEMENT		= "FRAMEWORK_PIPELINE_MANAGEMENT";
+	public static final String FRAMEWORK_PIPELINE_NOTIFICATION		= "FRAMEWORK_PIPELINE_NOTIFICATION";
+	public static final String FRAMEWORK_PIPELINE_HEALTH			= "FRAMEWORK_PIPELINE_HEALTH";
+	public static final String FRAMEWORK_PIPELINE_SERVICE			= "FRAMEWORK_PIPELINE_SERVICE";
 	
 	public static final String FRAMEWORK_CONFIG_PATH				= "FRAMEWORK_CONFIG_PATH";
 	
@@ -43,4 +46,6 @@ public class FrameworkConstants {
 	public static final boolean FRAMEWORK_PIPELINE_BATCH_DEFAULT_MODE= false;
 	public static final int FRAMEWORK_PIPELINE_BATCH_DEFAULT_MIN	= 0;
 	public static final int FRAMEWORK_PIPELINE_DEFAULT_MAX_ELEMENTS	= 10000;
+	
+	public static final int FRAMEWORK_PIPELINE_NOTIFICATION_TIME_UNIT= 500;
 }

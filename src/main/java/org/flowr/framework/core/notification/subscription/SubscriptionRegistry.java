@@ -5,14 +5,18 @@ import static org.flowr.framework.core.constants.ExceptionConstants.ERR_NOTIFICA
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_NOTIFICATION_PROTOCOL;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_NOTIFICATION_SUBSCRIPTION;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.flowr.framework.core.context.SubscriptionContext;
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.notification.NotificationLifecycle;
+import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionStatus;
 import org.flowr.framework.core.process.ProcessRegistry;
 
@@ -25,12 +29,29 @@ import org.flowr.framework.core.process.ProcessRegistry;
  */
 
 public class SubscriptionRegistry implements ProcessRegistry<String,NotificationSubscription>, 
-	NotificationLifecycle{
+	SubscriptionLifecycle{
 
-	private static HashMap<String,NotificationSubscription> subscriptionMap = 
-			new HashMap<String,NotificationSubscription>();
+	private static HashMap<NotificationProtocolType,ArrayList<NotificationSubscription>> subscriptionMap = 
+			new HashMap<NotificationProtocolType,ArrayList<NotificationSubscription>>();
 	private RegistryType registryType 										= RegistryType.LOCAL;
 	
+	
+	public SubscriptionRegistry() {
+		
+		Arrays.asList(ClientNotificationProtocolType.values()).forEach(
+			
+			(c) -> {
+				subscriptionMap.put(c,new ArrayList<NotificationSubscription>());
+			}
+		);
+		
+		Arrays.asList(ServerNotificationProtocolType.values()).forEach(
+			
+			(c) -> {
+				subscriptionMap.put(c,new ArrayList<NotificationSubscription>());
+			}
+		);
+	}
 
 	@Override
 	public SubscriptionContext register(SubscriptionContext subscriptionContext) throws ConfigurationException {
@@ -132,12 +153,13 @@ public class SubscriptionRegistry implements ProcessRegistry<String,Notification
 	@Override
 	public void bind(String subscriptionId, NotificationSubscription notificationSubscription) {
 		
-		subscriptionMap.put(subscriptionId,notificationSubscription);
+		subscriptionMap.get(notificationSubscription.getNotificationProtocolType()).add(notificationSubscription);
 	}
 
 	@Override
 	public void unbind(String subscriptionId,NotificationSubscription notificationSubscription) {
-		subscriptionMap.remove(subscriptionId);
+		
+		subscriptionMap.get(notificationSubscription.getNotificationProtocolType()).remove(notificationSubscription);
 	}
 
 	@Override
@@ -148,17 +170,47 @@ public class SubscriptionRegistry implements ProcessRegistry<String,Notification
 	}
 
 	@Override
+	public Collection<NotificationSubscription> getNotificationProtocolTypeList(
+			NotificationProtocolType notificationProtocolType) {
+		
+		return subscriptionMap.get(notificationProtocolType);
+	}
+	
+	@Override
 	public Collection<NotificationSubscription> list() {
 		
-		return subscriptionMap.values();
+		Collection<NotificationSubscription> susbcriptions = new ArrayList<NotificationSubscription>();
+		
+		subscriptionMap.values().forEach(
+				(v) -> {
+					susbcriptions.addAll(v);
+				}
+		);
+		
+		return susbcriptions;
 	}
 
 	@Override
 	public NotificationSubscription lookup(String subscriptionId) {
 
+		NotificationSubscription notificationSubscription = null;
 		//System.out.println("notificationMap : "+notificationMap);
 		
-		return subscriptionMap.get(subscriptionId);
+		Iterator<NotificationSubscription> iter = list().iterator();
+
+		while(iter.hasNext()) {			
+			
+			NotificationSubscription subscription = iter.next();
+			
+			if(subscription.getSubscriptionId().equals(subscriptionId)) {
+				
+				notificationSubscription = subscription;
+				break;
+			}
+
+		}
+		
+		return notificationSubscription;
 
 	}
 

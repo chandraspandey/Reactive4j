@@ -13,7 +13,7 @@ import org.flowr.framework.core.service.extension.PromiseService.PromiseServerSt
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Context extends Model{
@@ -34,7 +34,7 @@ public interface Context extends Model{
 		processContext.setServiceIdentifier(serviceIdentifier);
 		processContext.setProcessIdentifier(processIdentifier);			
 		processContext.setNotificationDeliveryType(NotificationDeliveryType.INTERNAL);
-		processContext.setNotificationProtocolType(ServerNotificationProtocolType.INFORMATION);
+		processContext.setNotificationProtocolType(ServerNotificationProtocolType.SERVER_INFORMATION);
 		
 		return processContext;
 		

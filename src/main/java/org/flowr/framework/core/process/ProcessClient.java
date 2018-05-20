@@ -9,9 +9,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.flowr.framework.core.config.ConfigProperties;
-import org.flowr.framework.core.config.Configuration.ConfigurationType;
-import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.context.NotificationContext;
 import org.flowr.framework.core.context.RouteContext;
 import org.flowr.framework.core.context.SubscriptionContext;
@@ -36,9 +33,6 @@ public class ProcessClient<REQ,RES>{
 	
 	// Client configuration
 	public static String clientSubscriptionId 				= null;	
-	public static ConfigProperties CLIENT_CONFIG 			= null;
-	public static ServiceConfiguration clientConfiguration  = null;
-
 	private ServiceProvider<REQ,RES> processProvider;
 
 	ProcessClient(ServiceProvider<REQ,RES> processProvider){
@@ -52,15 +46,6 @@ public class ProcessClient<REQ,RES>{
 		((ServiceFramework<?,?>)processProvider).getNotificationService().setNotificationRouteContext(clientRouteContext); 
 		return this;
 	}
-	
-	public ProcessClient<REQ,RES> andClientConfiguration(String filePath) 
-			throws ConfigurationException{
-				
-		clientConfiguration = ((ServiceFramework<?,?>)processProvider).getConfigurationService().getServiceConfiguration(ConfigurationType.CLIENT);
-		CLIENT_CONFIG 		= clientConfiguration.getConfigAsProperties();
-		return this;
-	}
-	
 	
 	public SubscriptionContext withClientNotificationSubscription(NotificationSubscription 
 		notificationSubscription) throws ConfigurationException{	
@@ -99,15 +84,7 @@ public class ProcessClient<REQ,RES>{
 	
 		NotificationContext clientNotificationContext = new NotificationContext();		
 		
-		//System.out.println("ProcessClient : serviceConfiguration : "+clientConfiguration);
-		
-		clientNotificationContext.setServiceConfiguration(clientConfiguration);
-		
 		ArrayList<SubscriptionContext> subscriptionContextList = new ArrayList<SubscriptionContext>();
-	
-		//System.out.println("ProcessClient : serviceConfiguration : "+clientConfiguration);
-		
-		clientNotificationContext.setServiceConfiguration(clientConfiguration);
 		
 		if(notificationMap!= null && !notificationMap.isEmpty()){			
 			
@@ -206,8 +183,7 @@ public class ProcessClient<REQ,RES>{
 			
 			clientRouteContext.setRouteSet(routeSet);
 			
-			notificationTask.setNotificationContext(clientNotificationContext);	
-			notificationServiceAdapter.setNotificationTask(notificationTask);
+			notificationServiceAdapter.configure(notificationTask);
 		}else{
 			
 			throw new ConfigurationException(

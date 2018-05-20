@@ -34,7 +34,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * Provides concrete implementation for Promise handling as defined by Promise
  * interface.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise<REQUEST,RESPONSE>,
@@ -261,6 +261,7 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 		
 		ChangeEvent<EventModel> changeEvent = new ChangeEventEntity();
 		changeEvent.setEventTimestamp(new Timestamp(Calendar.getInstance().getTimeInMillis()));
+		changeEvent.setSubscriptionClientId(scale.getSubscriptionClientId());
 		
 		EventContext eventContext = new EventContext();
 		eventContext.setPromiseState(scale.getPromiseState());
@@ -269,21 +270,6 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 		
 		eventContext.setNotificationDeliveryType(scale.getNotificationDeliveryType());	
 	
-		/*
-		 * Can be part of client dispatch logic as augmentation at the point of delivery 
-		 * 
-		 NotificationSubscription notificationSubscription = 
-				lookupNotificationSubscription(scale.getSubscriptionClientId());
-		
-		if(notificationSubscription != null){
-			
-			NotificationProtocolType notificationProtocolType = notificationSubscription.getNotificationProtocolType();
-			eventContext.setNotificationProtocolType(notificationProtocolType);
-		}else{
-			throw new ServerException(ERR_NOTIFICATION_SUBSCRIPTION,MSG_NOTIFICATION_SUBSCRIPTION, 
-					"NotificationSubscription does not exists for SubscriptionClientId : "+progressScale.getSubscriptionClientId());
-		}*/
-		
 		EventModel eventModel = new EventModel();
 		eventModel.setContext(eventContext);
 		eventModel.setReactiveMetaData(scale);

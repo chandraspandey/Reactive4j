@@ -1,13 +1,16 @@
 package org.flowr.framework.core.notification.subscription;
 
+import java.util.Collection;
+
 import org.flowr.framework.core.context.SubscriptionContext;
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class SubscriptionHelper implements Subscription{
@@ -28,12 +31,23 @@ public class SubscriptionHelper implements Subscription{
 	public NotificationSubscription lookupNotificationSubscription(String subscriptionId){
 		
 		return subscriptionRegistry.lookup(subscriptionId);
-	}
-	
+	}	
 
 	@Override
 	public SubscriptionContext onSubscriptionChange(SubscriptionContext subscriptionContext) throws ConfigurationException {
 
 		return subscriptionRegistry.change(subscriptionContext);
+	}
+	
+	@Override
+	public Collection<NotificationSubscription> getNotificationProtocolTypelist(
+			NotificationProtocolType notificationProtocolType) {
+		
+		return subscriptionRegistry.getNotificationProtocolTypeList(notificationProtocolType);
+	}
+	
+	@Override
+	public NotificationSubscription lookup(String subscriptionId) {
+		return subscriptionRegistry.lookup( subscriptionId);
 	}
 }

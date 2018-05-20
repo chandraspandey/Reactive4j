@@ -16,7 +16,7 @@ import org.flowr.framework.core.service.ServiceLifecycle;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecycle,Runnable {
@@ -28,6 +28,7 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 	
 	public EventPipelineBusExecutor(EventBus bus) {
 		eventBus = bus; 
+		System.out.println("EventPipelineBusExecutor : eventBus : "+eventBus);
 		service.execute(this);
 	}
 
@@ -60,14 +61,10 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 			pipelineList.forEach(
 					
 				(p) -> {
-
 						
 					if(!p.isEmpty()) {
-					
-	
-						task	= new EventPipelineTask(p);
 						
-						System.out.println("EventPipelineBusExecutor : eventBus : "+eventBus);
+						task	= new EventPipelineTask(p);
 						
 						Future<NotificationBufferQueue> future = service.submit(task);
 						

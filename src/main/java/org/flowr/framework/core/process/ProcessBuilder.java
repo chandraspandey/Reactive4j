@@ -2,7 +2,6 @@ package org.flowr.framework.core.process;
 
 import java.util.HashMap;
 
-import org.flowr.framework.core.config.ConfigProperties;
 import org.flowr.framework.core.context.NotificationContext;
 import org.flowr.framework.core.context.RouteContext;
 import org.flowr.framework.core.exception.ConfigurationException;
@@ -19,13 +18,11 @@ import org.flowr.framework.core.service.ServiceProvider;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ProcessBuilder<REQ,RES> implements ProcessLifecycle{
 
-	public static ConfigProperties SERVER_CONFIG 			= null;
-	public static ConfigProperties CLIENT_CONFIG 			= null;
 	private ServiceProvider<REQ,RES> processProvider 		= null;
 	
 	public ServiceProvider<REQ,RES> build() throws ConfigurationException{
@@ -44,12 +41,11 @@ public class ProcessBuilder<REQ,RES> implements ProcessLifecycle{
 		return this;
 	}
 	
-	public ProcessBuilder<REQ,RES> withServerConfigurationAs(String serverConfigPath,
+	public ProcessBuilder<REQ,RES> withServerConfigurationAs(
 		HashMap<NotificationProtocolType,NotificationSubscription> notificationMap,NotificationTask notificationTask, 
 		NotificationServiceAdapter notificationServiceAdapter) throws ConfigurationException{
 		
 		ProcessServer<REQ,RES> processServer = new ProcessServer<REQ,RES>(processProvider);
-		processServer.withServerConfiguration(serverConfigPath);
 		NotificationContext serverNotificationContext = processServer.withServerNotificationSubscription(
 				notificationMap);
 		RouteContext serverRouteContext = processServer.withServerNotificationTask(notificationTask, 
@@ -59,12 +55,11 @@ public class ProcessBuilder<REQ,RES> implements ProcessLifecycle{
 		return this;
 	}
 	
-	public ProcessBuilder<REQ,RES> andClientConfigurationAs(String clientConfigPath,HashMap<NotificationProtocolType,
+	public ProcessBuilder<REQ,RES> andClientConfigurationAs(HashMap<NotificationProtocolType,
 		NotificationSubscription> notificationMap,NotificationTask notificationTask, 
 		NotificationServiceAdapter notificationServiceAdapter) throws ConfigurationException{
 	
 		ProcessClient<REQ,RES> processClient = new ProcessClient<REQ,RES>(processProvider);
-		processClient.andClientConfiguration(clientConfigPath);
 		NotificationContext clientNotificationContext = processClient.andClientNotificationSubscription(
 				notificationMap);
 		RouteContext clientRouteContext = processClient.andClientNotificationTask(notificationTask, 

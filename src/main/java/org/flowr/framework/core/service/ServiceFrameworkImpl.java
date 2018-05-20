@@ -22,8 +22,7 @@ class ServiceFrameworkImpl<REQUEST,RESPONSE> extends ServiceFrameworkProvider<RE
 			configurationFilePath = System.getProperty(FrameworkConstants.FRAMEWORK_CONFIG_PATH);			
 		}
 			
-		this.getConfigurationService().configure(configurationFilePath);
-		
+		this.getConfigurationService().configure(configurationFilePath);		
 	}
 	
 }

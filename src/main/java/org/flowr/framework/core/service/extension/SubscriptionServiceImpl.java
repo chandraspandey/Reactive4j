@@ -1,5 +1,6 @@
 package org.flowr.framework.core.service.extension;
 
+import java.util.Collection;
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
@@ -7,6 +8,8 @@ import org.flowr.framework.core.context.SubscriptionContext;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.notification.subscription.NotificationSubscription.SubscriptionType;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
+import org.flowr.framework.core.notification.subscription.NotificationSubscription;
 import org.flowr.framework.core.notification.subscription.Subscription;
 import org.flowr.framework.core.notification.subscription.SubscriptionHelper;
 import org.flowr.framework.core.service.ServiceFramework;
@@ -16,7 +19,7 @@ import org.flowr.framework.core.service.ServiceProvider;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class SubscriptionServiceImpl implements SubscriptionService{
@@ -68,6 +71,17 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 		return subscriptionHelper.unsubscribe(subscriptionContext);
 	}
 
+	@Override
+	public Collection<NotificationSubscription> getNotificationProtocolTypelist(
+			NotificationProtocolType notificationProtocolType) {
+		
+		return subscriptionHelper.getNotificationProtocolTypelist(notificationProtocolType);
+	}
+	
+	@Override
+	public NotificationSubscription lookup(String subscriptionId) {
+		return subscriptionHelper.lookup(subscriptionId);
+	}
 	
 	@Override
 	public void setServiceType(ServiceType serviceType) {

@@ -21,7 +21,7 @@ import org.flowr.framework.core.notification.NotificationServiceAdapter.Notifica
  * Provides Route Mapping capabilities associated with notification routing capabilities for different mapped route 
  * part of Notification associated with NotificationServiceAdapter.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class NotificationAdapterMapping<K,V> {
@@ -124,7 +124,7 @@ public class NotificationAdapterMapping<K,V> {
 												
 	
 						if(
-							notificationProtocolType == ServerNotificationProtocolType.INFORMATION &&
+							notificationProtocolType == ServerNotificationProtocolType.SERVER_INFORMATION &&
 							notificationRoute.getKey().getNotificationServiceAdapterType() == NotificationServiceAdapterType.SERVER	){
 							
 							adapterList.add(notificationRoute.getKey());

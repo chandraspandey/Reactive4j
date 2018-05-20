@@ -330,7 +330,7 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 	
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
-		// TODO Auto-generated method stub
+		
 		return ServiceStatus.STARTED;
 	}
 
