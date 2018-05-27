@@ -1,9 +1,11 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.flow.EventPublisher;
+import org.flowr.framework.core.process.management.ManagedRegistry;
+import org.flowr.framework.core.process.management.ProcessHandler;
 import org.flowr.framework.core.service.ServiceFramework;
 
 /**
@@ -13,22 +15,34 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class SecurityServiceImpl implements SecurityService{
+public class ManagedServiceImpl implements ManagedService{
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String dependencyName			= RegistryService.class.getSimpleName();
-	private DependencyType dependencyType 	= DependencyType.MANDATORY;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_SECURITY;
-	private ServiceType serviceType			= ServiceType.SECURITY;
-
+	private ServiceUnit serviceUnit 				= ServiceUnit.POOL;
+	private String dependencyName					= ManagedServiceImpl.class.getSimpleName();
+	private DependencyType dependencyType 			= DependencyType.MANDATORY;
+	private String serviceName						= FrameworkConstants.FRAMEWORK_SERVICE_MANAGEMENT;
+	private ServiceType serviceType					= ServiceType.MANAGEMENT;
+	private static ManagedRegistry managedRegistry 	= new ManagedRegistry();
 	@SuppressWarnings("unused")
-	private ServiceFramework<?,?> serviceFramework			= null;
+	private ServiceFramework<?,?> serviceFramework	= null;
 	
 	@Override
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		this.serviceFramework = serviceFramework;
 	}
 	
+	public ManagedServiceImpl() {
+		
+	}
+	
+	public void put(String name, ProcessHandler handler) {
+		managedRegistry.bind(name, handler);		
+	}
+	
+	public ProcessHandler get(String name) {
+		
+		return managedRegistry.lookup(name);
+	}
 	
 	@Override
 	public void setServiceType(ServiceType serviceType) {
@@ -41,6 +55,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 		return this.serviceType;
 	}
+	
 	@Override
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
@@ -49,7 +64,7 @@ public class SecurityServiceImpl implements SecurityService{
 	public String getServiceName() {
 
 		return this.serviceName;
-	}		
+	}	
 	
 	@Override
 	public void setServiceUnit(ServiceUnit serviceUnit) {
@@ -83,7 +98,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 		return status;
 	}
-	
+
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
@@ -101,6 +116,5 @@ public class SecurityServiceImpl implements SecurityService{
 		// TODO Auto-generated method stub
 		
 	}
-
 
 }

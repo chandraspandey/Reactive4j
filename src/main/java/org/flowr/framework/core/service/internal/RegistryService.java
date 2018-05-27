@@ -1,4 +1,4 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
@@ -7,7 +7,7 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface RegistryService extends ServiceFrameworkComponent{

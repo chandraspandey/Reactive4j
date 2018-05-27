@@ -2,7 +2,7 @@ package org.flowr.framework.core.promise;
 
 import java.util.Properties;
 
-import org.flowr.framework.core.config.ClientConfig;
+import org.flowr.framework.core.config.OperationConfig;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.security.ClientIdentity;
 import org.flowr.framework.core.service.Service.ServiceStatus;
@@ -30,7 +30,7 @@ public interface PromiseTypeClient<REQUEST,RESPONSE> extends DeferableRequest<RE
 	
 	public PromiseTypeServer<REQUEST, RESPONSE> buildPromiseTypeServer() throws ConfigurationException;
 	
-	public void configure(ClientConfig<REQUEST, RESPONSE> clientConfig) throws ConfigurationException;
+	public void configure(OperationConfig<REQUEST, RESPONSE> clientConfig) throws ConfigurationException;
 	
 	public PromiseRequest<REQUEST, RESPONSE>  buildPromiseRequest() throws ConfigurationException;
 	

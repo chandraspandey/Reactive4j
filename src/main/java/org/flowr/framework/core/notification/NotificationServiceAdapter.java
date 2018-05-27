@@ -7,9 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
 
-import org.flowr.framework.api.Node;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.event.Event.EventType;
@@ -79,33 +77,6 @@ public interface NotificationServiceAdapter extends BatchEventPublisher, Service
 	public abstract class DefaultAdapter implements NotificationServiceAdapter{
 
 		@Override
-		public Circuit buildCircuit(Node node,ConfigurationType configurationType) throws ConfigurationException{
-			
-			Circuit circuit = null;
-
-			if(node != null) {
-				
-				try {
-					
-					circuit =node.buildCircuit(configurationType);
-				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-					throw new ConfigurationException(
-							ERR_CONFIG,
-							MSG_CONFIG, 
-							"Node instance creation interuppted.");
-				}
-			}else {
-				throw new ConfigurationException(
-						ERR_CONFIG,
-						MSG_CONFIG, 
-						"Node instance not created for Circuit creation.");
-			}
-			
-			return circuit;
-		}
-		
-		@Override
 		public HashMap<NotificationProtocolType,EndPointDispatcher> buildPipelineDispatcher(
 			Circuit circuit,
 			EventBus eventBus, ConfigurationType configurationType,
@@ -170,6 +141,20 @@ public interface NotificationServiceAdapter extends BatchEventPublisher, Service
 									eventBus.addEventPipeline(integrationPipeline);
 									break;
 								}case CLIENT_INTEGRATION:{
+									
+									EventPipeline integrationPipeline  =  new EventPipeline();
+									integrationPipeline.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_SERVICE);
+									integrationPipeline.setPipelineType(PipelineType.TRANSFER);
+									integrationPipeline.setPipelineFunctionType(PipelineFunctionType.PIPELINE_CLIENT_SERVICE);	
+									integrationPipeline.setEventType(EventType.CLIENT);
+									
+									Collection<ServiceEndPoint> serviceEndPointList = clientCircuit.getAvailableServiceEndPoints(
+											protocolType);
+									EndPointDispatcher dispatcher = notificationProtocolDispatcher.getDeclaredConstructor().newInstance(new Object[0]);
+									dispatcher.configure(protocolType, serviceEndPointList,integrationPipeline);
+									
+									dispatcherMap.put(protocolType, dispatcher);
+									eventBus.addEventPipeline(integrationPipeline);
 									
 								}case CLIENT_INTEGRATION_PIPELINE_NOTIFICATION_EVENT:{
 									EventPipeline integrationPipeline  =  new EventPipeline();

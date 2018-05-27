@@ -40,26 +40,19 @@ public interface Context extends Model{
 		
 	}
 	
-	public static ProcessContext ServiceContext(
-			String serverIdentifier, 
-			PromiseServerState promiseServerState,
-			PromiseServerStatus promiseServerStatus,
-			String serviceIdentifier,
-			String processIdentifier,
-			NotificationDeliveryType notificationDeliveryType,
-			ServerNotificationProtocolType serverNotificationProtocolType
-			){
+	public static ServiceContext ServiceContext(
+			String subscriptionIdentifier, 
+			ServiceMode serviceMode,
+			ServiceState serviceState,
+			ServerNotificationProtocolType serverNotificationProtocolType) {
 		
-		ProcessContext processContext = new ProcessContext();
-		processContext.setServerIdentifier(serverIdentifier);
-		processContext.setServerState(promiseServerState);
-		processContext.setServerStatus(promiseServerStatus);
-		processContext.setServiceIdentifier(serviceIdentifier);
-		processContext.setProcessIdentifier(processIdentifier);			
-		processContext.setNotificationDeliveryType(notificationDeliveryType);
-		processContext.setNotificationProtocolType(serverNotificationProtocolType);
+		ServiceContext serviceContext = new ServiceContext();
+		serviceContext.setSubscriptionClientId(subscriptionIdentifier);
+		serviceContext.setServiceMode(serviceMode);
+		serviceContext.setServiceState(serviceState);
+		serviceContext.setNotificationProtocolType(serverNotificationProtocolType);
 		
-		return processContext;
+		return serviceContext;
 		
 	}
 	

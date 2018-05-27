@@ -1,16 +1,18 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Properties;
 
+import org.flowr.framework.api.Node;
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.process.management.ManagedProcessHandler;
-import org.flowr.framework.core.promise.deferred.DeferredPromiseHandler;
-import org.flowr.framework.core.promise.deferred.DefferedPromise;
+import org.flowr.framework.core.process.management.NodeProcessHandler;
 import org.flowr.framework.core.service.ServiceFramework;
-import org.flowr.framework.core.service.internal.ManagedService;
 
 /**
  * 
@@ -19,40 +21,50 @@ import org.flowr.framework.core.service.internal.ManagedService;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPromiseService<REQUEST,RESPONSE>{
+public class NodeServiceImpl implements NodeService{
 
 	private ServiceUnit serviceUnit 								= ServiceUnit.SINGELTON;
-	private String dependencyName									= PromiseService.class.getSimpleName();
+	private String dependencyName									= HighAvailabilityService.class.getSimpleName();
 	private DependencyType dependencyType 							= DependencyType.MANDATORY;
-	private String serviceName										= FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED;
-	private ServiceType serviceType									= ServiceType.PROMISE;
-	@SuppressWarnings("unused")
-	private ServiceFramework<REQUEST,RESPONSE> serviceFramework		= null;
+	private String serviceName										= FrameworkConstants.FRAMEWORK_SERVICE_NODE;
+	private ServiceType serviceType									= ServiceType.NODE;
+	private ServiceFramework<?,?> serviceFramework					= null;
+	private NodeProcessHandler nodeProcessHandler 					= NodeService.getDefaultNodeProcessHandler();
 	private ManagedProcessHandler managedProcessHandler 			= ManagedService.getDefaultProcessHandler();
-	private DeferredPromiseHandler<REQUEST,RESPONSE> promiseHandler = new DeferredPromiseHandler<REQUEST,RESPONSE>();
+	private Node node												= null;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		
-		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
+		this.serviceFramework = serviceFramework;
 		
-		serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED,
+		this.serviceFramework.getEventService().registerEventPipeline(
+				FrameworkConstants.FRAMEWORK_PIPELINE_HEALTH,
 				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_PROMISE_DEFFERED_EVENT 
-				,promiseHandler);
-		
-		serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT
-				,managedProcessHandler);
-		
-		promiseHandler.associateProcessHandler(managedProcessHandler);		
-
+				PipelineFunctionType.HEALTH 
+				,managedProcessHandler);	
 	}
 	
+	@Override
+	public void setNode(Node node) {		
+		this.node = node;
+	}
+	
+	@Override
+	public Node getNode() {		
+		return this.node;
+	}
+	
+	@Override
+	public void setNodeProcessHandler(NodeProcessHandler nodeProcessHandler) {
+		
+		this.nodeProcessHandler = nodeProcessHandler;
+	}
+	
+	@Override
+	public NodeProcessHandler getNodeProcessHandler() {
+		return this.nodeProcessHandler;
+	}
 	
 	@Override
 	public void setServiceType(ServiceType serviceType) {
@@ -116,19 +128,35 @@ public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPro
 
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Properties configProperties) {
-		// TODO Auto-generated method stub
+
 		return ServiceStatus.STOPPED;
 	}
+	
+	@Override
+	public Process lookupProcess(String executable) throws ConfigurationException {
 
+		return nodeProcessHandler.lookupProcess(executable);
+	}
+	
+	@Override
+	public InputStream processIn(String executable) throws ConfigurationException {
+
+		return nodeProcessHandler.processIn(executable);
+	}
+	
+	@Override
+	public OutputStream processOut(String executable) throws ConfigurationException {
+		return nodeProcessHandler.processOut(executable);
+	}
 
 	@Override
-	public DefferedPromise<REQUEST, RESPONSE> getPromise() {
-		return this.promiseHandler;
+	public InputStream processError(String executable) throws ConfigurationException {
+		return nodeProcessHandler.processError(executable);
 	}
+
 }

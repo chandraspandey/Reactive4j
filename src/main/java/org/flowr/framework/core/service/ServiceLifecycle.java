@@ -9,18 +9,11 @@ import org.flowr.framework.core.service.Service.ServiceStatus;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface ServiceLifecycle {
 
-	/**
-	 * Provides listeners of the service to act according to information 
-	 * provided by EngineTask
-	 * @param engineTask
-	
-	public void publishServiceChange(NotificationTask notificationTask); 
-	 */
 	
 	public void addServiceListener(EventPublisher serviceListener);
 	

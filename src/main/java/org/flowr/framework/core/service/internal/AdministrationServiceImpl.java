@@ -1,4 +1,4 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Properties;
 
@@ -10,13 +10,13 @@ import org.flowr.framework.core.service.ServiceFramework;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class AdministrationServiceImpl implements AdministrationService{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String dependencyName			= RegistryService.class.getSimpleName();
+	private String dependencyName			= AdministrationService.class.getSimpleName();
 	private DependencyType dependencyType 	= DependencyType.MANDATORY;
 	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ADMINISTRATION;
 	private ServiceType serviceType			= ServiceType.ADMINISTRATION;

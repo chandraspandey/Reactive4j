@@ -12,37 +12,36 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Flow.Subscriber;
 
-import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.context.Context;
 import org.flowr.framework.core.context.ServerContext;
 import org.flowr.framework.core.event.ChangeEvent;
 import org.flowr.framework.core.event.ChangeEventEntity;
 import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.event.Event.EventType;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
 import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.promise.PromiseTypeServer;
-import org.flowr.framework.core.service.extension.AdministrationService;
-import org.flowr.framework.core.service.extension.ConfigurationService;
 import org.flowr.framework.core.service.extension.DefferedPromiseService;
-import org.flowr.framework.core.service.extension.EventService;
-import org.flowr.framework.core.service.extension.ManagedService;
 import org.flowr.framework.core.service.extension.MapPromiseService;
-import org.flowr.framework.core.service.extension.NotificationService;
 import org.flowr.framework.core.service.extension.PhasedPromiseService;
 import org.flowr.framework.core.service.extension.PromiseService;
-import org.flowr.framework.core.service.extension.RegistryService;
-import org.flowr.framework.core.service.extension.RoutingService;
 import org.flowr.framework.core.service.extension.ScheduledPromiseService;
-import org.flowr.framework.core.service.extension.SecurityService;
 import org.flowr.framework.core.service.extension.StagePromiseService;
 import org.flowr.framework.core.service.extension.StreamPromiseService;
-import org.flowr.framework.core.service.extension.SubscriptionService;
+import org.flowr.framework.core.service.internal.AdministrationService;
+import org.flowr.framework.core.service.internal.ConfigurationService;
+import org.flowr.framework.core.service.internal.EventService;
+import org.flowr.framework.core.service.internal.HighAvailabilityService;
+import org.flowr.framework.core.service.internal.ManagedService;
+import org.flowr.framework.core.service.internal.NodeService;
+import org.flowr.framework.core.service.internal.NotificationService;
+import org.flowr.framework.core.service.internal.RegistryService;
+import org.flowr.framework.core.service.internal.RoutingService;
+import org.flowr.framework.core.service.internal.SecurityService;
+import org.flowr.framework.core.service.internal.SubscriptionService;
 
 /**
  * 
@@ -84,6 +83,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	private ManagedService managedService					= ManagedService.getInstance();
 	private ConfigurationService configService				= ConfigurationService.getInstance();
 	private AdministrationService adminService				= AdministrationService.getInstance();
+	private HighAvailabilityService highAvailabilityService = HighAvailabilityService.getInstance();
+	private NodeService nodeService 						= NodeService.getInstance();
 	
 	@SuppressWarnings("unchecked")
 	private PromiseService<REQUEST,RESPONSE> promiseService 					= 
@@ -126,6 +127,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		mapPromiseService.setServiceFramework(this);
 		configService.setServiceFramework(this);
 		adminService.setServiceFramework(this);
+		highAvailabilityService.setServiceFramework(this);
+		nodeService.setServiceFramework(this);
 		
 		this.serviceList.add(eventService);
 		this.serviceList.add(notificationService);
@@ -143,6 +146,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		this.serviceList.add(mapPromiseService);
 		this.serviceList.add(configService);
 		this.serviceList.add(adminService);
+		this.serviceList.add(highAvailabilityService);
+		this.serviceList.add(nodeService);
 	}
 	
 	public void setServerSubscriptionIdentifier(String subscriptionIdentifier) {
@@ -284,12 +289,12 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 			frameworkServiceStatus = ServiceStatus.STARTED;
 		}
 
-		getEventService().registerEventPipeline(
+	/*	getEventService().registerEventPipeline(
 				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
 				PipelineType.TRANSFER, 
 				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT
 				,processHandler);
-		
+		*/
 
 		serverContext.setServiceState(ServiceState.STARTING);
 		serverContext.setServiceStatus(frameworkServiceStatus);
@@ -467,6 +472,16 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	}
 
 	@Override
+	public HighAvailabilityService getHighAvailabilityService() {
+		return highAvailabilityService;
+	}
+	
+	@Override
+	public NodeService getNodeService() {
+		return nodeService;
+	}
+	
+	@Override
 	public void setFlowName(String flowName) {
 		this.flowName = flowName;
 	}
@@ -532,6 +547,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 				
 		return (this.subscriber != null);
 	}
+
+
 
 
 

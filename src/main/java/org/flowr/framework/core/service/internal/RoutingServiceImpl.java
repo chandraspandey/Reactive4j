@@ -1,12 +1,15 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
+import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.process.management.ManagedRegistry;
-import org.flowr.framework.core.process.management.ProcessHandler;
+import org.flowr.framework.core.promise.PromiseRequest;
+import org.flowr.framework.core.security.ClientIdentity;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.ServiceResponse;
+import org.flowr.framework.core.service.route.ServiceRouteMapping;
 
 /**
  * 
@@ -15,33 +18,36 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class ManagedServiceImpl implements ManagedService{
+public class RoutingServiceImpl implements RoutingService{
 
-	private ServiceUnit serviceUnit 				= ServiceUnit.POOL;
-	private String dependencyName					= ManagedServiceImpl.class.getSimpleName();
-	private DependencyType dependencyType 			= DependencyType.MANDATORY;
-	private String serviceName						= FrameworkConstants.FRAMEWORK_SERVICE_MANAGEMENT;
-	private ServiceType serviceType					= ServiceType.MANAGEMENT;
-	private static ManagedRegistry managedRegistry 	= new ManagedRegistry();
+	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
+	private String dependencyName			= RegistryService.class.getSimpleName();
+	private DependencyType dependencyType 	= DependencyType.MANDATORY;
+	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ROUTING;
+	private ServiceType serviceType			= ServiceType.ROUTING;
+	private static ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>> routeMapping = 
+			new ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>>();
 	@SuppressWarnings("unused")
-	private ServiceFramework<?,?> serviceFramework	= null;
+	private ServiceFramework<?,?> serviceFramework			= null;
 	
 	@Override
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		this.serviceFramework = serviceFramework;
 	}
 	
-	public ManagedServiceImpl() {
+	@Override
+	public void bindServiceRoute(ClientIdentity clientIdentity,Class<? extends ServiceResponse>  responseClass) 
+		throws ConfigurationException{
 		
+		routeMapping.add(clientIdentity,responseClass);
 	}
 	
-	public void put(String name, ProcessHandler handler) {
-		managedRegistry.bind(name, handler);		
-	}
-	
-	public ProcessHandler get(String name) {
+	@Override
+	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?,?> promiseRequest){
 		
-		return managedRegistry.lookup(name);
+		ClientIdentity clientIdentity =  promiseRequest.getClientIdentity();
+		
+		return routeMapping.getRoute(clientIdentity);
 	}
 	
 	@Override
@@ -55,7 +61,6 @@ public class ManagedServiceImpl implements ManagedService{
 		
 		return this.serviceType;
 	}
-	
 	@Override
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
@@ -64,7 +69,7 @@ public class ManagedServiceImpl implements ManagedService{
 	public String getServiceName() {
 
 		return this.serviceName;
-	}	
+	}		
 	
 	@Override
 	public void setServiceUnit(ServiceUnit serviceUnit) {
@@ -98,7 +103,7 @@ public class ManagedServiceImpl implements ManagedService{
 		
 		return status;
 	}
-
+	
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
@@ -116,5 +121,6 @@ public class ManagedServiceImpl implements ManagedService{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

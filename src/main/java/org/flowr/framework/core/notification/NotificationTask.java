@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 import org.flowr.framework.core.node.EndPointDispatcher;
 import org.flowr.framework.core.node.ServiceMesh.ServiceTopologyMode;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.service.extension.NotificationService.NotificationServiceStatus;
+import org.flowr.framework.core.service.internal.NotificationService.NotificationServiceStatus;
 
 /**
  * Defines notification as discrete task executable as thread and provides integration with dispatcher capability. 

@@ -1,11 +1,11 @@
 package org.flowr.framework.api;
 
-import java.util.concurrent.ExecutionException;
-
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.node.Circuit;
+import org.flowr.framework.core.node.EndPoint.EndPointStatus;
 import org.flowr.framework.core.node.ServiceMesh;
+import org.flowr.framework.core.process.management.NodeProcessHandler;
+import org.flowr.framework.core.service.ServiceEndPoint;
 
 /**
  * 
@@ -15,6 +15,11 @@ import org.flowr.framework.core.node.ServiceMesh;
  */
 public interface Node extends ServiceMesh {
 
-	public Circuit buildCircuit(ConfigurationType configurationType) throws ConfigurationException, InterruptedException, 
-		ExecutionException;
+	public EndPointStatus addServiceEndpoint(ConfigurationType configurationType, ServiceEndPoint serviceEndPoint) 
+			throws ConfigurationException;
+		
+	public EndPointStatus removeServiceEndpoint(ConfigurationType configurationType, ServiceEndPoint serviceEndPoint)
+			throws ConfigurationException;
+	
+	public NodeProcessHandler getNodeProcessHandler();
 }

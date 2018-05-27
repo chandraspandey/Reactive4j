@@ -5,22 +5,24 @@ import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.SingleEventPublisher;
 import org.flowr.framework.core.service.dependency.Dependency;
 import org.flowr.framework.core.service.dependency.DependencyLoop;
-import org.flowr.framework.core.service.extension.AdministrationService;
-import org.flowr.framework.core.service.extension.ConfigurationService;
 import org.flowr.framework.core.service.extension.DefferedPromiseService;
-import org.flowr.framework.core.service.extension.EventService;
-import org.flowr.framework.core.service.extension.ManagedService;
 import org.flowr.framework.core.service.extension.MapPromiseService;
-import org.flowr.framework.core.service.extension.NotificationService;
 import org.flowr.framework.core.service.extension.PhasedPromiseService;
 import org.flowr.framework.core.service.extension.PromiseService;
-import org.flowr.framework.core.service.extension.RegistryService;
-import org.flowr.framework.core.service.extension.RoutingService;
 import org.flowr.framework.core.service.extension.ScheduledPromiseService;
-import org.flowr.framework.core.service.extension.SecurityService;
 import org.flowr.framework.core.service.extension.StagePromiseService;
 import org.flowr.framework.core.service.extension.StreamPromiseService;
-import org.flowr.framework.core.service.extension.SubscriptionService;
+import org.flowr.framework.core.service.internal.AdministrationService;
+import org.flowr.framework.core.service.internal.ConfigurationService;
+import org.flowr.framework.core.service.internal.EventService;
+import org.flowr.framework.core.service.internal.HighAvailabilityService;
+import org.flowr.framework.core.service.internal.ManagedService;
+import org.flowr.framework.core.service.internal.NodeService;
+import org.flowr.framework.core.service.internal.NotificationService;
+import org.flowr.framework.core.service.internal.RegistryService;
+import org.flowr.framework.core.service.internal.RoutingService;
+import org.flowr.framework.core.service.internal.SecurityService;
+import org.flowr.framework.core.service.internal.SubscriptionService;
 
 /**
  * Aggregation Service interface for defined service as Service registry supported as part of framework, 
@@ -83,6 +85,10 @@ public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, 
 	public SecurityService getSecurityService();
 
 	public MapPromiseService<REQUEST, RESPONSE> getMapPromiseService();
+	
+	public HighAvailabilityService getHighAvailabilityService(); 
+	
+	public NodeService getNodeService();
 	
 	public void configure(String configurationFilePath) throws ConfigurationException;
 	

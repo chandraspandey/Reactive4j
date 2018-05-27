@@ -190,10 +190,4 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
 				"}\n";
 
 	}
-
-
-
-
-
-
 }

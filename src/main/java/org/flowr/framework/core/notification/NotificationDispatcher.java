@@ -3,7 +3,7 @@ package org.flowr.framework.core.notification;
 import java.util.HashMap;
 
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.service.extension.NotificationService.NotificationServiceStatus;
+import org.flowr.framework.core.service.internal.NotificationService.NotificationServiceStatus;
 
 
 /**

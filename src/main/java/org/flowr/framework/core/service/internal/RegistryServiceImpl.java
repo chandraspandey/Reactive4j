@@ -1,15 +1,10 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.promise.PromiseRequest;
-import org.flowr.framework.core.security.ClientIdentity;
 import org.flowr.framework.core.service.ServiceFramework;
-import org.flowr.framework.core.service.ServiceResponse;
-import org.flowr.framework.core.service.route.ServiceRouteMapping;
 
 /**
  * 
@@ -18,36 +13,19 @@ import org.flowr.framework.core.service.route.ServiceRouteMapping;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class RoutingServiceImpl implements RoutingService{
+public class RegistryServiceImpl implements RegistryService{
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
+	private ServiceUnit serviceUnit 		= ServiceUnit.REGISTRY;
 	private String dependencyName			= RegistryService.class.getSimpleName();
 	private DependencyType dependencyType 	= DependencyType.MANDATORY;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ROUTING;
-	private ServiceType serviceType			= ServiceType.ROUTING;
-	private static ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>> routeMapping = 
-			new ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>>();
+	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_REGISTRY;
+	private ServiceType serviceType			= ServiceType.REGISTRY;
 	@SuppressWarnings("unused")
 	private ServiceFramework<?,?> serviceFramework			= null;
 	
 	@Override
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		this.serviceFramework = serviceFramework;
-	}
-	
-	@Override
-	public void bindServiceRoute(ClientIdentity clientIdentity,Class<? extends ServiceResponse>  responseClass) 
-		throws ConfigurationException{
-		
-		routeMapping.add(clientIdentity,responseClass);
-	}
-	
-	@Override
-	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?,?> promiseRequest){
-		
-		ClientIdentity clientIdentity =  promiseRequest.getClientIdentity();
-		
-		return routeMapping.getRoute(clientIdentity);
 	}
 	
 	@Override
@@ -60,7 +38,7 @@ public class RoutingServiceImpl implements RoutingService{
 	public ServiceType getServiceType() {
 		
 		return this.serviceType;
-	}
+	}	
 	@Override
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
@@ -69,7 +47,7 @@ public class RoutingServiceImpl implements RoutingService{
 	public String getServiceName() {
 
 		return this.serviceName;
-	}		
+	}	
 	
 	@Override
 	public void setServiceUnit(ServiceUnit serviceUnit) {
@@ -103,7 +81,13 @@ public class RoutingServiceImpl implements RoutingService{
 		
 		return status;
 	}
-	
+
+	@Override
+	public void addServiceListener(EventPublisher serviceListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
@@ -115,12 +99,5 @@ public class RoutingServiceImpl implements RoutingService{
 		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
-
-	@Override
-	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }

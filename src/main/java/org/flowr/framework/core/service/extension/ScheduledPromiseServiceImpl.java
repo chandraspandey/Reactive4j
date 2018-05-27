@@ -10,6 +10,7 @@ import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.promise.scheduled.ScheduledPromise;
 import org.flowr.framework.core.promise.scheduled.ScheduledPromiseHandler;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.internal.ManagedService;
 
 /**
  * 

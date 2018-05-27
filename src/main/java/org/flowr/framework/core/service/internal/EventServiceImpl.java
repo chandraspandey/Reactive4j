@@ -1,4 +1,4 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -63,6 +63,14 @@ public class EventServiceImpl implements EventService{
 	}
 	
 	public EventServiceImpl() {
+		
+		registerEventPipeline(
+				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
+				PipelineType.TRANSFER, 
+				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT,
+				ManagedService.getDefaultProcessHandler()
+		);
+		
 		
 		Arrays.asList(PipelineFunctionType.values()).forEach(
 				

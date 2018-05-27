@@ -245,7 +245,7 @@ public class SubscriptionRegistry implements ProcessRegistry<String,Notification
 	public String toString(){
 		
 		return "SubscriptionRegistry{  registryType : "+registryType+" | "+
-				"\n notificationMap : "+subscriptionMap+
+				"\n subscriptionMap : "+subscriptionMap+
 				"\n}\n";
 	}
 

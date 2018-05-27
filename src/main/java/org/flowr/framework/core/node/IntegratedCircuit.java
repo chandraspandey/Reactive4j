@@ -46,6 +46,40 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 		return circuitMap.keySet();
 	}
 	
+	@Override
+	public EndPointStatus addServiceEndpoint(ServiceEndPoint serviceEndPoint) {
+		
+		EndPointStatus status = EndPointStatus.UNREACHABLE;
+		
+		handleEndPoint(serviceEndPoint);
+		
+		boolean isNegotiated = serviceEndPoint.isNegotiated();
+		
+		while(!isNegotiated){
+			
+			try {
+				Thread.sleep(2000);
+				isNegotiated = serviceEndPoint.isNegotiated();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if(circuitMap.get(serviceEndPoint) != null && circuitMap.get(serviceEndPoint) == EndPointStatus.REACHABLE) {
+			status = EndPointStatus.ADDED;
+		}
+		
+		return status;
+	}
+	
+	@Override
+	public EndPointStatus removeServiceEndpoint(ServiceEndPoint serviceEndpoint) {
+		
+		circuitMap.remove(serviceEndpoint);
+				
+		return EndPointStatus.REMOVED;
+	}
+	
 	
 	@Override
 	public Collection<ServiceEndPoint> getAllAvailableServiceEndPoints(){
@@ -239,9 +273,15 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 	@Override
 	public SimpleEntry<ServiceEndPoint, EndPointStatus> doCallback(SimpleEntry<ServiceEndPoint, EndPointStatus> status) {
 
-		System.out.println("IntegratedCircuit : heartbeat : status : "+status);
+		
 		circuitMap.put(status.getKey(),status.getValue());
-		return null;
+		
+		if(status.getValue() == EndPointStatus.UNREACHABLE) {
+
+			System.out.println("IntegratedCircuit : heartbeat : status : "+status);
+		}
+		
+		return status;
 	}
 	
 	@Override

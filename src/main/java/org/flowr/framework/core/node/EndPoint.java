@@ -17,9 +17,11 @@ import org.flowr.framework.core.notification.Notification.NotificationProtocolTy
 public interface EndPoint {
 
 	public enum EndPointStatus{
+		ADDED,
 		NEGOTIATE,
 		REACHABLE,
-		UNREACHABLE
+		UNREACHABLE,
+		REMOVED
 	}
 	
 	public void setNotificationProtocolType(NotificationProtocolType notificationProtocolType);

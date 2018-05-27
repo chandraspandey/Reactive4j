@@ -1,4 +1,4 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Collection;
 import java.util.Properties;

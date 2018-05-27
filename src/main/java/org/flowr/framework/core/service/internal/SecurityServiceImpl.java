@@ -1,4 +1,4 @@
-package org.flowr.framework.core.service.extension;
+package org.flowr.framework.core.service.internal;
 
 import java.util.Properties;
 
@@ -10,16 +10,17 @@ import org.flowr.framework.core.service.ServiceFramework;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class RegistryServiceImpl implements RegistryService{
+public class SecurityServiceImpl implements SecurityService{
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.REGISTRY;
+	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
 	private String dependencyName			= RegistryService.class.getSimpleName();
 	private DependencyType dependencyType 	= DependencyType.MANDATORY;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_REGISTRY;
-	private ServiceType serviceType			= ServiceType.REGISTRY;
+	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_SECURITY;
+	private ServiceType serviceType			= ServiceType.SECURITY;
+
 	@SuppressWarnings("unused")
 	private ServiceFramework<?,?> serviceFramework			= null;
 	
@@ -27,6 +28,7 @@ public class RegistryServiceImpl implements RegistryService{
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		this.serviceFramework = serviceFramework;
 	}
+	
 	
 	@Override
 	public void setServiceType(ServiceType serviceType) {
@@ -38,7 +40,7 @@ public class RegistryServiceImpl implements RegistryService{
 	public ServiceType getServiceType() {
 		
 		return this.serviceType;
-	}	
+	}
 	@Override
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
@@ -47,7 +49,7 @@ public class RegistryServiceImpl implements RegistryService{
 	public String getServiceName() {
 
 		return this.serviceName;
-	}	
+	}		
 	
 	@Override
 	public void setServiceUnit(ServiceUnit serviceUnit) {
@@ -81,13 +83,7 @@ public class RegistryServiceImpl implements RegistryService{
 		
 		return status;
 	}
-
-	@Override
-	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub
@@ -99,5 +95,12 @@ public class RegistryServiceImpl implements RegistryService{
 		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
+
+	@Override
+	public void addServiceListener(EventPublisher serviceListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

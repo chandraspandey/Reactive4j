@@ -20,7 +20,7 @@ import org.flowr.framework.core.notification.subscription.NotificationSubscripti
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class ClientConfig<REQUEST, RESPONSE> {
+public class OperationConfig<REQUEST, RESPONSE> {
 
 	private HashMap<NotificationProtocolType,NotificationSubscription> clientSubscriptionList;
 	private NotificationServiceAdapter clientNotificationServiceAdapter;
@@ -31,7 +31,7 @@ public class ClientConfig<REQUEST, RESPONSE> {
 	private REQUEST REQ; 
 	private RESPONSE RES;
 	
-	public ClientConfig(	
+	public OperationConfig(	
 
 		HashMap<NotificationProtocolType,NotificationSubscription> clientSubscriptionList,
 		NotificationServiceAdapter clientNotificationServiceAdapter,
@@ -106,7 +106,7 @@ public class ClientConfig<REQUEST, RESPONSE> {
 	
 	public String toString(){
 		
-		return "\n ClientConfig{"+
+		return "\n OperationConfig{"+
 				" clientSubscriptionList : "+clientSubscriptionList+"\n"+	
 				" clientNotificationAdapter : "+clientNotificationServiceAdapter+"\n"+	
 				" clientNotificationTask : "+clientNotificationTask+"\n"+	

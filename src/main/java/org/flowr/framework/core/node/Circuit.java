@@ -24,6 +24,10 @@ public interface Circuit {
 		UNAVAILABLE
 	}
 	
+	public EndPointStatus addServiceEndpoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;
+		
+	public EndPointStatus removeServiceEndpoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;	
+	
 	public void buildCircuit(ConfigurationType configurationType) throws ConfigurationException, 
 		InterruptedException, ExecutionException;
 	

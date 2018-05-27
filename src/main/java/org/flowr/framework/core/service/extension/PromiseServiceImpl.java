@@ -10,6 +10,7 @@ import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.promise.Promise;
 import org.flowr.framework.core.promise.PromiseHandler;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.internal.ManagedService;
 
 /**
  * 
