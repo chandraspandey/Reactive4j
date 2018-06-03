@@ -1,9 +1,5 @@
 package org.flowr.framework.core.promise.phase;
 
-import java.util.Collection;
-import java.util.concurrent.Delayed;
-
-import org.flowr.framework.core.exception.PromiseException;
 import org.flowr.framework.core.promise.Promise;
 
 
@@ -19,18 +15,9 @@ import org.flowr.framework.core.promise.Promise;
  * This may be dynamically handled by the client program such as loading of 
  * Thumbnails/media in the GUI first & then the actual size/media versions. 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface PhasedPromise<REQUEST,RESPONSE> extends Promise<REQUEST,RESPONSE>{
-
-	
-	/**
-	 * Returns accumulated chunk types & performs the completion activities when 
-	 * all the phases are executed. It may be used for consuming the genearted
-	 * outputs as necessary by the end user client.
-	 * @throws PromiseException
-	 */
-	public Collection<Delayed> done() throws PromiseException;		
 
 }

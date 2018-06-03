@@ -7,6 +7,8 @@ import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.process.management.ManagedRegistry;
 import org.flowr.framework.core.process.management.ProcessHandler;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.dependency.Dependency;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * 
@@ -15,7 +17,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class ManagedServiceImpl implements ManagedService{
+public class ManagedServiceImpl implements ManagedService,Dependency, DependencyLoop{
 
 	private ServiceUnit serviceUnit 				= ServiceUnit.POOL;
 	private String dependencyName					= ManagedServiceImpl.class.getSimpleName();
@@ -78,8 +80,9 @@ public class ManagedServiceImpl implements ManagedService{
 
 	@Override
 	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
+		DependencyStatus status = DependencyStatus.UNSATISFIED;
+		
+		return status;
 	}
 
 	@Override

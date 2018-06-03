@@ -15,15 +15,13 @@ import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.PromiseException;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;
-import org.flowr.framework.core.promise.phase.PhasedProgressScale;
-import org.flowr.framework.core.promise.phase.PhasedService.ServicePhase;
 import org.flowr.framework.core.target.ReactiveTarget;
 
 public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends ServiceBus<REQUEST,RESPONSE> {
 
 
 	@Override
-	public PromiseResponse<RESPONSE> service(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws PromiseException,
+	public PromiseResponse<RESPONSE> service(PromiseRequest<REQUEST> promiseRequest) throws PromiseException,
 		ConfigurationException{
 		
 		PromiseResponse<RESPONSE> response = null;		
@@ -68,14 +66,7 @@ public abstract class ServiceFrameworkProvider<REQUEST,RESPONSE> extends Service
 								}case PROMISE_PHASED:{
 									
 									this.getPhasedPromiseService().getPromise().setReactiveTarget(reactiveTarget);
-									response = this.getPhasedPromiseService().getPromise().handle(promiseRequest);
-									PhasedProgressScale phasedProgressScale = (PhasedProgressScale) 
-											response.getProgressScale();
-									
-									if(phasedProgressScale.getServicePhase() == ServicePhase.COMPLETE){
-										response.setStreamValues(this.getPhasedPromiseService().getPromise().done());
-										
-									}
+									response = this.getPhasedPromiseService().getPromise().handle(promiseRequest);									
 									break;
 								}case PROMISE_SCHEDULED:{
 									this.getScheduledPromiseService().getPromise().setReactiveTarget(reactiveTarget);

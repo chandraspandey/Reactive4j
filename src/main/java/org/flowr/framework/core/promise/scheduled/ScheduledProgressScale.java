@@ -5,18 +5,18 @@ import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
 
 import org.flowr.framework.core.notification.Notification.NotificationDeliveryType;
-import org.flowr.framework.core.promise.RequestScale;
-import org.flowr.framework.core.promise.Scale;
 import org.flowr.framework.core.promise.Promise.PromiseState;
 import org.flowr.framework.core.promise.Promise.PromiseStatus;
 import org.flowr.framework.core.promise.Promise.ScheduleStatus;
+import org.flowr.framework.core.promise.RequestScale;
+import org.flowr.framework.core.promise.Scale;
 
 
 /**
  * Defines ScheduledProgressScale as enclosed model that has Time/Calendar characteristics which can be used for 
  * automatic negotiation of execution at future point of time.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ScheduledProgressScale implements Scale{
@@ -38,6 +38,24 @@ public class ScheduledProgressScale implements Scale{
 	private long INTERVAL;
 	private Hashtable<String, String> metaDataAttributes;
 	private EventOrigin eventOrigin;
+	private Severity severity 	= Severity.LOW;
+	private Priority priority	= Priority.LOW;
+	
+	public void setSeverity(Severity severity) {
+		this.severity = severity;
+	}
+	
+	public Severity getSeverity() {
+		return this.severity;
+	}
+	
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+	
+	public Priority getPriority() {
+		return this.priority;
+	}
 	
 	public String getSubscriptionClientId() {
 		return subscriptionClientId;
@@ -246,6 +264,8 @@ public class ScheduledProgressScale implements Scale{
 		
 		return "\n ScheduledProgressScale{"+
 				" | scheduleStatus : "+scheduleStatus+
+				" | severity : "+severity+
+				" | priority : "+priority+
 				" | scheduledTimestamp : "+scheduledTimestamp+
 				" | deferredTimestamp : "+deferredTimestamp+
 				" | subscriptionClientId : "+subscriptionClientId+

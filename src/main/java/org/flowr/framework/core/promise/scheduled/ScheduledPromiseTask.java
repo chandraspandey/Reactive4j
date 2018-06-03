@@ -20,18 +20,18 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * concrete implementation provided by Promisable generates the PromiseResponse
  * on agreed schedule.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ScheduledPromiseTask<REQUEST,RESPONSE> implements 
 	FailsafeCallable<PromiseResponse<RESPONSE>>, Promisable<REQUEST,RESPONSE>,Autonomic<RequestScale,Scale> {
 
-	private PromiseRequest<REQUEST,RESPONSE> promiseRequest;
+	private PromiseRequest<REQUEST> promiseRequest;
 	private ReactiveTarget<REQUEST,RESPONSE> reactiveTarget;
 	private boolean isNegotiated = false;
 
 	
-	public ScheduledPromiseTask(PromiseRequest<REQUEST,RESPONSE> promiseRequest,ReactiveTarget<REQUEST,RESPONSE> 
+	public ScheduledPromiseTask(PromiseRequest<REQUEST> promiseRequest,ReactiveTarget<REQUEST,RESPONSE> 
 		reactiveTarget){
 		
 		this.promiseRequest = promiseRequest;

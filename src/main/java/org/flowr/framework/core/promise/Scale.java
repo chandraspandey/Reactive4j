@@ -10,11 +10,138 @@ import org.flowr.framework.core.promise.Promise.PromiseStatus;
 /**
  * Marker interface.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Scale extends ReactiveMetaData{
 
+	public enum Severity{
+		LOW,
+		MEDIUM,
+		HIGH,
+		CRITICAL;
+		
+		private static double low;
+		private static double medium;
+		private static double high;
+		private static double critical;
+		
+		public static void setValueOf( Severity severity, double val) {
+			
+			switch(severity) {
+				
+				case CRITICAL:{
+					critical = val;
+					break;
+				}case HIGH:{
+					high = val;
+					break;
+				}case LOW:{
+					low = val;
+					break;
+				}case MEDIUM:{
+					medium = val;
+					break;
+				}default:{
+					break;
+				}				
+			}
+		}
+		
+		public static double getValueOf( Severity severity) {
+			
+			double val = 0.0;
+			
+			switch(severity) {
+				
+				case CRITICAL:{
+					val = critical;
+					break;
+				}case HIGH:{
+					val = high;
+					break;
+				}case LOW:{
+					val = low;
+					break;
+				}case MEDIUM:{
+					val = medium;
+					break;
+				}default:{
+					break;
+				}				
+			}			
+			return val;
+		}		
+	}
+	
+	public enum Priority{
+		LOW,
+		MEDIUM,
+		HIGH,
+		CRITICAL;
+		
+		private static double low;
+		private static double medium;
+		private static double high;
+		private static double critical;
+		
+		public void setValueOf( Priority priority, double val) {
+			
+			switch(priority) {
+				
+				case CRITICAL:{
+					critical = val;
+					break;
+				}case HIGH:{
+					high = val;
+					break;
+				}case LOW:{
+					low = val;
+					break;
+				}case MEDIUM:{
+					medium = val;
+					break;
+				}default:{
+					break;
+				}				
+			}
+		}
+		
+		public static double getValueOf(Priority priority) {
+			
+			double val = 0.0;
+			
+			switch(priority) {
+				
+				case CRITICAL:{
+					val = critical;
+					break;
+				}case HIGH:{
+					val = high;
+					break;
+				}case LOW:{
+					val = low;
+					break;
+				}case MEDIUM:{
+					val = medium;
+					break;
+				}default:{
+					break;
+				}				
+			}
+			
+			return val;
+		}
+	}
+	
+	public void setSeverity(Severity severity);
+	
+	public Severity getSeverity();
+	
+	public void setPriority(Priority priority);
+	
+	public Priority getPriority();
+	
 	public String getAcknowledgmentIdentifier();
 
 	public void setAcknowledgmentIdentifier(String acknowledgmentIdentifier);

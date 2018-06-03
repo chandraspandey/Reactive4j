@@ -4,12 +4,19 @@ import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.constants.FrameworkConstants;
+import org.flowr.framework.core.context.Context;
+import org.flowr.framework.core.context.ServiceContext;
+import org.flowr.framework.core.event.ChangeEvent;
+import org.flowr.framework.core.event.ChangeEventEntity;
+import org.flowr.framework.core.event.Event;
 import org.flowr.framework.core.event.Event.EventType;
 import org.flowr.framework.core.event.pipeline.EventBus;
 import org.flowr.framework.core.event.pipeline.EventPipeline;
@@ -17,6 +24,7 @@ import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.BatchEventPublisher;
+import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.node.Circuit;
 import org.flowr.framework.core.node.CircuitBreaker;
 import org.flowr.framework.core.node.EndPointDispatcher;
@@ -25,6 +33,8 @@ import org.flowr.framework.core.notification.Notification.NotificationProtocolTy
 import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.service.ServiceEndPoint;
 import org.flowr.framework.core.service.ServiceLifecycle;
+import org.flowr.framework.core.service.Service.ServiceMode;
+import org.flowr.framework.core.service.Service.ServiceState;
 
 /**
  * Extends EventPublisher to provide Notification Adapter configuration  required for notification.
@@ -55,6 +65,8 @@ public interface NotificationServiceAdapter extends BatchEventPublisher, Service
 		}
 	}
 	
+	public Event<EventModel> onServiceChange(ServiceEndPoint serviceEndPoint, ServiceState serviceState);
+	
 	public void setNotificationServiceAdapterType(NotificationServiceAdapterType notificationServiceAdapterType);
 	
 	public NotificationServiceAdapterType getNotificationServiceAdapterType();
@@ -76,6 +88,32 @@ public interface NotificationServiceAdapter extends BatchEventPublisher, Service
 	
 	public abstract class DefaultAdapter implements NotificationServiceAdapter{
 
+		@Override
+		public Event<EventModel> onServiceChange(ServiceEndPoint serviceEndPoint, ServiceState serviceState) {
+		
+			ChangeEvent<EventModel> changeEvent = new ChangeEventEntity();
+					
+			changeEvent.setSubscriptionClientId(serviceEndPoint.getServiceConfiguration().getNotificationEndPoint());
+			
+			changeEvent.setEventTimestamp(Timestamp.from(Instant.now()));
+			
+			EventModel eventModel = new EventModel();
+			eventModel.setReactiveMetaData(null);
+			
+			
+			ServiceContext serviceContext = Context.ServiceContext(
+					serviceEndPoint.getServiceConfiguration().getNotificationEndPoint(), 
+					ServiceMode.SERVER,
+					serviceState,
+					ServerNotificationProtocolType.SERVER_HEALTHCHECK);
+			
+			eventModel.setContext(serviceContext);		
+			changeEvent.setChangedModel(eventModel);
+			changeEvent.setEventType(EventType.HEALTHCHECK);
+			
+			return changeEvent;
+		}
+		
 		@Override
 		public HashMap<NotificationProtocolType,EndPointDispatcher> buildPipelineDispatcher(
 			Circuit circuit,

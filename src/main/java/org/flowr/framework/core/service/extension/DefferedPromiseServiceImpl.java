@@ -22,8 +22,6 @@ import org.flowr.framework.core.service.internal.ManagedService;
 public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPromiseService<REQUEST,RESPONSE>{
 
 	private ServiceUnit serviceUnit 								= ServiceUnit.SINGELTON;
-	private String dependencyName									= PromiseService.class.getSimpleName();
-	private DependencyType dependencyType 							= DependencyType.MANDATORY;
 	private String serviceName										= FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED;
 	private ServiceType serviceType									= ServiceType.PROMISE;
 	@SuppressWarnings("unused")
@@ -83,29 +81,6 @@ public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPro
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import org.flowr.framework.core.promise.Scale;
 /**
  * Defines ProgressScale as enclosed model that can be used to convey progress along with relevant data & meta data.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ProgressScale implements Scale{
@@ -30,6 +30,25 @@ public class ProgressScale implements Scale{
 	private long INTERVAL;
 	private Hashtable<String, String> metaDataAttributes;
 	private EventOrigin eventOrigin;
+	private Severity severity 	= Severity.LOW;
+	private Priority priority	= Priority.LOW;
+	
+	public void setSeverity(Severity severity) {
+		this.severity = severity;
+	}
+	
+	public Severity getSeverity() {
+		return this.severity;
+	}
+	
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+	
+	public Priority getPriority() {
+		return this.priority;
+	}
+	
 	
 	public String getSubscriptionClientId() {
 		return subscriptionClientId;
@@ -186,6 +205,8 @@ public class ProgressScale implements Scale{
 		
 		return "\n ProgressScale{"+
 				" | subscriptionClientId : "+subscriptionClientId+
+				" | severity : "+severity+
+				" | priority : "+priority+
 				" | now : "+now+
 				" | promiseState : "+promiseState+
 				" | promiseStatus : "+promiseStatus+	

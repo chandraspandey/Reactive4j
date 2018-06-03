@@ -30,13 +30,9 @@ import org.flowr.framework.core.service.ServiceFramework;
 public class NotificationServiceImpl implements NotificationService{
 
 	private ServiceUnit serviceUnit 							= ServiceUnit.SINGELTON;
-	private String dependencyName								= NotificationService.class.getSimpleName();
-	private DependencyType dependencyType 						= DependencyType.MANDATORY;
 	private String serviceName									= FrameworkConstants.FRAMEWORK_SERVICE_NOTIFICATION;
-	private ServiceType serviceType								= ServiceType.NOTIFICATION;
-	
-	private NotificationHelper notificationHelper				= new NotificationEventHelper();	
-	//private static NotificationBufferQueue notificationQueue 	= new NotificationBufferQueue();
+	private ServiceType serviceType								= ServiceType.NOTIFICATION;	
+	private NotificationHelper notificationHelper				= new NotificationEventHelper();
 	private boolean isEnabled 									= true;
 	@SuppressWarnings("unused")
 	private EventPublisher 	notificationServiceListener			= null;
@@ -196,29 +192,6 @@ public class NotificationServiceImpl implements NotificationService{
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 }

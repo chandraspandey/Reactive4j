@@ -36,8 +36,6 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 
 	private static String configPath								= null;
 	private ServiceUnit serviceUnit 								= ServiceUnit.SINGELTON;
-	private String dependencyName									= ConfigurationService.class.getSimpleName();
-	private DependencyType dependencyType 							= DependencyType.MANDATORY;
 	private String serviceName										= FrameworkConstants.FRAMEWORK_SERVICE_CONFIGURATION;
 	private ServiceType serviceType									= ServiceType.CONFIGURATION;
 	private ServiceConfiguration clientConfiguration 				= null;
@@ -305,28 +303,6 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		return this.serviceUnit;
 	}
 
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
-	}
 	
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
@@ -351,8 +327,6 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		return "ConfigurationService{"+
 				" configPath : "+configPath+	
 				" | serviceUnit : "+serviceUnit+	
-				" | dependencyName : "+dependencyName+	
-				" | dependencyType : "+dependencyType+	
 				" | serviceName : "+serviceName+	
 				" | serviceType : "+serviceType+	
 				" | \n clientConfiguration : "+clientConfiguration+	

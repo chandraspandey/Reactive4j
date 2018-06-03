@@ -21,6 +21,8 @@ import org.flowr.framework.core.node.IntegratedCircuit;
 import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.service.ServiceEndPoint;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.dependency.Dependency;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * 
@@ -29,7 +31,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class HighAvailabilityServiceImpl implements HighAvailabilityService{
+public class HighAvailabilityServiceImpl implements HighAvailabilityService,Dependency, DependencyLoop{
 
 	private ServiceUnit serviceUnit 								= ServiceUnit.SINGELTON;
 	private String dependencyName									= HighAvailabilityService.class.getSimpleName();
@@ -40,6 +42,7 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService{
 	private ManagedProcessHandler managedProcessHandler 			= ManagedService.getDefaultProcessHandler();
 	private Circuit clientCircuit 									= null;
 	private Circuit serverCircuit 									= null;	
+	private Circuit externalCircuit 								= null;
 	private ServiceStatus serviceStatus								= ServiceStatus.UNUSED;
 	
 	@Override
@@ -69,11 +72,22 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService{
 			}case SERVER:{
 				circuit = serverCircuit;
 				break;
+			}case EXTERNAL:{
+				circuit = externalCircuit;
+				break;
+			}default:{
+				break;
 			}
 		}
 		
 		return circuit;
 	}
+	
+	public void addExternalCircuit(Circuit externalCircuit) {
+		
+		this.externalCircuit = externalCircuit;
+	}
+	
 	
 	@Override
 	public void buildCircuit() throws ConfigurationException {
@@ -203,8 +217,10 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService{
 
 	@Override
 	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		DependencyStatus status = DependencyStatus.UNSATISFIED;
+		
+		return status;
 	}
 
 	@Override

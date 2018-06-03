@@ -9,6 +9,8 @@ import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.service.ServiceEndPoint;
+import org.flowr.framework.core.service.dependency.Dependency;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * Defines HA as deployment of an integrated Circuit for facilitating automatic fallback & fallforward features
@@ -17,7 +19,7 @@ import org.flowr.framework.core.service.ServiceEndPoint;
  */
 
 
-public interface Circuit {
+public interface Circuit extends Dependency, DependencyLoop{
 
 	public enum CircuitStatus{
 		AVAILABLE,

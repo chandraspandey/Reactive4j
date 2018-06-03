@@ -18,7 +18,7 @@ public interface RoutingService extends ServiceFrameworkComponent{
 	public void bindServiceRoute(ClientIdentity clientIdentity,Class<? extends ServiceResponse>  responseClass) 
 			throws ConfigurationException;		
 
-	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?,?> promiseRequest);
+	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?> promiseRequest);
 	
 	public static RoutingService getInstance() {
 		

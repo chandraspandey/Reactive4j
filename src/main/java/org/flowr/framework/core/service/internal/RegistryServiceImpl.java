@@ -16,8 +16,6 @@ import org.flowr.framework.core.service.ServiceFramework;
 public class RegistryServiceImpl implements RegistryService{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.REGISTRY;
-	private String dependencyName			= RegistryService.class.getSimpleName();
-	private DependencyType dependencyType 	= DependencyType.MANDATORY;
 	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_REGISTRY;
 	private ServiceType serviceType			= ServiceType.REGISTRY;
 	@SuppressWarnings("unused")
@@ -57,29 +55,6 @@ public class RegistryServiceImpl implements RegistryService{
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

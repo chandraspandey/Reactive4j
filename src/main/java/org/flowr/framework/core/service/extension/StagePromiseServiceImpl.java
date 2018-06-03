@@ -16,8 +16,6 @@ import org.flowr.framework.core.service.ServiceFramework;
 public class StagePromiseServiceImpl<REQUEST,RESPONSE> implements StagePromiseService<REQUEST,RESPONSE>{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String dependencyName			= StagePromiseService.class.getSimpleName();
-	private DependencyType dependencyType 	= DependencyType.MANDATORY;
 	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_STAGE;
 	private ServiceType serviceType			= ServiceType.PROMISE_STAGE;
 	@SuppressWarnings("unused")
@@ -59,29 +57,6 @@ public class StagePromiseServiceImpl<REQUEST,RESPONSE> implements StagePromiseSe
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

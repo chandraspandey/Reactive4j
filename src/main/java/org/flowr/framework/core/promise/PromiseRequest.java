@@ -10,7 +10,7 @@ import org.flowr.framework.core.service.ServiceRequest;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class PromiseRequest<REQUEST,RESPONSE> implements ServiceRequest{
+public class PromiseRequest<REQUEST> implements ServiceRequest{
 
 	private boolean isTimelineRequired;
 	

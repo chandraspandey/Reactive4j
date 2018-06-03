@@ -8,7 +8,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * Provides a wrapper analogy of IF-THEN-WHAT for asynchronous call using 
  * Future<PromiseResponse>
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Promise<REQUEST,RESPONSE> {
@@ -72,7 +72,7 @@ public interface Promise<REQUEST,RESPONSE> {
 	 * @return
 	 * @throws PromiseException
 	 */
-	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST,RESPONSE>
+	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST>
 		promiseRequest) throws PromiseException;
 	
 	/**
@@ -83,7 +83,7 @@ public interface Promise<REQUEST,RESPONSE> {
 	 * @return boolean
 	 * @throws PromiseException
 	 */
-	public boolean ifValid(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws 
+	public boolean ifValid(PromiseRequest<REQUEST> promiseRequest) throws 
 		PromiseException;
 	
 	
@@ -95,7 +95,7 @@ public interface Promise<REQUEST,RESPONSE> {
 	 * @return PromiseResponse
 	 * @throws PromiseException
 	 */
-	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST,RESPONSE> 
+	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST> 
 		promiseRequest) throws PromiseException;
 	
 	/**
@@ -107,7 +107,7 @@ public interface Promise<REQUEST,RESPONSE> {
 	 * @return PromiseResponse
 	 * @throws PromiseException
 	 */
-	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST,RESPONSE> 
+	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST> 
 		promiseRequest) throws PromiseException;
 	
 	/**

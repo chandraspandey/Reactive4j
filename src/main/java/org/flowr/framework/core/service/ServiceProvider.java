@@ -18,7 +18,7 @@ public interface ServiceProvider<REQUEST,RESPONSE> extends Service, ServiceLifec
 		
 	public void setServerSubscriptionIdentifier(String subscriptionIdentifier);
 
-	public  PromiseResponse<RESPONSE> service(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws PromiseException,
+	public  PromiseResponse<RESPONSE> service(PromiseRequest<REQUEST> promiseRequest) throws PromiseException,
 		ConfigurationException;
 
 }

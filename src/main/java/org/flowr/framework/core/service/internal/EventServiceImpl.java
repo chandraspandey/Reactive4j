@@ -27,8 +27,6 @@ import org.flowr.framework.core.service.ServiceFramework;
 public class EventServiceImpl implements EventService{
 
 	private ServiceUnit serviceUnit 					= ServiceUnit.SINGELTON;
-	private String dependencyName						= EventService.class.getSimpleName();
-	private DependencyType dependencyType 				= DependencyType.MANDATORY;
 	private static EventBus eventBus					= new EventPipelineBus();
 	private String serviceName							= FrameworkConstants.FRAMEWORK_SERVICE_EVENT;
 	private ServiceStatus serviceStatus					= ServiceStatus.UNUSED;
@@ -189,29 +187,6 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

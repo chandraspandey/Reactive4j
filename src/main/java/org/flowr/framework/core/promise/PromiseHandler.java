@@ -68,8 +68,7 @@ public class PromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST,RESPONS
 	}
 	
 	@Override
-	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST,RESPONSE>
-		promiseRequest) throws PromiseException{
+	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST> promiseRequest) throws PromiseException{
 		
 		PromiseResponse<RESPONSE> promiseResponse = null;
 				
@@ -92,7 +91,7 @@ public class PromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST,RESPONS
 	
 	
 	@Override
-	public boolean ifValid(PromiseRequest<REQUEST,RESPONSE> promiseRequest)  {
+	public boolean ifValid(PromiseRequest<REQUEST> promiseRequest)  {
 			
 		boolean isValid = false;
 				
@@ -107,7 +106,7 @@ public class PromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST,RESPONS
 	}
 
 	@Override
-	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws 
+	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST> promiseRequest) throws 
 		PromiseException {
 
 		PromiseResponse<RESPONSE> promiseResponse = null;
@@ -145,7 +144,7 @@ public class PromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST,RESPONS
 	}
 
 	@Override
-	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws PromiseException {
+	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST> promiseRequest) throws PromiseException {
 		
 		PromiseResponse<RESPONSE> promiseResponse = null;
 
@@ -207,8 +206,8 @@ public class PromiseHandler<REQUEST,RESPONSE> implements Promise<REQUEST,RESPONS
 		return promiseResponse;
 	}
 
-	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST,RESPONSE> 
-		promiseRequest) throws PromiseException, InterruptedException, ExecutionException {
+	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST> promiseRequest) throws PromiseException, 
+		InterruptedException, ExecutionException {
 		
 		PromiseResponse<RESPONSE> promiseResponse = new PromiseResponse<RESPONSE>();
 		

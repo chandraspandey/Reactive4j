@@ -101,7 +101,8 @@ public interface Configuration {
 	
 	public enum ConfigurationType{
 		CLIENT,
-		SERVER
+		SERVER,
+		EXTERNAL
 	}
 	
 	/*

@@ -22,8 +22,6 @@ import org.flowr.framework.core.service.internal.ManagedService;
 public class PhasedPromiseServiceImpl<REQUEST,RESPONSE> implements PhasedPromiseService<REQUEST,RESPONSE>{
 
 	private ServiceUnit serviceUnit 						= ServiceUnit.SINGELTON;
-	private String dependencyName							= PhasedPromiseService.class.getSimpleName();
-	private DependencyType dependencyType 					= DependencyType.MANDATORY;
 	private String serviceName								= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_PHASED;
 	private ServiceType serviceType							= ServiceType.PROMISE_PHASED;
 	@SuppressWarnings("unused")
@@ -84,29 +82,6 @@ public class PhasedPromiseServiceImpl<REQUEST,RESPONSE> implements PhasedPromise
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

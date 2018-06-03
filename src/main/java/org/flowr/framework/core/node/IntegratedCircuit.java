@@ -39,6 +39,8 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 	private ScheduledExecutorService service 					= Executors.newSingleThreadScheduledExecutor();
 	private HashMap<ServiceEndPoint,EndPointStatus> circuitMap 	= new HashMap<ServiceEndPoint,EndPointStatus>();
 	private CircuitStatus circuitStatus							= CircuitStatus.UNAVAILABLE; 
+	private String dependencyName								= Circuit.class.getSimpleName();
+	private DependencyType dependencyType						= DependencyType.MANDATORY;
 	
 	@Override
 	public Collection<ServiceEndPoint> getAllServiceEndPoints(){
@@ -295,6 +297,34 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 		this.circuitStatus = circuitStatus;
 	}
 	
+
+
+	@Override
+	public String getDependencyName() {
+		return this.dependencyName;
+	}
+
+	@Override
+	public DependencyType getDependencyType() {
+		return this.dependencyType;
+	}
+
+	@Override
+	public DependencyStatus verify() {
+		
+		DependencyStatus dependencyStatus = DependencyStatus.UNSATISFIED;
+		
+		return dependencyStatus;
+	}
+
+	@Override
+	public DependencyStatus loopTest() {
+		
+		DependencyStatus dependencyStatus = DependencyStatus.UNSATISFIED;
+		
+		return dependencyStatus;
+	}
+
 	public String toString(){
 		
 		return "IntegratedCircuit{"+
@@ -302,6 +332,4 @@ public class IntegratedCircuit implements Circuit, Callback<SimpleEntry<ServiceE
 				"}\n";
 
 	}
-
-
 }

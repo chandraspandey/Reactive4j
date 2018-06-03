@@ -13,6 +13,8 @@ import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.process.management.NodeProcessHandler;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.dependency.Dependency;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * 
@@ -21,7 +23,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class NodeServiceImpl implements NodeService{
+public class NodeServiceImpl implements NodeService,Dependency, DependencyLoop{
 
 	private ServiceUnit serviceUnit 								= ServiceUnit.SINGELTON;
 	private String dependencyName									= HighAvailabilityService.class.getSimpleName();

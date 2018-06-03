@@ -20,10 +20,10 @@ public class ProcessRequest<REQ,RES>{
 	
 	private RequestScale requestScale = null;
 	private PromiseContext<REQ> promiseContext;
-	private PromiseRequest<REQ,RES> promiseRequest;
+	private PromiseRequest<REQ> promiseRequest;
 	private PromiseTypeServer<REQ,RES> promiseServer;
 	
-	public ProcessRequest(ServiceFramework<REQ,RES> serviceFramework,PromiseRequest<REQ,RES> promiseRequest, 
+	public ProcessRequest(ServiceFramework<REQ,RES> serviceFramework,PromiseRequest<REQ> promiseRequest, 
 			PromiseTypeServer<REQ,RES> promiseServer,REQ request) throws ConfigurationException{
 		
 		this.promiseRequest = promiseRequest;

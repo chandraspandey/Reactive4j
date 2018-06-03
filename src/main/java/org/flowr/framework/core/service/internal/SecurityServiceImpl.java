@@ -5,6 +5,8 @@ import java.util.Properties;
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.dependency.Dependency;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * 
@@ -13,7 +15,7 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class SecurityServiceImpl implements SecurityService{
+public class SecurityServiceImpl implements SecurityService,Dependency, DependencyLoop{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
 	private String dependencyName			= RegistryService.class.getSimpleName();
@@ -63,8 +65,9 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Override
 	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
+		DependencyStatus status = DependencyStatus.UNSATISFIED;
+		
+		return status;
 	}
 
 	@Override

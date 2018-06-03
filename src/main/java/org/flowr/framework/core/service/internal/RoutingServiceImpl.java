@@ -21,8 +21,6 @@ import org.flowr.framework.core.service.route.ServiceRouteMapping;
 public class RoutingServiceImpl implements RoutingService{
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String dependencyName			= RegistryService.class.getSimpleName();
-	private DependencyType dependencyType 	= DependencyType.MANDATORY;
 	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ROUTING;
 	private ServiceType serviceType			= ServiceType.ROUTING;
 	private static ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>> routeMapping = 
@@ -43,7 +41,7 @@ public class RoutingServiceImpl implements RoutingService{
 	}
 	
 	@Override
-	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?,?> promiseRequest){
+	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?> promiseRequest){
 		
 		ClientIdentity clientIdentity =  promiseRequest.getClientIdentity();
 		
@@ -81,29 +79,6 @@ public class RoutingServiceImpl implements RoutingService{
 		return this.serviceUnit;
 	}
 
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
-	}
-	
 	@Override
 	public ServiceStatus startup(Properties configProperties) {
 		// TODO Auto-generated method stub

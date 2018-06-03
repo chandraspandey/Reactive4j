@@ -70,7 +70,7 @@ public class ProcessBuilder<REQ,RES> implements ProcessLifecycle{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public ProcessBuilder<REQ,RES> forPromiseRequestAndResponseServerAs(PromiseRequest<REQ,RES> promiseRequest, REQ req,
+	public ProcessBuilder<REQ,RES> forPromiseRequestAndResponseServerAs(PromiseRequest<REQ> promiseRequest, REQ req,
 		PromiseTypeServer<REQ,RES> promiseServer) throws ConfigurationException{		
 
 		@SuppressWarnings("rawtypes")

@@ -1,12 +1,8 @@
 package org.flowr.framework.core.promise.phase;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.concurrent.Delayed;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Flow.Subscriber;
 
@@ -24,7 +20,6 @@ import org.flowr.framework.core.model.EventModel;
 import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.node.BackPressureExecutorService;
 import org.flowr.framework.core.node.BackPressureExecutors;
-import org.flowr.framework.core.process.DelayBufferQueue;
 import org.flowr.framework.core.process.management.ProcessHandler;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;
@@ -58,9 +53,7 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 	
 	// Chached Thread pool for executing async tasks 
 	private BackPressureExecutorService executorService = BackPressureExecutors.newCachedBackPressureThreadPool();
-	
-	// Hold the chunk responses till the transmission completes 
-	private DelayBufferQueue delayBufferQueue = new DelayBufferQueue();
+
 	private Subscriber<? super Event<EventModel>> subscriber;
 	private ProcessHandler processHandler;
 	
@@ -80,8 +73,7 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 	
 	
 	@Override
-	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST,RESPONSE>
-		promiseRequest) throws PromiseException{
+	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST> promiseRequest) throws PromiseException{
 		
 		PromiseResponse<RESPONSE> promiseResponse = null;
 				
@@ -104,7 +96,7 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 	
 	
 	@Override
-	public boolean ifValid(PromiseRequest<REQUEST,RESPONSE> promiseRequest)  {
+	public boolean ifValid(PromiseRequest<REQUEST> promiseRequest)  {
 			
 		boolean isValid = false;
 				
@@ -119,8 +111,7 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 	}
 
 	@Override
-	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws 
-		PromiseException {
+	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST> promiseRequest) throws PromiseException {
 
 		PromiseResponse<RESPONSE> promiseResponse = null;
 		
@@ -159,7 +150,7 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 	
 	
 	@Override
-	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws PromiseException {
+	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST> promiseRequest) throws PromiseException {
 		
 		PromiseResponse<RESPONSE> promiseResponse = null;
 
@@ -167,7 +158,9 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 		
 		Timeline timeline = new Timeline(snapshotScale);		
 		
-		ChunkValue chunkBuffer =  null;
+		ChunkBuffer chunkBuffer = new ChunkBuffer();
+		
+		ChunkValue chunkValue =  null;
 	
 		try {
 			
@@ -186,12 +179,12 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 					
 					snapshotScale.clone((PhasedProgressScale)promiseResponse.getProgressScale());
 					
-					chunkBuffer = snapshotScale.getChunkBuffer();
+					chunkValue = snapshotScale.getChunkBuffer();
 					
 					// Add to the Queue		
-					if(chunkBuffer != null){
+					if(chunkValue != null){
 
-						delayBufferQueue.add(chunkBuffer);		
+						chunkBuffer.addChunkValue(chunkValue);		
 						publishClientEvent(EventType.CLIENT,snapshotScale);
 						timeline = processTimeline( timeline,snapshotScale) ;	
 					}
@@ -224,6 +217,8 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 
 		((PhasedProgressScale)promiseResponse.getProgressScale()).setServicePhase(
 				ServicePhase.COMPLETE);
+		
+		promiseResponse.setStreamValues(chunkBuffer.done());
 
 		processHandler.publishProcessEvent(EventType.SERVER,Context.ProcessLifecycleContext(serverIdentifier, 
 				PromiseServerState.COMPLETE,PromiseServerStatus.RUNNING, snapshotScale.getSubscriptionClientId(),
@@ -236,26 +231,9 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 		
 		return promiseResponse;
 	}
-	
-	@Override
-	public Collection<Delayed> done() throws PromiseException {
-		
-		Collection<Delayed> streamValues = new ArrayList<Delayed>();
-		
-		Iterator<Delayed> streamIterator= delayBufferQueue.iterator();
-		
-		while(streamIterator.hasNext()){
-			
-			ChunkValue res = (ChunkValue) streamIterator.next();
-			
-			streamValues.add(res);	
-		}
-		
-		return streamValues;
-	}
 
-	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST,RESPONSE> 
-		promiseRequest) throws PromiseException, InterruptedException, ExecutionException {
+	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST> promiseRequest) throws PromiseException, 
+		InterruptedException, ExecutionException {
 		
 		PromiseResponse<RESPONSE> promiseResponse = new PromiseResponse<RESPONSE>();
 		
@@ -435,4 +413,3 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 		return (this.subscriber != null);
 	}
 }
-

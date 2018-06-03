@@ -71,8 +71,7 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 	}
 	
 	@Override
-	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST,RESPONSE>
-		promiseRequest) throws PromiseException{
+	public PromiseResponse<RESPONSE> handle(PromiseRequest<REQUEST> promiseRequest) throws PromiseException{
 		
 		PromiseResponse<RESPONSE> promiseResponse = null;
 				
@@ -94,7 +93,7 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 	
 	
 	@Override
-	public boolean ifValid(PromiseRequest<REQUEST,RESPONSE> promiseRequest)  {
+	public boolean ifValid(PromiseRequest<REQUEST> promiseRequest)  {
 			
 		boolean isValid = false;
 				
@@ -109,8 +108,7 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 	}
 
 	@Override
-	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws 
-		PromiseException {
+	public PromiseResponse<RESPONSE> then(PromiseRequest<REQUEST> promiseRequest) throws PromiseException {
 
 		PromiseResponse<RESPONSE> promiseResponse = null;
 		
@@ -148,7 +146,7 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 	}
 
 	@Override
-	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST,RESPONSE> promiseRequest) throws PromiseException {
+	public PromiseResponse<RESPONSE> what(PromiseRequest<REQUEST> promiseRequest) throws PromiseException {
 		
 		PromiseResponse<RESPONSE> promiseResponse = null;
 
@@ -210,8 +208,8 @@ public class DeferredPromiseHandler<REQUEST,RESPONSE> implements DefferedPromise
 		return promiseResponse;
 	}
 
-	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST,RESPONSE> 
-		promiseRequest) throws PromiseException, InterruptedException, ExecutionException {
+	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST> promiseRequest) throws PromiseException, 
+		InterruptedException, ExecutionException {
 		
 		PromiseResponse<RESPONSE> promiseResponse = new PromiseResponse<RESPONSE>();
 		

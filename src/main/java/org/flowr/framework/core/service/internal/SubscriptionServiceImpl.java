@@ -25,8 +25,6 @@ import org.flowr.framework.core.service.ServiceProvider;
 public class SubscriptionServiceImpl implements SubscriptionService{
 
 	private ServiceUnit serviceUnit 						= ServiceUnit.POOL;
-	private String dependencyName							= SubscriptionService.class.getSimpleName();
-	private DependencyType dependencyType 					= DependencyType.MANDATORY;
 	private String serviceName								= FrameworkConstants.FRAMEWORK_SERVICE_SUBSCRIPTION;
 	private ServiceType serviceType							= ServiceType.SUBSCRIPTION;
 	private ServiceFramework<?,?> serviceFramework			= null;
@@ -113,29 +111,6 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

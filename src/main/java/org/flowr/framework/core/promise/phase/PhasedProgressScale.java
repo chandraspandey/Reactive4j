@@ -4,10 +4,10 @@ import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
 
 import org.flowr.framework.core.notification.Notification.NotificationDeliveryType;
-import org.flowr.framework.core.promise.RequestScale;
-import org.flowr.framework.core.promise.Scale;
 import org.flowr.framework.core.promise.Promise.PromiseState;
 import org.flowr.framework.core.promise.Promise.PromiseStatus;
+import org.flowr.framework.core.promise.RequestScale;
+import org.flowr.framework.core.promise.Scale;
 import org.flowr.framework.core.promise.phase.PhasedService.ServicePhase;
 
 /**
@@ -16,7 +16,7 @@ import org.flowr.framework.core.promise.phase.PhasedService.ServicePhase;
  * capability at future point of time. The StreamValue attribute is used for
  * chunked response transmission in dissemination phase.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class PhasedProgressScale implements Scale{
@@ -37,7 +37,24 @@ public class PhasedProgressScale implements Scale{
 	private long INTERVAL;
 	private Hashtable<String, String> metaDataAttributes;
 	private EventOrigin eventOrigin;
+	private Severity severity 	= Severity.LOW;
+	private Priority priority	= Priority.LOW;
 	
+	public void setSeverity(Severity severity) {
+		this.severity = severity;
+	}
+	
+	public Severity getSeverity() {
+		return this.severity;
+	}
+	
+	public void setPriority(Priority priority) {
+		this.priority = priority;
+	}
+	
+	public Priority getPriority() {
+		return this.priority;
+	}
 	public String getSubscriptionClientId() {
 		return subscriptionClientId;
 	}
@@ -216,6 +233,8 @@ public class PhasedProgressScale implements Scale{
 		
 		return "\n PhasedProgressScale{"+
 				" | servicePhase : "+servicePhase+" | "+
+				" | severity : "+severity+
+				" | priority : "+priority+
 				" | chunkBuffer : "+chunkBuffer+" | "+
 				" | subscriptionClientId : "+subscriptionClientId+
 				" | now : "+now+

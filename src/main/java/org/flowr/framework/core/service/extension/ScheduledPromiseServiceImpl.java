@@ -22,8 +22,6 @@ import org.flowr.framework.core.service.internal.ManagedService;
 public class ScheduledPromiseServiceImpl<REQUEST,RESPONSE> implements ScheduledPromiseService<REQUEST,RESPONSE>{
 
 	private ServiceUnit serviceUnit 						= ServiceUnit.SINGELTON;
-	private String dependencyName							= ScheduledPromise.class.getSimpleName();
-	private DependencyType dependencyType 					= DependencyType.MANDATORY;
 	private String serviceName								= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_SCHEDULED;
 	private ServiceType serviceType							= ServiceType.PROMISE_SCHEDULED;
 	@SuppressWarnings("unused")
@@ -84,29 +82,6 @@ public class ScheduledPromiseServiceImpl<REQUEST,RESPONSE> implements ScheduledP
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override

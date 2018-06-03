@@ -32,7 +32,7 @@ public interface PromiseTypeClient<REQUEST,RESPONSE> extends DeferableRequest<RE
 	
 	public void configure(OperationConfig<REQUEST, RESPONSE> clientConfig) throws ConfigurationException;
 	
-	public PromiseRequest<REQUEST, RESPONSE>  buildPromiseRequest() throws ConfigurationException;
+	public PromiseRequest<REQUEST>  buildPromiseRequest() throws ConfigurationException;
 	
 	public ClientIdentity buildClientIdentity() throws ConfigurationException;
 	

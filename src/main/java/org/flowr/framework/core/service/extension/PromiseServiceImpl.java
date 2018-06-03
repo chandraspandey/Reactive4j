@@ -22,8 +22,6 @@ import org.flowr.framework.core.service.internal.ManagedService;
 public class PromiseServiceImpl<REQUEST,RESPONSE> implements PromiseService<REQUEST,RESPONSE>{
 
 	private ServiceUnit serviceUnit 						= ServiceUnit.SINGELTON;
-	private String dependencyName							= PromiseService.class.getSimpleName();
-	private DependencyType dependencyType 					= DependencyType.MANDATORY;
 	private String serviceName								= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE;
 	private ServiceType serviceType							= ServiceType.PROMISE;
 	@SuppressWarnings("unused")
@@ -83,29 +81,6 @@ public class PromiseServiceImpl<REQUEST,RESPONSE> implements PromiseService<REQU
 	@Override
 	public ServiceUnit getServiceUnit() {
 		return this.serviceUnit;
-	}
-
-	@Override
-	public DependencyStatus loopTest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
-
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
-
-	@Override
-	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
 	}
 
 	@Override
