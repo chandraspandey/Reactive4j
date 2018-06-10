@@ -37,24 +37,25 @@ public class PhasedProgressScale implements Scale{
 	private long INTERVAL;
 	private Hashtable<String, String> metaDataAttributes;
 	private EventOrigin eventOrigin;
-	private Severity severity 	= Severity.LOW;
-	private Priority priority	= Priority.LOW;
+	private SeverityScale severityScale;
+	private PriorityScale priorityScale;
 	
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
+	public void setSeverityScale(SeverityScale severityScale) {
+		this.severityScale = severityScale;
 	}
 	
-	public Severity getSeverity() {
-		return this.severity;
+	public SeverityScale getSeverityScale() {
+		return this.severityScale;
 	}
 	
-	public void setPriority(Priority priority) {
-		this.priority = priority;
+	public void setPriorityScale(PriorityScale priorityScale) {
+		this.priorityScale = priorityScale;
 	}
 	
-	public Priority getPriority() {
-		return this.priority;
+	public PriorityScale getPriorityScale() {
+		return this.priorityScale;
 	}
+	
 	public String getSubscriptionClientId() {
 		return subscriptionClientId;
 	}
@@ -89,7 +90,9 @@ public class PhasedProgressScale implements Scale{
 				this.progressTimeUnit 			== other.progressTimeUnit &&
 				this.INTERVAL					== other.INTERVAL &&
 				this.metaDataAttributes 		== other.metaDataAttributes &&
-				this.eventOrigin				== other.eventOrigin
+				this.eventOrigin				== other.eventOrigin &&
+				this.priorityScale				== other.priorityScale &&
+				this.severityScale				== other.severityScale
 		){
 			isEqual = true;
 		}
@@ -106,6 +109,7 @@ public class PhasedProgressScale implements Scale{
 		PhasedProgressScale phasedProgressScale = (PhasedProgressScale)scale;
 		
 		if(phasedProgressScale != null){
+			
 			this.setAcknowledgmentIdentifier(phasedProgressScale.getAcknowledgmentIdentifier());
 			this.setNow(phasedProgressScale.getNow());
 			this.setPromiseState(phasedProgressScale.getPromiseState());
@@ -122,6 +126,8 @@ public class PhasedProgressScale implements Scale{
 			this.setServicePhase(phasedProgressScale.getServicePhase());	
 			this.setSubscriptionClientId(phasedProgressScale.getSubscriptionClientId());
 			this.setNotificationDeliveryType(phasedProgressScale.getNotificationDeliveryType());
+			this.setPriorityScale(phasedProgressScale.getPriorityScale());
+			this.setSeverityScale(phasedProgressScale.getSeverityScale());
 		}
 		
 	}
@@ -233,8 +239,8 @@ public class PhasedProgressScale implements Scale{
 		
 		return "\n PhasedProgressScale{"+
 				" | servicePhase : "+servicePhase+" | "+
-				" | severity : "+severity+
-				" | priority : "+priority+
+				" | severityScale : "+severityScale+
+				" | priorityScale : "+priorityScale+
 				" | chunkBuffer : "+chunkBuffer+" | "+
 				" | subscriptionClientId : "+subscriptionClientId+
 				" | now : "+now+

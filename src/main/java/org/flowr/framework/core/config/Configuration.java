@@ -73,6 +73,39 @@ import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_T
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_THREADS_MIN;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_TIMEOUT;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_TIMEOUT_UNIT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_MAPPING_ENTITY_COUNT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_OVERFLOW;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_SPOOL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_EXPIRY_DISK;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_DISK_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_HEAP_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_MEMORY_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_TIME_TO_IDLE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_TIME_TO_LIVE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_NAME;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_PATH;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_POLICY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_PROVIDER;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_PROVIDER_FACTORY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_QUERY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_STATISTICS;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_STRATEGY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_TIMESTAMP;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_DRIVER;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_PASSWORD;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_USERNAME;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_URL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_POOL_SIZE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_COUNT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_DIALECT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_MAPPING_ENTITY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_NAME;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_EXTERNAL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_FORMAT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_SHOW;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONFIG_MIN;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,6 +217,98 @@ public interface Configuration {
 			}
 		}
 		return configurationList;		
+	}
+	
+	public static CacheConfiguration CacheConfiguration(String configName, String filePath) 
+			throws ConfigurationException{
+		
+		CacheConfiguration cacheConfiguration = new CacheConfiguration();
+		
+		ConfigProperties prop 		= new ConfigProperties(configName,filePath);
+		
+		cacheConfiguration.setCacheName(prop.get(STRING, DATASOURCE_CACHE_NAME));
+		cacheConfiguration.setCachePath(prop.get(STRING, DATASOURCE_CACHE_PATH));
+		cacheConfiguration.setCachePolicy(prop.get(STRING, DATASOURCE_CACHE_POLICY));
+		cacheConfiguration.setCacheProviderClass(prop.get(STRING, DATASOURCE_CACHE_PROVIDER));
+		cacheConfiguration.setCacheProviderFactoryClass(prop.get(STRING, DATASOURCE_CACHE_PROVIDER_FACTORY));
+		cacheConfiguration.setCacheQueryClass(prop.get(STRING, DATASOURCE_CACHE_QUERY));
+		cacheConfiguration.setCacheTimestampClass(prop.get(STRING, DATASOURCE_CACHE_TIMESTAMP));
+		cacheConfiguration.setCacheStrategy(prop.get(STRING, DATASOURCE_CACHE_STRATEGY));
+		
+		cacheConfiguration.setCacheStatistics(prop.get(BOOLEAN, DATASOURCE_CACHE_STATISTICS));		
+		cacheConfiguration.setCacheOverFlowToDisk(prop.get(BOOLEAN, DATASOURCE_CACHE_DISK_OVERFLOW));
+		
+		cacheConfiguration.setCacheDiskSpool(prop.get(LONG, DATASOURCE_CACHE_DISK_SPOOL));
+		cacheConfiguration.setELEMENT_EXPIRY_DISK(prop.get(LONG, DATASOURCE_CACHE_ELEMENTS_EXPIRY_DISK));
+		cacheConfiguration.setELEMENT_MAX_DISK(prop.get(LONG, DATASOURCE_CACHE_ELEMENTS_DISK_MAX));
+		cacheConfiguration.setELEMENT_MAX_HEAP(prop.get(LONG, DATASOURCE_CACHE_ELEMENTS_HEAP_MAX));
+		cacheConfiguration.setELEMENT_MAX_MEMORY(prop.get(LONG, DATASOURCE_CACHE_ELEMENTS_MEMORY_MAX));
+		cacheConfiguration.setELEMENT_TIME_TO_IDLE(prop.get(LONG, DATASOURCE_CACHE_ELEMENTS_TIME_TO_IDLE));
+		cacheConfiguration.setELEMENT_TIME_TO_LIVE(prop.get(LONG, DATASOURCE_CACHE_ELEMENTS_TIME_TO_LIVE));		
+		
+		cacheConfiguration.setConfigAsProperties(prop);
+		
+		System.out.println("Configuration : cacheConfiguration : "+cacheConfiguration);
+		
+		return cacheConfiguration;
+	}
+	
+	
+	public static List<DataSourceConfiguration> DataSourceConfiguration(String configName, String filePath) 
+			throws ConfigurationException{
+		
+		List<DataSourceConfiguration> dataSourceconfigurationList = new ArrayList<DataSourceConfiguration>();
+		
+		ConfigProperties prop 				= new ConfigProperties(configName,filePath);
+		int dataSourceMax	 				= prop.get(INTEGER,DATASOURCE_COUNT);
+		int dataEntityMappingMax	 		= prop.get(INTEGER,DATASOURCE_MAPPING_ENTITY_COUNT);
+		
+		System.out.println("Configuration : dataSourceMax :"+dataSourceMax);
+		System.out.println("Configuration : dataEntityMappingMax :"+dataEntityMappingMax);
+		
+		List<String> mappingEntityList 		= new ArrayList<String>();
+		
+		for(int index=DATASOURCE_CONFIG_MIN; index <= dataEntityMappingMax;index++ ){
+			
+			String mappingEntityClass = prop.get(STRING, DATASOURCE_MAPPING_ENTITY+"."+index);
+
+			if(mappingEntityClass != null) {
+				mappingEntityList.add(mappingEntityClass);
+			}
+		}
+
+		for(int index=DATASOURCE_CONFIG_MIN; index <= dataSourceMax;index++ ){
+			
+			if(prop.get(STRING, DATASOURCE_NAME+"."+index) != null) {
+				
+				DataSourceConfiguration dataSourceConfiguration = new DataSourceConfiguration();
+				
+				dataSourceConfiguration.setConnectionDriverClass(prop.get(STRING, DATASOURCE_CONNECTION_DRIVER+"."+index));
+				dataSourceConfiguration.setConnectionPassword(prop.get(STRING, DATASOURCE_CONNECTION_PASSWORD+"."+index));
+				dataSourceConfiguration.setConnectionURL(prop.get(STRING, DATASOURCE_CONNECTION_URL+"."+index));
+				dataSourceConfiguration.setConnectionUserName(prop.get(STRING, DATASOURCE_CONNECTION_USERNAME+"."+index));
+				dataSourceConfiguration.setDataSourceName(prop.get(STRING, DATASOURCE_NAME+"."+index));
+				dataSourceConfiguration.setDialect(prop.get(STRING, DATASOURCE_DIALECT+"."+index));
+				dataSourceConfiguration.setConnectionPoolSize(prop.get(INTEGER, DATASOURCE_CONNECTION_POOL_SIZE+"."+index));
+				dataSourceConfiguration.setFormatQuery(prop.get(BOOLEAN, DATASOURCE_QUERY_FORMAT+"."+index));
+				dataSourceConfiguration.setShowQuery(prop.get(BOOLEAN, DATASOURCE_QUERY_SHOW+"."+index));
+				dataSourceConfiguration.setCacheExternal(prop.get(BOOLEAN, DATASOURCE_QUERY_CACHE_EXTERNAL+"."+index));
+				dataSourceConfiguration.setCacheQuery(prop.get(BOOLEAN, DATASOURCE_QUERY_CACHE+"."+index));
+				
+				if(!mappingEntityList.isEmpty()) {
+					
+					dataSourceConfiguration.setMappingEntityClassList(mappingEntityList);
+				}
+				
+				dataSourceConfiguration.setConfigAsProperties(prop);
+				
+				dataSourceconfigurationList.add(dataSourceConfiguration);
+					
+			}
+		}
+		
+		//System.out.println("Configuration : dataSourceconfigurationList : "+dataSourceconfigurationList);
+		return dataSourceconfigurationList;
 	}
 	
 	public static List<PipelineConfiguration> ServerPipelineConfiguration(String configName, String filePath) 

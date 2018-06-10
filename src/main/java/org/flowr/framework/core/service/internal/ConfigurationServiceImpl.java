@@ -10,7 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import org.flowr.framework.core.config.CacheConfiguration;
 import org.flowr.framework.core.config.Configuration;
+import org.flowr.framework.core.config.DataSourceConfiguration;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.config.ServiceConfiguration;
@@ -46,6 +48,8 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 	private PhasedProgressScale phasedProgressScale					= null;
 	private ScheduledProgressScale scheduledProgressScale			= null;
 	private RequestScale requestScale								= null;
+	private CacheConfiguration cacheConfiguration 					= null;
+	private List<DataSourceConfiguration> dataSourceList 			= null; 
 	
 	@SuppressWarnings("unused")
 	private ServiceFramework<?,?> serviceFramework			= null;
@@ -64,6 +68,8 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 			loadPipelineConfiguration();
 			loadProgressScaleConfiguration();
 			getRequestScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);
+			loadDataSourceConfiguration();
+			loadCacheConfiguration();
 		}else {
 		
 			throw new ConfigurationException(
@@ -82,7 +88,30 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		phasedProgressScale			= null;
 		scheduledProgressScale		= null;
 		requestScale				= null;
+		cacheConfiguration			= null;
+		dataSourceList				= null;
 	}
+	
+	public void loadDataSourceConfiguration() throws ConfigurationException{
+			
+		dataSourceList = Configuration.DataSourceConfiguration(ConfigurationType.CLIENT.name(), configPath);
+	}
+	
+	public void loadCacheConfiguration() throws ConfigurationException{
+			
+		cacheConfiguration = Configuration.CacheConfiguration(ConfigurationType.CLIENT.name(), configPath);
+	}
+
+	public CacheConfiguration getCacheConfiguration() {
+		
+		return cacheConfiguration;
+	}
+	
+	public List<DataSourceConfiguration> getDataSourceConfiguration(){
+		
+		return dataSourceList;
+	}
+	
 	
 	@Override	
 	public List<PipelineConfiguration> getPipelineConfiguration(ConfigurationType configurationType) throws ConfigurationException{
@@ -101,20 +130,6 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		}		
 		return pipelineConfiguration;
 	}
-	
-
-
-	
-	/*public List<ServiceConfiguration> getClientEndPointConfiguration() throws ConfigurationException{
-		
-		return Configuration.ClientEndPointConfiguration(ConfigurationType.CLIENT.name(),configPath);
-	}
-
-	public List<ServiceConfiguration> getServerEndPointConfiguration() throws ConfigurationException{
-		
-		return Configuration.ServerEndPointConfiguration(ConfigurationType.SERVER.name(),configPath);
-	}*/
-
 
 	@Override
 	public RequestScale getRequestScale(String clientSubscriptionId) throws ConfigurationException {

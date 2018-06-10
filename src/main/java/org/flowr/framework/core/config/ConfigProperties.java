@@ -137,9 +137,9 @@ public class ConfigProperties extends Properties{
 		Boolean d = null;
 		
 		if(key != null && getProperty(key) != null && !getProperty(key).isEmpty()){
-			d = Boolean.valueOf(getProperty(key,"false"));	
+			d = Boolean.valueOf(getProperty(key,String.valueOf(Boolean.FALSE)));	
 		}else{
-			d = Boolean.valueOf("false");	
+			d = Boolean.valueOf(Boolean.FALSE);	
 		}
 		
 		return d;	
@@ -150,9 +150,9 @@ public class ConfigProperties extends Properties{
 		Double d = null;
 		
 		if(key != null && getProperty(key) != null && !getProperty(key).isEmpty()){
-			d = Double.valueOf(getProperty(key,"0.0"));	
+			d = Double.valueOf(getProperty(key,String.valueOf(Double.MIN_VALUE)));	
 		}else{
-			d = Double.valueOf("0.0");	
+			d = Double.valueOf(Double.MIN_VALUE);	
 		}
 		
 		return d;	
@@ -163,9 +163,9 @@ public class ConfigProperties extends Properties{
 		Integer i = null;
 		
 		if(key != null && getProperty(key) != null && !getProperty(key).isEmpty()){
-			i = Integer.valueOf(getProperty(key,"0"));	
+			i = Integer.valueOf(getProperty(key,String.valueOf(Integer.MIN_VALUE)));	
 		}else{
-			i = Integer.valueOf("0");	
+			i = Integer.valueOf(Integer.MIN_VALUE);	
 		}
 		
 		return i;	
@@ -176,9 +176,9 @@ public class ConfigProperties extends Properties{
 		Long l = null;
 		
 		if(key != null && getProperty(key) != null && !getProperty(key).isEmpty()){
-			l = Long.valueOf(getProperty(key,"0"));	
+			l = Long.valueOf(getProperty(key,String.valueOf(Long.MIN_VALUE)));	
 		}else{
-			l = Long.valueOf("0");	
+			l = Long.valueOf(Long.MIN_VALUE);	
 		}
 		
 		return l;		
@@ -189,9 +189,9 @@ public class ConfigProperties extends Properties{
 		Float f = null;
 		
 		if(key != null && getProperty(key) != null && !getProperty(key).isEmpty()){
-			f = Float.valueOf(getProperty(key,"0.0"));	
+			f = Float.valueOf(getProperty(key,String.valueOf(Float.MIN_VALUE)));	
 		}else{
-			f = Float.valueOf("0.0");	
+			f = Float.valueOf(Float.MIN_VALUE);	
 		}
 		
 		return f;		

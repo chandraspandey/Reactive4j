@@ -19,17 +19,23 @@ public interface Scale extends ReactiveMetaData{
 		LOW,
 		MEDIUM,
 		HIGH,
-		CRITICAL;
+		CRITICAL
+	}
+	
+	public class SeverityScale{
 		
-		private static double low;
-		private static double medium;
-		private static double high;
-		private static double critical;
+		private Severity severity = null;
+		private double low;
+		private double medium;
+		private double high;
+		private double critical;
 		
-		public static void setValueOf( Severity severity, double val) {
+		public SeverityScale( Severity severity, double val) {
+			
+			this.severity  = severity;
 			
 			switch(severity) {
-				
+			
 				case CRITICAL:{
 					critical = val;
 					break;
@@ -46,9 +52,14 @@ public interface Scale extends ReactiveMetaData{
 					break;
 				}				
 			}
+
 		}
 		
-		public static double getValueOf( Severity severity) {
+		public Severity getSeverity() {
+			return this.severity;
+		}
+		
+		public double getValueOf(Severity severity) {
 			
 			double val = 0.0;
 			
@@ -69,26 +80,54 @@ public interface Scale extends ReactiveMetaData{
 				}default:{
 					break;
 				}				
-			}			
+			}
+			
 			return val;
-		}		
-	}
+		}
+		
+		
+		public String toString() {
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append(severity);
+			
+			if(low > 0) {
+				builder.append(" : "+low);
+			}else if(medium > 0) {
+				builder.append(" : "+medium);
+			}else if(high > 0) {
+				builder.append(" : "+high);
+			}else if(critical > 0) {
+				builder.append(" : "+critical);
+			}
+			
+			return builder.toString();
+		}
+	}	
 	
 	public enum Priority{
 		LOW,
 		MEDIUM,
 		HIGH,
-		CRITICAL;
+		CRITICAL
+	}
+	
+
+	
+	public class PriorityScale{
 		
-		private static double low;
-		private static double medium;
-		private static double high;
-		private static double critical;
+		private Priority priority = null;
+		private double low;
+		private double medium;
+		private double high;
+		private double critical;
 		
-		public void setValueOf( Priority priority, double val) {
+		public PriorityScale( Priority priority, double val) {
+			
+			this.priority  = priority;
 			
 			switch(priority) {
-				
+			
 				case CRITICAL:{
 					critical = val;
 					break;
@@ -105,9 +144,14 @@ public interface Scale extends ReactiveMetaData{
 					break;
 				}				
 			}
+
 		}
 		
-		public static double getValueOf(Priority priority) {
+		public Priority getPriority() {
+			return this.priority;
+		}
+		
+		public double getValueOf(Priority priority) {
 			
 			double val = 0.0;
 			
@@ -132,15 +176,34 @@ public interface Scale extends ReactiveMetaData{
 			
 			return val;
 		}
-	}
+		
+		
+		public String toString() {
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append(priority);
+			
+			if(low > 0) {
+				builder.append(" : "+low);
+			}else if(medium > 0) {
+				builder.append(" : "+medium);
+			}else if(high > 0) {
+				builder.append(" : "+high);
+			}else if(critical > 0) {
+				builder.append(" : "+critical);
+			}
+			
+			return builder.toString();
+		}
+	}	
 	
-	public void setSeverity(Severity severity);
+	public void setSeverityScale(SeverityScale severityScale);
 	
-	public Severity getSeverity();
+	public SeverityScale getSeverityScale();
 	
-	public void setPriority(Priority priority);
+	public void setPriorityScale(PriorityScale priorityScale);
 	
-	public Priority getPriority();
+	public PriorityScale getPriorityScale();
 	
 	public String getAcknowledgmentIdentifier();
 

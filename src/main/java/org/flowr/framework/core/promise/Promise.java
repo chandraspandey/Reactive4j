@@ -34,6 +34,7 @@ public interface Promise<REQUEST,RESPONSE> {
 		ASSURED,
 		FULFILLED,
 		TIMEOUT,
+		CANCEL,
 		ERROR
 	}
 	

@@ -30,25 +30,24 @@ public class ProgressScale implements Scale{
 	private long INTERVAL;
 	private Hashtable<String, String> metaDataAttributes;
 	private EventOrigin eventOrigin;
-	private Severity severity 	= Severity.LOW;
-	private Priority priority	= Priority.LOW;
+	private SeverityScale severityScale;
+	private PriorityScale priorityScale;
 	
-	public void setSeverity(Severity severity) {
-		this.severity = severity;
+	public void setSeverityScale(SeverityScale severityScale) {
+		this.severityScale = severityScale;
 	}
 	
-	public Severity getSeverity() {
-		return this.severity;
+	public SeverityScale getSeverityScale() {
+		return this.severityScale;
 	}
 	
-	public void setPriority(Priority priority) {
-		this.priority = priority;
+	public void setPriorityScale(PriorityScale priorityScale) {
+		this.priorityScale = priorityScale;
 	}
 	
-	public Priority getPriority() {
-		return this.priority;
+	public PriorityScale getPriorityScale() {
+		return this.priorityScale;
 	}
-	
 	
 	public String getSubscriptionClientId() {
 		return subscriptionClientId;
@@ -69,6 +68,7 @@ public class ProgressScale implements Scale{
 		ProgressScale progressScale = (ProgressScale)scale; 
 		
 		if(progressScale != null){
+			
 			this.setAcknowledgmentIdentifier(progressScale.getAcknowledgmentIdentifier());
 			this.setNow(progressScale.getNow());
 			this.setPromiseState(progressScale.getPromiseState());
@@ -82,6 +82,8 @@ public class ProgressScale implements Scale{
 			this.setMetaDataAttributes(progressScale.getMetaDataAttributes());
 			this.setSubscriptionClientId(progressScale.getSubscriptionClientId());
 			this.setNotificationDeliveryType(progressScale.getNotificationDeliveryType());
+			this.setPriorityScale(progressScale.getPriorityScale());
+			this.setSeverityScale(progressScale.getSeverityScale());
 		}
 	}
 	
@@ -104,7 +106,9 @@ public class ProgressScale implements Scale{
 				this.progressTimeUnit 			== other.progressTimeUnit &&
 				this.INTERVAL					== other.INTERVAL &&
 				this.metaDataAttributes 		== other.metaDataAttributes &&
-				this.eventOrigin				== other.eventOrigin
+				this.eventOrigin				== other.eventOrigin &&
+				this.priorityScale				== other.priorityScale &&
+				this.severityScale				== other.severityScale
 		){
 			isEqual = true;
 		}
@@ -205,8 +209,8 @@ public class ProgressScale implements Scale{
 		
 		return "\n ProgressScale{"+
 				" | subscriptionClientId : "+subscriptionClientId+
-				" | severity : "+severity+
-				" | priority : "+priority+
+				" | severityScale : "+severityScale+
+				" | priorityScale : "+priorityScale+
 				" | now : "+now+
 				" | promiseState : "+promiseState+
 				" | promiseStatus : "+promiseStatus+	
