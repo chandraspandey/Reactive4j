@@ -16,8 +16,7 @@ public class PipelineConfiguration implements Configuration{
 	private long MAX_ELEMENTS 					= 10000;
 	private boolean batchMode					= false;
 	private int batchSize						= 1;	
-	private ConfigProperties configAsProperties;
-	List<ServiceConfiguration> configurationList = null;
+	private List<ServiceConfiguration> configurationList = null;
 
 	public PipelinePolicy getPipelinePolicy() {
 		return pipelinePolicy;
@@ -51,14 +50,6 @@ public class PipelineConfiguration implements Configuration{
 		this.batchSize = batchSize;
 	}
 
-	public ConfigProperties getConfigAsProperties() {
-		return configAsProperties;
-	}
-
-	public void setConfigAsProperties(ConfigProperties configAsProperties) {
-		this.configAsProperties = configAsProperties;
-	}
-	
 	public String getPipelineName() {
 		return pipelineName;
 	}
@@ -82,12 +73,7 @@ public class PipelineConfiguration implements Configuration{
 				" | pipelinePolicy : "+pipelinePolicy+	
 				" | batchMode : "+batchMode+	
 				" | batchSize : "+batchSize+	
-				" | configAsProperties : "+configAsProperties+
 				" | configurationList : "+configurationList+
 				"}\n";
 	}
-
-
-
-
 }

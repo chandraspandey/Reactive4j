@@ -102,11 +102,13 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		cacheConfiguration = Configuration.CacheConfiguration(ConfigurationType.CLIENT.name(), configPath);
 	}
 
+	@Override
 	public CacheConfiguration getCacheConfiguration() {
 		
 		return cacheConfiguration;
 	}
 	
+	@Override
 	public List<DataSourceConfiguration> getDataSourceConfiguration(){
 		
 		return dataSourceList;

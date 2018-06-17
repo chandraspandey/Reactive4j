@@ -13,15 +13,13 @@ public class CacheConfiguration implements Configuration{
 	private String cacheStrategy;
 	private String cachePath;
 	private String cachePolicy;
-	private String cacheProviderClass;
-	private String cacheProviderFactoryClass;
-	private String cacheQueryClass;
-	private String cacheTimestampClass;
 	
 	private boolean cacheOverFlowToDisk;
 	private boolean cacheStatistics;
+	private boolean isEternal;
 	
 	private long cacheDiskSpool;
+	private long cacheDiskMax;
 	private long ELEMENT_MAX_MEMORY;
 	private long ELEMENT_MAX_HEAP;
 	private long ELEMENT_MAX_DISK;
@@ -29,17 +27,11 @@ public class CacheConfiguration implements Configuration{
 	private long ELEMENT_TIME_TO_IDLE;
 	private long ELEMENT_EXPIRY_DISK;
 	
-	private ConfigProperties configAsProperties;	
-	
 	public boolean isValid(){
 		
 		boolean isValid = false;
 		
-		if(
-				cacheProviderClass != null && cacheProviderFactoryClass != null && 
-				cacheQueryClass != null && cacheTimestampClass != null &&
-				ELEMENT_MAX_MEMORY > 0 && ELEMENT_TIME_TO_LIVE > 0 
-		){
+		if(	ELEMENT_MAX_MEMORY > 0 && ELEMENT_TIME_TO_LIVE > 0 ){
 			
 			isValid = true;
 		}
@@ -78,39 +70,7 @@ public class CacheConfiguration implements Configuration{
 	public void setCachePolicy(String cachePolicy) {
 		this.cachePolicy = cachePolicy;
 	}
-
-	public String getCacheProviderClass() {
-		return cacheProviderClass;
-	}
-
-	public void setCacheProviderClass(String cacheProviderClass) {
-		this.cacheProviderClass = cacheProviderClass;
-	}
-
-	public String getCacheProviderFactoryClass() {
-		return cacheProviderFactoryClass;
-	}
-
-	public void setCacheProviderFactoryClass(String cacheProviderFactoryClass) {
-		this.cacheProviderFactoryClass = cacheProviderFactoryClass;
-	}
-
-	public String getCacheQueryClass() {
-		return cacheQueryClass;
-	}
-
-	public void setCacheQueryClass(String cacheQueryClass) {
-		this.cacheQueryClass = cacheQueryClass;
-	}
-
-	public String getCacheTimestampClass() {
-		return cacheTimestampClass;
-	}
-
-	public void setCacheTimestampClass(String cacheTimestampClass) {
-		this.cacheTimestampClass = cacheTimestampClass;
-	}
-
+	
 	public boolean isCacheOverFlowToDisk() {
 		return cacheOverFlowToDisk;
 	}
@@ -182,13 +142,21 @@ public class CacheConfiguration implements Configuration{
 	public void setELEMENT_EXPIRY_DISK(long eLEMENT_EXPIRY_DISK) {
 		ELEMENT_EXPIRY_DISK = eLEMENT_EXPIRY_DISK;
 	}
-
-	public ConfigProperties getConfigAsProperties() {
-		return configAsProperties;
+	
+	public boolean isEternal() {
+		return isEternal;
 	}
 
-	public void setConfigAsProperties(ConfigProperties configAsProperties) {
-		this.configAsProperties = configAsProperties;
+	public void setEternal(boolean isEternal) {
+		this.isEternal = isEternal;
+	}
+
+	public long getCacheDiskMax() {
+		return cacheDiskMax;
+	}
+
+	public void setCacheDiskMax(long cacheDiskMax) {
+		this.cacheDiskMax = cacheDiskMax;
 	}
 	
 	public String toString(){
@@ -198,12 +166,10 @@ public class CacheConfiguration implements Configuration{
 				" | cacheStrategy : "+cacheStrategy+	
 				" | cachePath : "+cachePath+	
 				" | cachePolicy : "+cachePolicy+	
-				" | cacheProviderClass : "+cacheProviderClass+
-				" | cacheProviderFactoryClass : "+cacheProviderFactoryClass+
-				" | cacheQueryClass : "+cacheQueryClass+
-				" | cacheTimestampClass : "+cacheTimestampClass+
 				" | cacheOverFlowToDisk : "+cacheOverFlowToDisk+		
 				" | cacheStatistics : "+cacheStatistics+	
+				" | isEternal : "+isEternal+
+				" | cacheDiskMax : "+cacheDiskMax+
 				" | cacheDiskSpool : "+cacheDiskSpool+
 				" | ELEMENT_MAX_MEMORY : "+ELEMENT_MAX_MEMORY+
 				" | ELEMENT_MAX_HEAP : "+ELEMENT_MAX_HEAP+
@@ -214,4 +180,6 @@ public class CacheConfiguration implements Configuration{
 				" | ELEMENT_EXPIRY_DISK : "+ELEMENT_EXPIRY_DISK+	
 				"}\n";
 	}
+
+
 }

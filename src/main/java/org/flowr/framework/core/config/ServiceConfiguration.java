@@ -32,7 +32,7 @@ public class ServiceConfiguration implements Configuration{
 	private int MIN_THREADS;
 	private int MAX_THREADS;	
 	private ConfigProperties configAsProperties;
-	
+
 	public boolean isValid(){
 		
 		boolean isValid = false;
@@ -79,6 +79,14 @@ public class ServiceConfiguration implements Configuration{
 		this.MAX_THREADS = MAX_THREADS;
 	}
 	
+	public ConfigProperties getConfigAsProperties() {
+		return configAsProperties;
+	}
+
+	public void setConfigAsProperties(ConfigProperties configAsProperties) {
+		this.configAsProperties = configAsProperties;
+	}
+	
 	public long getTimeout() {
 		return timeout;
 	}
@@ -115,13 +123,6 @@ public class ServiceConfiguration implements Configuration{
 	
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
-	}
-	
-	public ConfigProperties getConfigAsProperties() {
-		return configAsProperties;
-	}
-	public void setConfigAsProperties(ConfigProperties configAsProperties) {
-		this.configAsProperties = configAsProperties;
 	}
 	
 	private long convert(long v){
@@ -208,12 +209,6 @@ public class ServiceConfiguration implements Configuration{
 				" | heartbeatTimeUnit : "+heartbeatTimeUnit+
 				" | MIN_THREADS : "+MIN_THREADS+
 				" | MAX_THREADS : "+MAX_THREADS+
-				" | configAsProperties : "+configAsProperties+
 				"}";
 	}
-
-
-
-
-
 }
