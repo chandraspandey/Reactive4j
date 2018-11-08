@@ -1,5 +1,6 @@
 package org.flowr.framework.core.promise;
 
+import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.config.OperationConfig;
@@ -36,8 +37,8 @@ public interface PromiseTypeClient<REQUEST,RESPONSE> extends DeferableRequest<RE
 	
 	public ClientIdentity buildClientIdentity() throws ConfigurationException;
 	
-	public ServiceStatus startupAdapter(Properties properties) throws ConfigurationException;
+	public ServiceStatus startupAdapter(Optional<Properties> configProperties) throws ConfigurationException;
 	
-	public ServiceStatus shutdownAdapter(Properties properties) throws ConfigurationException;
+	public ServiceStatus shutdownAdapter(Optional<Properties> configProperties) throws ConfigurationException;
 
 }

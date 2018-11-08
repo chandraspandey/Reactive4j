@@ -8,12 +8,14 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.config.CacheConfiguration;
 import org.flowr.framework.core.config.Configuration;
-import org.flowr.framework.core.config.DataSourceConfiguration;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
+import org.flowr.framework.core.config.DataSourceConfiguration;
+import org.flowr.framework.core.config.NodeServiceConfiguration;
 import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.constants.FrameworkConstants;
@@ -50,6 +52,8 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 	private RequestScale requestScale								= null;
 	private CacheConfiguration cacheConfiguration 					= null;
 	private List<DataSourceConfiguration> dataSourceList 			= null; 
+	private List<NodeServiceConfiguration> nodeInboundConfiguration	= null;
+	private List<NodeServiceConfiguration> nodeOutboundConfiguration= null;
 	
 	@SuppressWarnings("unused")
 	private ServiceFramework<?,?> serviceFramework			= null;
@@ -70,6 +74,7 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 			getRequestScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);
 			loadDataSourceConfiguration();
 			loadCacheConfiguration();
+			loadIntegrationConfiguration();
 		}else {
 		
 			throw new ConfigurationException(
@@ -90,6 +95,8 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		requestScale				= null;
 		cacheConfiguration			= null;
 		dataSourceList				= null;
+		nodeInboundConfiguration	= null;
+		nodeOutboundConfiguration	= null;
 	}
 	
 	public void loadDataSourceConfiguration() throws ConfigurationException{
@@ -184,6 +191,52 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 		}		
 		return serviceConfiguration;
 	}
+	
+	@Override
+	public List<NodeServiceConfiguration> getIntegrationServiceConfiguration(ConfigurationType configurationType) throws ConfigurationException{
+		
+		List<NodeServiceConfiguration> serviceConfigurationList = null;
+		
+		switch(configurationType) {
+		
+			case INTEGRATION_INBOUND:{
+				
+				serviceConfigurationList = nodeInboundConfiguration;
+				break;			
+			}case INTEGRATION_OUTBOUND:{
+				
+				serviceConfigurationList = nodeOutboundConfiguration;
+				break;			
+			}default:{
+				break;
+			}			
+		}		
+		return serviceConfigurationList;
+	}
+	
+	public void loadIntegrationConfiguration() throws ConfigurationException{
+		
+		Iterator<ConfigurationType> iter = Arrays.asList(ConfigurationType.values()).iterator();
+		
+		while(iter.hasNext()) {
+			
+			switch(iter.next()) {
+			
+	
+				case INTEGRATION_INBOUND:{
+					nodeInboundConfiguration = Configuration.NodeInboundEndPointConfiguration(
+							ConfigurationType.INTEGRATION_INBOUND.name(), configPath);
+					break;			
+				}case INTEGRATION_OUTBOUND:{
+					nodeOutboundConfiguration = Configuration.NodeOutboundEndPointConfiguration(
+							ConfigurationType.INTEGRATION_OUTBOUND.name(), configPath);
+					break;			
+				}default:{
+					break;
+				}				
+			}
+		}
+	}	
 
 	public void loadPipelineConfiguration() throws ConfigurationException {
 			
@@ -322,13 +375,13 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 
 	
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
@@ -356,5 +409,7 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 				" | requestScale : "+requestScale+	
 				"}\n";
 	}
+
+
 	
 }

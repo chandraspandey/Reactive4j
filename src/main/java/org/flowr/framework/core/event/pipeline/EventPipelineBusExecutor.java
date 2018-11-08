@@ -1,6 +1,7 @@
 package org.flowr.framework.core.event.pipeline;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -39,13 +40,13 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		serviceStatus = ServiceStatus.STARTED;
 		return serviceStatus;
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		service.shutdown();
 		serviceStatus = ServiceStatus.STOPPED;
 		return serviceStatus;	

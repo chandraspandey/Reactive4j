@@ -9,7 +9,7 @@ import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface EventBus {

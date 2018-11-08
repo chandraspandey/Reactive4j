@@ -41,8 +41,72 @@ import static org.flowr.framework.core.constants.ClientConstants.CONFIG_CLIENT_T
 import static org.flowr.framework.core.constants.ClientConstants.CONFIG_CLIENT_THREADS_MIN;
 import static org.flowr.framework.core.constants.ClientConstants.CONFIG_CLIENT_TIMEOUT;
 import static org.flowr.framework.core.constants.ClientConstants.CONFIG_CLIENT_TIMEOUT_UNIT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_OVERFLOW;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_SPOOL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_DISK_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_EXPIRY_DISK;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_HEAP_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_MEMORY_MAX;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_TIME_TO_IDLE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_TIME_TO_LIVE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ETERNAL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_NAME;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_PATH;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_POLICY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_STATISTICS;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_STRATEGY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONFIG_MIN;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_DRIVER;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_PASSWORD;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_POOL_SIZE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_URL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_USERNAME;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_COUNT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_DB;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_DIALECT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_JPA_VERSION;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_MAPPING_ENTITY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_MAPPING_ENTITY_COUNT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_NAME;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_PROVIDER;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_DEFAULT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_EXTERNAL;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_PROVIDER;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_PROVIDER_FACTORY;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_TIMESTAMP;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_FORMAT;
+import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_SHOW;
 import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_ENDPOINT_HEARTBEAT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_ENDPOINT_HEARTBEAT_UNIT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_ENDPOINT_MAX;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_ENDPOINT_MIN;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_CLIENT_HOST_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_CLIENT_HOST_PORT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_CLIENT_MAX;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_ENDPOINT_TYPE;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_FUNCTION_TYPE;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_SERVER_CHANNEL_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_SERVER_HOST_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_SERVER_HOST_PORT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_INBOUND_SERVER_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_NOTIFICATION_ENDPOINT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_CLIENT_HOST_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_CLIENT_HOST_PORT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_CLIENT_MAX;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_ENDPOINT_TYPE;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_FUNCTION_TYPE;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_CHANNEL_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_HOST_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_HOST_PORT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_NAME;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_THREADS_MAX;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_THREADS_MIN;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_TIMEOUT;
+import static org.flowr.framework.core.constants.NodeConstants.CONFIG_NODE_PIPELINE_TIMEOUT_UNIT;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_NAME;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_NOTIFICATION_ENDPOINT;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_PIPELINE_BATCH_MODE;
@@ -73,45 +137,8 @@ import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_T
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_THREADS_MIN;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_TIMEOUT;
 import static org.flowr.framework.core.constants.ServerConstants.CONFIG_SERVER_TIMEOUT_UNIT;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_MAPPING_ENTITY_COUNT;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_OVERFLOW;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_MAX;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ETERNAL;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_DISK_SPOOL;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_EXPIRY_DISK;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_DISK_MAX;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_HEAP_MAX;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_MEMORY_MAX;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_TIME_TO_IDLE;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_ELEMENTS_TIME_TO_LIVE;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_NAME;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_PROVIDER;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_DB;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_JPA_VERSION;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_PATH;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_POLICY;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_PROVIDER;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_PROVIDER_FACTORY;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_DEFAULT;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_STATISTICS;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CACHE_STRATEGY;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_TIMESTAMP;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_DRIVER;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_PASSWORD;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_USERNAME;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_URL;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONNECTION_POOL_SIZE;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_COUNT;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_DIALECT;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_MAPPING_ENTITY;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_NAME;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_CACHE_EXTERNAL;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_FORMAT;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_QUERY_SHOW;
-import static org.flowr.framework.core.constants.DataSourceConstants.DATASOURCE_CONFIG_MIN;
 
-
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +167,8 @@ public interface Configuration {
 	public enum ConfigurationType{
 		CLIENT,
 		SERVER,
+		INTEGRATION_INBOUND,
+		INTEGRATION_OUTBOUND,
 		EXTERNAL
 	}
 	
@@ -206,7 +235,7 @@ public interface Configuration {
 						config.setHeartbeatInterval(prop.get(LONG,CONFIG_CLIENT_PIPELINE_ENDPOINT_HEARTBEAT));
 						config.setHeartbeatTimeUnit(prop.get(TIMEUNIT, CONFIG_CLIENT_PIPELINE_ENDPOINT_HEARTBEAT_UNIT));
 						
-						config.setServerName(prop.get(STRING,CONFIG_CLIENT_PIPELINE_ENDPOINT_NAME+"."+eIndex));
+						config.setHostName(prop.get(STRING,CONFIG_CLIENT_PIPELINE_ENDPOINT_NAME+"."+eIndex));
 						config.setNotificationEndPoint(prop.get(STRING,CONFIG_CLIENT_PIPELINE_ENDPOINT_URL+"."+eIndex));
 						config.setPipelineFunctionType(prop.get(PipelineFunctionType.class,ENUM,CONFIG_CLIENT_PIPELINE_FUNCTION_TYPE+"."+eIndex)); 
 						config.setNotificationProtocolType( prop.get(ClientNotificationProtocolType.class,ENUM,CONFIG_CLIENT_PIPELINE_ENDPOINT_TYPE+"."+eIndex));
@@ -360,7 +389,7 @@ public interface Configuration {
 						config.setHeartbeatInterval(prop.get(LONG,CONFIG_SERVER_PIPELINE_ENDPOINT_HEARTBEAT));
 						config.setHeartbeatTimeUnit(prop.get(TIMEUNIT, CONFIG_SERVER_PIPELINE_ENDPOINT_HEARTBEAT_UNIT));
 						
-						config.setServerName(prop.get(STRING,CONFIG_SERVER_PIPELINE_ENDPOINT_NAME+"."+eIndex));
+						config.setHostName(prop.get(STRING,CONFIG_SERVER_PIPELINE_ENDPOINT_NAME+"."+eIndex));
 						config.setNotificationEndPoint(prop.get(STRING,CONFIG_SERVER_PIPELINE_ENDPOINT_URL+"."+eIndex));
 						config.setPipelineFunctionType(prop.get(PipelineFunctionType.class,ENUM,CONFIG_SERVER_PIPELINE_FUNCTION_TYPE+"."+eIndex)); 
 						config.setNotificationProtocolType( prop.get(ServerNotificationProtocolType.class,ENUM,CONFIG_SERVER_PIPELINE_ENDPOINT_TYPE+"."+eIndex));
@@ -403,7 +432,7 @@ public interface Configuration {
 				config.setHeartbeatInterval(prop.get(LONG,CONFIG_CLIENT_PIPELINE_ENDPOINT_HEARTBEAT));
 				config.setHeartbeatTimeUnit(prop.get(TIMEUNIT, CONFIG_CLIENT_PIPELINE_ENDPOINT_HEARTBEAT_UNIT));
 				
-				config.setServerName(prop.get(STRING,CONFIG_CLIENT_PIPELINE_ENDPOINT_NAME+"."+index));
+				config.setHostName(prop.get(STRING,CONFIG_CLIENT_PIPELINE_ENDPOINT_NAME+"."+index));
 				config.setNotificationEndPoint(prop.get(STRING,CONFIG_CLIENT_PIPELINE_ENDPOINT_URL+"."+index));
 				config.setPipelineFunctionType(prop.get(PipelineFunctionType.class,ENUM,CONFIG_CLIENT_PIPELINE_FUNCTION_TYPE+"."+index)); 
 				config.setNotificationProtocolType( prop.get(ClientNotificationProtocolType.class,ENUM,CONFIG_CLIENT_PIPELINE_ENDPOINT_TYPE+"."+index));
@@ -443,7 +472,7 @@ public interface Configuration {
 				config.setHeartbeatInterval(prop.get(LONG,CONFIG_SERVER_PIPELINE_ENDPOINT_HEARTBEAT));
 				config.setHeartbeatTimeUnit(prop.get(TIMEUNIT, CONFIG_SERVER_PIPELINE_ENDPOINT_HEARTBEAT_UNIT));
 				
-				config.setServerName(prop.get(STRING,CONFIG_SERVER_PIPELINE_ENDPOINT_NAME+"."+index));
+				config.setHostName(prop.get(STRING,CONFIG_SERVER_PIPELINE_ENDPOINT_NAME+"."+index));
 				config.setNotificationEndPoint(prop.get(STRING,CONFIG_SERVER_PIPELINE_ENDPOINT_URL+"."+index));
 				config.setPipelineFunctionType(prop.get(PipelineFunctionType.class,ENUM,CONFIG_SERVER_PIPELINE_FUNCTION_TYPE+"."+index)); 
 				config.setNotificationProtocolType( prop.get(ServerNotificationProtocolType.class,ENUM,CONFIG_SERVER_PIPELINE_ENDPOINT_TYPE+"."+index));
@@ -465,8 +494,8 @@ public interface Configuration {
 		ServiceConfiguration config = new ServiceConfiguration(); 
 	
 		ConfigProperties prop 		= new ConfigProperties(configName,filePath);
-		config.setServerName(prop.get(STRING,CONFIG_CLIENT_SERVICE_SERVER_NAME));
-		config.setServerPort(prop.get(INTEGER,CONFIG_CLIENT_SERVICE_SERVER_PORT));
+		config.setHostName(prop.get(STRING,CONFIG_CLIENT_SERVICE_SERVER_NAME));
+		config.setHostPort(prop.get(INTEGER,CONFIG_CLIENT_SERVICE_SERVER_PORT));
 		config.setMIN_THREADS(prop.get(INTEGER,CONFIG_CLIENT_THREADS_MIN));
 		config.setMAX_THREADS(prop.get(INTEGER,CONFIG_CLIENT_THREADS_MAX));
 		config.setTimeout(prop.get(LONG,CONFIG_CLIENT_TIMEOUT));
@@ -485,8 +514,8 @@ public interface Configuration {
 		ServiceConfiguration config = new ServiceConfiguration();
 		
 		ConfigProperties prop 		= new ConfigProperties(configName,filePath);
-		config.setServerName(prop.get(STRING,CONFIG_SERVER_NAME));
-		config.setServerPort(prop.get(INTEGER,CONFIG_SERVER_PORT));
+		config.setHostName(prop.get(STRING,CONFIG_SERVER_NAME));
+		config.setHostPort(prop.get(INTEGER,CONFIG_SERVER_PORT));
 		config.setMIN_THREADS(prop.get(INTEGER,CONFIG_SERVER_THREADS_MIN));
 		config.setMAX_THREADS(prop.get(INTEGER,CONFIG_SERVER_THREADS_MAX));
 		config.setTimeout(prop.get(LONG,CONFIG_SERVER_TIMEOUT));
@@ -598,5 +627,125 @@ public interface Configuration {
 		scale.setNotificationDeliveryType(prop.get(NotificationDeliveryType.EXTERNAL.getClass(), ENUM,CONFIG_SERVER_RESPONSE_PROGRESS_NOTIFICATION_DELIVERY_TYPE));	
 
 		return scale;
+	}
+	
+	public static List<NodeServiceConfiguration> NodeInboundEndPointConfiguration(String configName, String filePath) 
+			throws ConfigurationException{
+			
+		List<NodeServiceConfiguration> configurationList = new ArrayList<NodeServiceConfiguration>();
+		
+		
+		ConfigProperties prop 		= new ConfigProperties(configName,filePath);
+		
+		int nodeMin = prop.get(INTEGER,CONFIG_NODE_PIPELINE_ENDPOINT_MIN);
+		int nodeMax = prop.get(INTEGER,CONFIG_NODE_PIPELINE_ENDPOINT_MAX);
+		
+		for(int index= nodeMin; index < nodeMax;index++ ){
+			
+		
+			if(
+				( prop.get(STRING,CONFIG_NODE_PIPELINE_INBOUND_SERVER_NAME+"."+index) != null ) 
+			){
+				
+				NodeServiceConfiguration config = new NodeServiceConfiguration(); 				
+						
+				config.setMIN_THREADS(prop.get(INTEGER,CONFIG_NODE_PIPELINE_THREADS_MIN));
+				config.setMAX_THREADS(prop.get(INTEGER,CONFIG_NODE_PIPELINE_THREADS_MAX));
+				config.setTimeout(prop.get(LONG,CONFIG_NODE_PIPELINE_TIMEOUT));
+				config.setTimeoutTimeUnit(prop.get(TIMEUNIT, CONFIG_NODE_PIPELINE_TIMEOUT_UNIT));
+				config.setConfigName(configName);
+				config.setFilePath(filePath);
+				config.setHeartbeatInterval(prop.get(LONG,CONFIG_NODE_PIPELINE_ENDPOINT_HEARTBEAT));
+				config.setHeartbeatTimeUnit(prop.get(TIMEUNIT, CONFIG_NODE_PIPELINE_ENDPOINT_HEARTBEAT_UNIT));				
+				config.setNotificationEndPoint(prop.get(STRING,CONFIG_NODE_PIPELINE_NOTIFICATION_ENDPOINT)); 
+				
+				config.setNodePipelineName(prop.get(STRING,CONFIG_NODE_PIPELINE_INBOUND_SERVER_NAME+"."+index));
+				config.setNodeChannelName(prop.get(STRING,CONFIG_NODE_PIPELINE_INBOUND_SERVER_CHANNEL_NAME+"."+index));
+				
+				config.setHostName(prop.get(STRING,CONFIG_NODE_PIPELINE_INBOUND_SERVER_HOST_NAME+"."+index));
+				config.setHostPort(prop.get(INTEGER,CONFIG_NODE_PIPELINE_INBOUND_SERVER_HOST_PORT+"."+index));
+				config.setPipelineFunctionType(prop.get(PipelineFunctionType.class,ENUM,CONFIG_NODE_PIPELINE_INBOUND_FUNCTION_TYPE+"."+index)); 
+				config.setNotificationProtocolType( prop.get(ServerNotificationProtocolType.class,ENUM,CONFIG_NODE_PIPELINE_INBOUND_ENDPOINT_TYPE+"."+index));
+
+				int clientMax = prop.get(INTEGER,CONFIG_NODE_PIPELINE_INBOUND_CLIENT_MAX+"."+index);
+				
+				for(int clientIndex= 1; clientIndex <= clientMax;clientIndex++ ){
+					
+						SimpleEntry<String, Integer> clientEndPoint = new SimpleEntry<String, Integer>(
+							prop.get(STRING,CONFIG_NODE_PIPELINE_INBOUND_CLIENT_HOST_NAME+"."+clientIndex),
+							prop.get(INTEGER,CONFIG_NODE_PIPELINE_INBOUND_CLIENT_HOST_PORT+"."+clientIndex)
+						);
+						config.addClientEndPoint(clientEndPoint);
+				}
+				
+				configurationList.add(config);
+				config.setConfigAsProperties(prop);
+			}	
+			
+		}
+		
+		//System.out.println("Configuration : ClientEndPointConfiguration : "+configurationList);
+		
+		return configurationList;		
+	}
+	
+	public static List<NodeServiceConfiguration> NodeOutboundEndPointConfiguration(String configName, String filePath) 
+			throws ConfigurationException{
+			
+		List<NodeServiceConfiguration> configurationList = new ArrayList<NodeServiceConfiguration>();
+		
+		ConfigProperties prop 		= new ConfigProperties(configName,filePath);
+		
+		int nodeMin = prop.get(INTEGER,CONFIG_NODE_PIPELINE_ENDPOINT_MIN);
+		int nodeMax = prop.get(INTEGER,CONFIG_NODE_PIPELINE_ENDPOINT_MAX);
+		
+		for(int index=nodeMin; index < nodeMax;index++ ){
+			
+		
+			if(
+				( prop.get(STRING,CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_NAME+"."+index) != null ) 
+			){
+				
+				NodeServiceConfiguration config = new NodeServiceConfiguration(); 				
+						
+				config.setMIN_THREADS(prop.get(INTEGER,CONFIG_NODE_PIPELINE_THREADS_MIN));
+				config.setMAX_THREADS(prop.get(INTEGER,CONFIG_NODE_PIPELINE_THREADS_MAX));
+				config.setTimeout(prop.get(LONG,CONFIG_NODE_PIPELINE_TIMEOUT));
+				config.setTimeoutTimeUnit(prop.get(TIMEUNIT, CONFIG_NODE_PIPELINE_TIMEOUT_UNIT));
+				config.setConfigName(configName);
+				config.setFilePath(filePath);
+				config.setHeartbeatInterval(prop.get(LONG,CONFIG_NODE_PIPELINE_ENDPOINT_HEARTBEAT));
+				config.setHeartbeatTimeUnit(prop.get(TIMEUNIT, CONFIG_NODE_PIPELINE_ENDPOINT_HEARTBEAT_UNIT));				
+				config.setNotificationEndPoint(prop.get(STRING,CONFIG_NODE_PIPELINE_NOTIFICATION_ENDPOINT)); 
+				
+				config.setNodePipelineName(prop.get(STRING,CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_NAME+"."+index));
+				config.setNodeChannelName(prop.get(STRING,CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_CHANNEL_NAME+"."+index));
+
+				
+				config.setHostName(prop.get(STRING,CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_HOST_NAME+"."+index));
+				config.setHostPort(prop.get(INTEGER,CONFIG_NODE_PIPELINE_OUTBOUND_SERVER_HOST_PORT+"."+index));
+				config.setPipelineFunctionType(prop.get(PipelineFunctionType.class,ENUM,CONFIG_NODE_PIPELINE_OUTBOUND_FUNCTION_TYPE+"."+index)); 
+				config.setNotificationProtocolType( prop.get(ClientNotificationProtocolType.class,ENUM,CONFIG_NODE_PIPELINE_OUTBOUND_ENDPOINT_TYPE+"."+index));
+
+				int clientMax = prop.get(INTEGER,CONFIG_NODE_PIPELINE_OUTBOUND_CLIENT_MAX+"."+index);
+				
+				for(int clientIndex= 1; clientIndex <= clientMax;clientIndex++ ){
+					
+						SimpleEntry<String, Integer> clientEndPoint = new SimpleEntry<String, Integer>(
+							prop.get(STRING,CONFIG_NODE_PIPELINE_OUTBOUND_CLIENT_HOST_NAME+"."+clientIndex),
+							prop.get(INTEGER,CONFIG_NODE_PIPELINE_OUTBOUND_CLIENT_HOST_PORT+"."+clientIndex)
+						);
+						config.addClientEndPoint(clientEndPoint);
+				}
+				
+				configurationList.add(config);
+				config.setConfigAsProperties(prop);
+			}	
+			
+		}
+		
+		//System.out.println("Configuration : ClientEndPointConfiguration : "+configurationList);
+		
+		return configurationList;		
 	}
 }

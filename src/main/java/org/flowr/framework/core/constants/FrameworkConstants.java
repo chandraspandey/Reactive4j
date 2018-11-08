@@ -51,4 +51,6 @@ public class FrameworkConstants {
 	public static final int FRAMEWORK_PIPELINE_DEFAULT_MAX_ELEMENTS	= 10000;
 	
 	public static final int FRAMEWORK_PIPELINE_NOTIFICATION_TIME_UNIT= 500;
+	public static final int FRAMEWORK_NETWORK_IO_BUFFER_UNIT		= 1024;
+	public static final int FRAMEWORK_NETWORK_IO_BUFFER_BLOCK		= 5120;
 }

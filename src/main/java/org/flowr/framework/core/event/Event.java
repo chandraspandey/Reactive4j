@@ -8,7 +8,7 @@ import java.util.concurrent.Delayed;
  * Defines event timestamp tagging functionality as core functionality. Inheriting interfaces provides domain
  * specific functionalities.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface Event<E> extends Delayed{
@@ -16,7 +16,8 @@ public interface Event<E> extends Delayed{
 	public enum EventType{
 		CLIENT,
 		SERVER,
-		HEALTHCHECK
+		HEALTHCHECK,
+		NETWORK
 	}
 	
 	public void setEventTimestamp(Timestamp eventTimestamp);

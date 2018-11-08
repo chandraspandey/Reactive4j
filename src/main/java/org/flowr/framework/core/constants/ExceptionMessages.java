@@ -4,7 +4,7 @@ package org.flowr.framework.core.constants;
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class ExceptionMessages {
@@ -28,6 +28,7 @@ public class ExceptionMessages {
 	public static final String MSG_NOTIFICATION_PROTOCOL	= "Notification Protocol not defined ";
 	public static final String MSG_TYPE_ERROR				= "Invalid Type. ";
 	public static final String MSG_MANDATORY				= "Mandatory Field. ";
+	public static final String MSG_IO_INVALID_INPUT 		= "Invalid Input to framework.";
 	
 	public static final String MSG_SERVICE					= "Service Error";
 	public static final String MSG_SERVICE_ALREADY_EXISTS	= "Service with same ServiceType & name already exists.";

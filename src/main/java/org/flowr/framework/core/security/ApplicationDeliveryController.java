@@ -1,6 +1,6 @@
 package org.flowr.framework.core.security;
 
-import org.flowr.action.Action;
+import org.flowr.framework.action.Action;
 import org.flowr.framework.core.model.AttributeSet;
 import org.flowr.framework.core.model.Model;
 import org.flowr.framework.core.security.policy.Qualifier;

@@ -1,6 +1,7 @@
 package org.flowr.framework.core.service.internal;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -196,7 +197,7 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
 		service.execute(this);
 		serviceStatus = ServiceStatus.STARTED;
@@ -205,7 +206,7 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		
 		service.shutdown();
 		serviceStatus = ServiceStatus.STOPPED;

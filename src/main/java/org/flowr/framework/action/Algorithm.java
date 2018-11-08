@@ -1,4 +1,4 @@
-package org.flowr.action;
+package org.flowr.framework.action;
 
 
 /**

@@ -2,6 +2,7 @@ package org.flowr.framework.core.service.internal;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
@@ -95,7 +96,7 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
 		System.out.println("NotificationServiceImpl : startup : "+configProperties);
 		
@@ -125,7 +126,7 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		
 		HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeSet = 
 				notificationHelper.getNotificationRoutes();

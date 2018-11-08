@@ -31,7 +31,8 @@ public interface Service extends ServiceLifecycle{
 		MANAGEMENT,
 		SUBSCRIPTION,
 		SECURITY,
-		API
+		API,
+		NETWORK
 	}
 		
 	public enum ServiceState{

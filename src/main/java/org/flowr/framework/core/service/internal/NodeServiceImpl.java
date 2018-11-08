@@ -2,6 +2,7 @@ package org.flowr.framework.core.service.internal;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.api.Node;
@@ -129,12 +130,12 @@ public class NodeServiceImpl implements NodeService,Dependency, DependencyLoop{
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 
 		return ServiceStatus.STOPPED;
 	}

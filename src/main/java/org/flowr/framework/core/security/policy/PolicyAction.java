@@ -1,6 +1,6 @@
 package org.flowr.framework.core.security.policy;
 
-import org.flowr.action.Action;
+import org.flowr.framework.action.Action;
 import org.flowr.framework.core.security.Antecedent.SecurityAntecedent;
 import org.flowr.framework.core.security.Dependent.SecurityDependent;
 

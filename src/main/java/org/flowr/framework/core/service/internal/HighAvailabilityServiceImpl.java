@@ -5,6 +5,7 @@ import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
@@ -247,7 +248,7 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService,Depe
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
 		try {
 			buildCircuit();
@@ -260,7 +261,7 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService,Depe
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		
 		clientCircuit.shutdownCircuit();
 		serverCircuit.shutdownCircuit();

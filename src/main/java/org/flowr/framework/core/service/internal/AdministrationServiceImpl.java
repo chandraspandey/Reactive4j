@@ -1,5 +1,6 @@
 package org.flowr.framework.core.service.internal;
 
+import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
@@ -60,13 +61,13 @@ public class AdministrationServiceImpl implements AdministrationService{
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}

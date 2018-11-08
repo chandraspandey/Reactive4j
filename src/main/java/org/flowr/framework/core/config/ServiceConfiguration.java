@@ -20,9 +20,9 @@ public class ServiceConfiguration implements Configuration{
 	private PipelineFunctionType pipelineFunctionType;	
 	private String configName;
 	private String filePath;
-	private String serverName;
+	private String hostName;
 	private String notificationEndPoint;
-	private int serverPort;
+	private int hostPort;
 	private long timeout;
 	private TimeUnit timeoutTimeUnit;
 	
@@ -47,18 +47,19 @@ public class ServiceConfiguration implements Configuration{
 		return isValid;
 	}
 
-	public String getServerName() {
-		return serverName;
+
+	public String getHostName() {
+		return hostName;
 	}
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 	
-	public int getServerPort() {
-		return serverPort;
+	public int getHostPort() {
+		return hostPort;
 	}
-	public void setServerPort(int serverPort) {
-		this.serverPort = serverPort;
+	public void setHostPort(int hostPort) {
+		this.hostPort = hostPort;
 	}
 	public String getNotificationEndPoint() {
 		return notificationEndPoint;
@@ -192,7 +193,7 @@ public class ServiceConfiguration implements Configuration{
 	public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
 		this.pipelineFunctionType = pipelineFunctionType;
 	}
-	
+
 	public String toString(){
 		
 		return "ServiceConfiguration{"+
@@ -200,9 +201,9 @@ public class ServiceConfiguration implements Configuration{
 				" | notificationProtocolType : "+notificationProtocolType+	
 				" | pipelineFunctionType : "+pipelineFunctionType+	
 				" | filePath : "+filePath+	
-				" | serverName : "+serverName+				
-				" | notificationEndPoint : "+notificationEndPoint+
-				" | serverPort : "+serverPort+
+				" | hostName : "+hostName+	
+				" | hostPort : "+hostPort+
+				" | notificationEndPoint : "+notificationEndPoint+				
 				" | timeout : "+timeout+
 				" | timeoutTimeUnit : "+timeoutTimeUnit+
 				" | heartbeatInterval : "+heartbeatInterval+

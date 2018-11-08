@@ -1,7 +1,5 @@
 package org.flowr.framework.core.event.pipeline;
 
-import org.flowr.framework.core.flow.EventSubscriber;
-
 /**
  * 
  * 
@@ -9,7 +7,7 @@ import org.flowr.framework.core.flow.EventSubscriber;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface Pipeline<Event> extends EventSubscriber{
+public interface Pipeline<Event>{// extends EventSubscriber{
 	
 	public enum PipelineType{
 		PRIORITY,
@@ -40,7 +38,9 @@ public interface Pipeline<Event> extends EventSubscriber{
 		USECASE,
 		PIPELINE_SERVER_INTEGRATION,
 		PIPELINE_SERVER_SERVICE,
-		PIPELINE_CLIENT_SERVICE
+		PIPELINE_CLIENT_SERVICE,
+		PIPELINE_NETWORK_SERVER,
+		PIPELINE_NETWORK_CLIENT
 	}
 	
 	public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType);

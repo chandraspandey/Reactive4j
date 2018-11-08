@@ -1,6 +1,6 @@
 package org.flowr.framework.core.security.policy.action;
 
-import org.flowr.action.Algorithm;
+import org.flowr.framework.action.Algorithm;
 
 /**
  * Defines Obfuscation of identity text in communication.

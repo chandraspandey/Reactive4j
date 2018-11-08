@@ -25,6 +25,7 @@ public class ServerConstants {
 		= "flowr.server.response.progress.scale.notification.delivery.type";
 	
 	public static final String CONFIG_SERVER_EVENT_BUS_NAME						= "EventBus";
+	public static final String CONFIG_SERVER_NETWORK_BUS_NAME					= "NetworkBus";
 
 	// supports up to 100 nodes
 	public static final int CONFIG_SERVER_PIPELINE_ENDPOINT_MIN					= 0;

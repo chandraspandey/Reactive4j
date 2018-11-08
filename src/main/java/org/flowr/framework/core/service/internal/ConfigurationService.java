@@ -5,6 +5,7 @@ import java.util.List;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.config.CacheConfiguration;
 import org.flowr.framework.core.config.DataSourceConfiguration;
+import org.flowr.framework.core.config.NodeServiceConfiguration;
 import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.exception.ConfigurationException;
@@ -51,6 +52,8 @@ public interface ConfigurationService extends ServiceFrameworkComponent{
 	public List<PipelineConfiguration> getPipelineConfiguration(ConfigurationType configurationType) throws ConfigurationException;
 
 	public ServiceConfiguration getServiceConfiguration(ConfigurationType configurationType) throws ConfigurationException;
+	
+	public List<NodeServiceConfiguration> getIntegrationServiceConfiguration(ConfigurationType configurationType) throws ConfigurationException;
 	
 	public CacheConfiguration getCacheConfiguration();
 	

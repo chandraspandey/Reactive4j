@@ -1,6 +1,6 @@
 package org.flowr.framework.core.security.policy.action;
 
-import org.flowr.action.Action;
+import org.flowr.framework.action.Action;
 
 /**
  * Extends Action Interface to provide Security specific instrumentation

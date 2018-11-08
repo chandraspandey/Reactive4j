@@ -1,5 +1,6 @@
 package org.flowr.framework.core.service;
 
+import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.flow.EventPublisher;
@@ -22,12 +23,12 @@ public interface ServiceLifecycle {
 	 * @param configProperties : Optional properties that can be configured for granular startup of services
 	 * @return
 	 */
-	public ServiceStatus startup(Properties configProperties);
+	public ServiceStatus startup(Optional<Properties> configProperties);
 
 	/**
 	 * Provides hookup services for shut down
 	 * @param configProperties : Optional properties that can be configured for granular shutdown of services
 	 * @return
 	 */
-	public ServiceStatus shutdown(Properties configProperties);
+	public ServiceStatus shutdown(Optional<Properties> configProperties);
 }

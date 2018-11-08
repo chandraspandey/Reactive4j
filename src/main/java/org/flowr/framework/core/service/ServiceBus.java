@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.Flow.Subscriber;
 
@@ -259,7 +260,7 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	}
 
 	@Override
-	public ServiceStatus startup(Properties configProperties) {
+	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
 		this.serviceList.forEach(
 			
@@ -316,7 +317,7 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	}
 
 	@Override
-	public ServiceStatus shutdown(Properties configProperties) {
+	public ServiceStatus shutdown(Optional<Properties> configProperties) {
 		
 		this.serviceList.forEach(
 			

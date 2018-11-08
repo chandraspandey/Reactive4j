@@ -1,6 +1,6 @@
 package org.flowr.framework.core.security.token;
 
-import org.flowr.action.Algorithm;
+import org.flowr.framework.action.Algorithm;
 
 /**
  * 
