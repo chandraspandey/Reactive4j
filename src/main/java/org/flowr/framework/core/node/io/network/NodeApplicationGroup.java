@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.util.AbstractMap.SimpleEntry;
 
-import org.flowr.framework.core.node.BackPressureExecutors;
+import org.flowr.framework.core.node.ha.BackPressureExecutors;
 import org.flowr.framework.core.node.io.flow.handler.IntegrationPipelineHandler;
 import org.flowr.framework.core.node.io.pipeline.NetworkBus;
 import org.flowr.framework.core.node.io.pipeline.NetworkPipeline;

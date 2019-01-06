@@ -1,4 +1,4 @@
-package org.flowr.framework.core.node;
+package org.flowr.framework.core.node.ha;
 
 import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
 import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;

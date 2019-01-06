@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.flowr.framework.core.node.io.endpoint.NodeConfig;
+import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
 
 /**
  * 
@@ -23,48 +24,322 @@ import org.flowr.framework.core.node.io.endpoint.NodeConfig;
 
 public interface NodeChannel extends NodeChannelLifeCycle{
 
-	public enum ChannelFlowType{
-		INBOUND,
-		OUTBOUND,
-		INTERRUPT
+	/**
+	 * 
+	 * Defines channel flow type for operational handling
+	 * @author Chandra Shekhar Pandey
+	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+	 *
+	 */
+	public enum ChannelFlowType implements ByteEnumerableType{
+		NONE(0),
+		INBOUND(1),
+		OUTBOUND(2),
+		INTERRUPT(3);
+		
+		private byte code = 0;
+		
+		ChannelFlowType(int code){
+			
+			this.code = (byte)code;
+		}
+
+		@Override
+		public byte getCode() {
+			
+			return code;
+		}	
+		
+		public static ChannelFlowType getType(int code) {
+			
+			ChannelFlowType channelFlowType = NONE;
+			
+			switch((byte) code) {
+				
+				case 0:{
+					channelFlowType = NONE;
+					break;
+				}case 1:{
+					channelFlowType = INBOUND;
+					break;
+				}case 2:{
+					channelFlowType = OUTBOUND;
+					break;
+				}case 3:{
+					channelFlowType = INTERRUPT;
+					break;
+				}default :{
+					channelFlowType = NONE;
+					break;
+				}			
+			}
+			
+			return channelFlowType;
+		}
 	}
 	
-	public enum ChannelStatus{
-		DEFAULT,
-		INITIALIZED,
-		REGISTERED,
-		SEEK,
-		CANCEL,
-		READ,
-		WRITE,
-		CONNECTED,
-		DISCONNECTED,
-		ERROR
+	/**
+	 * 
+	 * Defines channel status for operational handling
+	 * @author Chandra Shekhar Pandey
+	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+	 *
+	 */
+	public enum ChannelStatus implements ByteEnumerableType{
+		DEFAULT(0),
+		INITIALIZED(1),
+		REGISTERED(2),
+		SEEK(3),
+		CANCEL(4),
+		READ(5),
+		WRITE(6),
+		CONNECTED(7),
+		DISCONNECTED(8),
+		ERROR(9);
+		
+		private byte code = 0;
+		
+		ChannelStatus(int code){
+			
+			this.code = (byte)code;
+		}
+
+		@Override
+		public byte getCode() {
+			
+			return code;
+		}	
+		
+		public static ChannelStatus getType(int code) {
+			
+			ChannelStatus channelStatus = DEFAULT;
+			
+			switch((byte) code) {
+				
+				case 0:{
+					channelStatus = DEFAULT;
+					break;
+				}case 1:{
+					channelStatus = INITIALIZED;
+					break;
+				}case 2:{
+					channelStatus = REGISTERED;
+					break;
+				}case 3:{
+					channelStatus = SEEK;
+					break;
+				}case 4:{
+					channelStatus = CANCEL;
+					break;
+				}case 5:{
+					channelStatus = READ;
+					break;
+				}case 6:{
+					channelStatus = WRITE;
+					break;
+				}case 7:{
+					channelStatus = CONNECTED;
+					break;
+				}case 8:{
+					channelStatus = DISCONNECTED;
+					break;
+				}case 9:{
+					channelStatus = ERROR;
+					break;
+				}default :{
+					channelStatus = DEFAULT;
+					break;
+				}			
+			}
+			
+			return channelStatus;
+		}		
 	}	
 	
-	public enum ChannelState{
-		DEFAULT,
-		READ_INITIATED,
-		READ_ERROR,
-		READ_COMPLETED,
-		WRITE_INITIATED,
-		WRITE_ERROR,
-		WRITE_COMPLETED		
+	/**
+	 * 
+	 * Defines channel state for operational handling
+	 * @author Chandra Shekhar Pandey
+	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+	 *
+	 */
+	public enum ChannelState implements ByteEnumerableType{
+		DEFAULT(0),
+		READ_INITIATED(1),
+		READ_ERROR(2),
+		READ_COMPLETED(3),
+		WRITE_INITIATED(4),
+		WRITE_ERROR(5),
+		WRITE_COMPLETED(6);
+		
+		private byte code = 0;
+		
+		ChannelState(int code){
+			
+			this.code = (byte)code;
+		}
+
+		@Override
+		public byte getCode() {
+			
+			return code;
+		}	
+		
+		public static ChannelState getType(int code) {
+			
+			ChannelState channelState = DEFAULT;
+			
+			switch((byte) code) {
+				
+				case 0:{
+					channelState = DEFAULT;
+					break;
+				}case 1:{
+					channelState = READ_INITIATED;
+					break;
+				}case 2:{
+					channelState = READ_ERROR;
+					break;
+				}case 3:{
+					channelState = READ_COMPLETED;
+					break;
+				}case 4:{
+					channelState = WRITE_INITIATED;
+					break;
+				}case 5:{
+					channelState = WRITE_ERROR;
+					break;
+				}case 6:{
+					channelState = WRITE_COMPLETED;
+					break;
+				}default :{
+					channelState = DEFAULT;
+					break;
+				}			
+			}
+			
+			return channelState;
+		}		
 	}
 	
-	public enum ChannelType{
-		CLIENT,
-		SERVER,
-		PIPE
+	/**
+	 * 
+	 * Defines channel type for operational handling
+	 * @author Chandra Shekhar Pandey
+	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+	 *
+	 */
+	public enum ChannelType  implements ByteEnumerableType{
+		NONE(0),
+		CLIENT(1),
+		SERVER(2),
+		PIPE(3);
+		
+		private byte code = 0;
+		
+		ChannelType(int code){
+			
+			this.code = (byte)code;
+		}
+
+		@Override
+		public byte getCode() {
+			
+			return code;
+		}	
+		
+		public static ChannelType getType(int code) {
+			
+			ChannelType channelType = NONE;
+			
+			switch((byte) code) {
+				
+				case 0:{
+					channelType = NONE;
+					break;
+				}case 1:{
+					channelType = CLIENT;
+					break;
+				}case 2:{
+					channelType = SERVER;
+					break;
+				}case 3:{
+					channelType = PIPE;
+					break;
+				}default :{
+					channelType = NONE;
+					break;
+				}			
+			}
+			
+			return channelType;
+		}
 	}	
 	
-	public enum ChannelProtocol{
-		START,
-		ACK,
-		NACK,
-		ERROR,
-		TIMEOUT,
-		END
+	/**
+	 * 
+	 * Defines channel protocol for data flow handling
+	 * @author Chandra Shekhar Pandey
+	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+	 *
+	 */
+	public enum ChannelProtocol  implements ByteEnumerableType{
+		NONE(0),
+		START(1),
+		ACK(2),
+		NACK(3),
+		ERROR(4),
+		TIMEOUT(5),
+		END(6);
+		
+		private byte code = 0;
+		
+		ChannelProtocol(int code){
+			
+			this.code = (byte)code;
+		}
+
+		@Override
+		public byte getCode() {
+			
+			return code;
+		}	
+		
+		public static ChannelProtocol getType(int code) {
+			
+			ChannelProtocol channelProtocol = NONE;
+			
+			switch((byte) code) {
+				
+				case 0:{
+					channelProtocol = NONE;
+					break;
+				}case 1:{
+					channelProtocol = START;
+					break;
+				}case 2:{
+					channelProtocol = ACK;
+					break;
+				}case 3:{
+					channelProtocol = NACK;
+					break;
+				}case 4:{
+					channelProtocol = ERROR;
+					break;
+				}case 5:{
+					channelProtocol = TIMEOUT;
+					break;
+				}case 6:{
+					channelProtocol = END;
+					break;
+				}default :{
+					channelProtocol = NONE;
+					break;
+				}			
+			}
+			
+			return channelProtocol;
+		}				
 	}	
 	
 	public String getChannelName();

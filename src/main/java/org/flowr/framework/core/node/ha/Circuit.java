@@ -1,4 +1,4 @@
-package org.flowr.framework.core.node;
+package org.flowr.framework.core.node.ha;
 
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.node.EndPoint;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.service.ServiceEndPoint;

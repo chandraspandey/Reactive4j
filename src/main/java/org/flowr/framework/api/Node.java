@@ -4,7 +4,7 @@ import org.flowr.framework.core.config.Configuration;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
-import org.flowr.framework.core.node.ServiceMesh;
+import org.flowr.framework.core.node.io.network.ServiceMesh;
 import org.flowr.framework.core.process.management.NodeProcessHandler;
 import org.flowr.framework.core.service.ServiceEndPoint;
 

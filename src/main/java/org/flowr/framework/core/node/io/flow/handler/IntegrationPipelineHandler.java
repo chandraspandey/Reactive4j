@@ -1,6 +1,7 @@
 package org.flowr.framework.core.node.io.flow.handler;
 
 import org.flowr.framework.core.node.io.flow.IOFlow.IOFlowType;
+import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
 
 /**
  * Defines top level marker interface & behavior for handling capabilities.
@@ -12,11 +13,55 @@ import org.flowr.framework.core.node.io.flow.IOFlow.IOFlowType;
 
 public interface IntegrationPipelineHandler {
 
-	public enum HandlerType{
-		IO,
-		MEDIA,
-		CERTIFICATE,
-		TOKEN
+	public enum HandlerType implements ByteEnumerableType{
+		NONE(0),
+		IO(1),
+		MEDIA(2),
+		CERTIFICATE(3),
+		TOKEN(4);
+		
+		private byte code = 0;
+		
+		HandlerType(int code){
+			
+			this.code = (byte)code;
+		}
+
+		@Override
+		public byte getCode() {
+			
+			return code;
+		}	
+		
+		public static HandlerType getType(int code) {
+			
+			HandlerType handlerType = NONE;
+			
+			switch((byte) code) {
+				
+				case 0:{
+					handlerType = NONE;
+					break;
+				}case 1:{
+					handlerType = IO;
+					break;
+				}case 2:{
+					handlerType = MEDIA;
+					break;
+				}case 3:{
+					handlerType = CERTIFICATE;
+					break;
+				}case 4:{
+					handlerType = TOKEN;
+					break;
+				}default :{
+					handlerType = NONE;
+					break;
+				}			
+			}
+			
+			return handlerType;
+		}
 	}
 	
 	public void setHandlerType(HandlerType handlerType);

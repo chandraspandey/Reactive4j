@@ -4,7 +4,7 @@ import org.flowr.framework.core.constants.ExceptionMessages;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.PromiseException;
 import org.flowr.framework.core.node.Autonomic;
-import org.flowr.framework.core.node.FailsafeCallable;
+import org.flowr.framework.core.node.ha.FailsafeCallable;
 import org.flowr.framework.core.promise.Promisable;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;

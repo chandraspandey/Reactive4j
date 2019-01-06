@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import org.flowr.framework.core.node.EndPointDispatcher;
-import org.flowr.framework.core.node.ServiceMesh.ServiceTopologyMode;
+import org.flowr.framework.core.node.io.network.ServiceMesh.ServiceTopologyMode;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.service.internal.NotificationService.NotificationServiceStatus;
 

@@ -2,7 +2,7 @@ package org.flowr.framework.core.promise;
 
 import java.util.concurrent.TimeUnit;
 
-import org.flowr.framework.core.node.BackPressureWindow;
+import org.flowr.framework.core.node.ha.BackPressureWindow;
 import org.flowr.framework.core.notification.Notification.NotificationDeliveryType;
 
 /**
@@ -11,7 +11,7 @@ import org.flowr.framework.core.notification.Notification.NotificationDeliveryTy
  * target attributes of ProgressScale will be overriding irrespective of request. 
  * By Default less than 60 Seconds Timeout is not supported for distributed ecosystem.
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public class RequestScale implements BackPressureWindow{

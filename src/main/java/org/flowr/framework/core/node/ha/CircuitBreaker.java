@@ -1,6 +1,7 @@
-package org.flowr.framework.core.node;
+package org.flowr.framework.core.node.ha;
 
 import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.node.EndPoint;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
 import org.flowr.framework.core.service.ServiceEndPoint;
 import org.flowr.framework.core.service.internal.NotificationService.NotificationServiceStatus;

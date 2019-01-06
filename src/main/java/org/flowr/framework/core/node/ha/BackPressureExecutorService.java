@@ -1,4 +1,4 @@
-package org.flowr.framework.core.node;
+package org.flowr.framework.core.node.ha;
 
 import java.sql.Timestamp;
 import java.time.Instant;

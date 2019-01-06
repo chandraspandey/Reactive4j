@@ -1,4 +1,4 @@
-package org.flowr.framework.core.node.io.flow;
+package org.flowr.framework.core.node.io.network;
 
 import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
 
@@ -8,22 +8,23 @@ import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
-public interface IOFlow {
+
+public interface ServiceMesh extends IngressController, EgressController{
 
 	/**
-	 * Defines high level operation flow type for data flow classification & handling
+	 * Defines service topology for classification & handling
 	 * @author Chandra Shekhar Pandey
 	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
 	 *
 	 */
-	public enum IOFlowType implements ByteEnumerableType{
+	public enum ServiceTopologyMode implements ByteEnumerableType{
 		NONE(0),
-		INBOUND(1),
-		OUTBOUND(2);
+		LOCAL(1),
+		DISTRIBUTED(2);
 		
 		private byte code = 0;
 		
-		IOFlowType(int code){
+		ServiceTopologyMode(int code){
 			
 			this.code = (byte)code;
 		}
@@ -34,29 +35,28 @@ public interface IOFlow {
 			return code;
 		}	
 		
-		public static IOFlowType getType(int code) {
+		public static ServiceTopologyMode getType(int code) {
 			
-			IOFlowType operationFlowType = NONE;
+			ServiceTopologyMode serviceTopologyMode = NONE;
 			
 			switch((byte) code) {
 				
 				case 0:{
-					operationFlowType = NONE;
+					serviceTopologyMode = NONE;
 					break;
 				}case 1:{
-					operationFlowType = INBOUND;
+					serviceTopologyMode = LOCAL;
 					break;
 				}case 2:{
-					operationFlowType = OUTBOUND;
+					serviceTopologyMode = DISTRIBUTED;
 					break;
 				}default :{
-					operationFlowType = NONE;
+					serviceTopologyMode = NONE;
 					break;
 				}			
 			}
 			
-			return operationFlowType;
-		}
+			return serviceTopologyMode;
+		}		
 	}
-	
 }

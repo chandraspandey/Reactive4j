@@ -2,8 +2,8 @@ package org.flowr.framework.core.service.internal;
 
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.node.Circuit;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
+import org.flowr.framework.core.node.ha.Circuit;
 import org.flowr.framework.core.service.ServiceEndPoint;
 import org.flowr.framework.core.service.ServiceFrameworkComponent;
 

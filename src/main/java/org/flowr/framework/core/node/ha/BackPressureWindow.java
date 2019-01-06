@@ -1,10 +1,10 @@
-package org.flowr.framework.core.node;
+package org.flowr.framework.core.node.ha;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
 public interface BackPressureWindow {
