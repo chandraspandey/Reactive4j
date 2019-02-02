@@ -32,6 +32,30 @@ public class DataSchemaFormat implements DataFormat{
 	private SecondaryBitMap secondaryBitMap				= null;
 	private FieldAttributeSet secondaryfieldAttributeSet= null;
 	
+	public DataSchemaFormat(DataSchemaFormat dataSchemaFormat) throws DataAccessException{
+		
+		if(dataSchemaFormat != null && dataSchemaFormat.primaryBitMap != null && 
+				dataSchemaFormat.primaryfieldAttributeSet != null) {
+			
+			this.isSchematicData = true;
+		
+			this.dataFlowType 				= dataSchemaFormat.dataFlowType;
+			this.isSchematicData			= dataSchemaFormat.isSchematicData;
+			this.primaryBitMap				= dataSchemaFormat.primaryBitMap;
+			this.primaryfieldAttributeSet	= dataSchemaFormat.primaryfieldAttributeSet;
+			this.secondaryBitMap			= dataSchemaFormat.secondaryBitMap;
+			this.secondaryfieldAttributeSet = dataSchemaFormat.secondaryfieldAttributeSet;
+		}else {
+			
+			DataAccessException exception = new DataAccessException(
+				ExceptionConstants.ERR_CONFIG_INVALID_FORMAT,
+				ExceptionMessages.MSG_IO_INVALID_INPUT,
+				"Invalid DataSchemaFormat. PrimaryAttributeSet & PrimaryFieldAttributeSet not present for SchematicData."
+			);
+			throw exception;
+		}
+	}
+	
 	public DataSchemaFormat(			
 			SimpleEntry<PrimaryBitMap,FieldAttributeSet> primaryFields,	
 			Optional<SimpleEntry<SecondaryBitMap,FieldAttributeSet>> secondaryFields	
@@ -134,7 +158,7 @@ public class DataSchemaFormat implements DataFormat{
 			throw exception;
 		}
 	
-	}/**/
+	}
 	
 	@Override
 	public void setDataFlowType(DataFlowType dataFlowType) {
@@ -151,7 +175,7 @@ public class DataSchemaFormat implements DataFormat{
 		return this.isSchematicData;
 	}
 	
-	private int size() {
+	public int size() {
 		
 		int length = 0;
 		
@@ -172,12 +196,14 @@ public class DataSchemaFormat implements DataFormat{
 			length += secondaryfieldAttributeSet.size();
 		}
 			
+		System.out.println("DataSchemaFormat : length : "+length);
+		
 		return length;
 	}
 	
 	public byte[] getData() throws DataAccessException{
 				
-		byte[] dataBuffer = null;
+		byte[] dataSchemaBuffer = null;
 		
 		if(isSchematicData) {
 				
@@ -205,7 +231,7 @@ public class DataSchemaFormat implements DataFormat{
 				byteArrayFieldBuffer.put(((ByteArrayField)secondaryIter.next()).getByteArrayValue());
 			}			
 			
-			dataBuffer = byteArrayFieldBuffer.get();
+			dataSchemaBuffer = byteArrayFieldBuffer.get();
 		}else {
 			
 			DataAccessException exception = new DataAccessException(
@@ -216,7 +242,7 @@ public class DataSchemaFormat implements DataFormat{
 			throw exception;
 		}
 		
-		return dataBuffer;
+		return dataSchemaBuffer;
 	}
 	
 	public String toString(){
@@ -224,6 +250,8 @@ public class DataSchemaFormat implements DataFormat{
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("DataSchemaFormat{");
+		
+		builder.append("\n : size : "+this.size());
 		
 		builder.append(primaryBitMap);
 		

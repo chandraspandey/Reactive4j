@@ -2,6 +2,7 @@ package org.flowr.framework.core.node.io.flow.data;
 
 import java.util.Optional;
 
+import org.flowr.framework.core.exception.DataAccessException;
 import org.flowr.framework.core.model.Attribute;
 import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
 
@@ -13,6 +14,8 @@ import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
  */
 public interface DataSchema {
 
+	public byte[] getData() throws DataAccessException;
+	
 	/**
 	 * 
 	 * Defines high level data flow type for data handling classification

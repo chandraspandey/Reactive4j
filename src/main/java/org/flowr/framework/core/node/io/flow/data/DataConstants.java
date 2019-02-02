@@ -33,6 +33,7 @@ public class DataConstants {
 	
 	// Default length that is not set for easy declarative recognition
 	public static final int FIELD_DEFAULT						= 0;
+	public static final int FIELD_CODE_DEFAULT					= 1;
 	
 	
 	// Control/ Non printable bytes

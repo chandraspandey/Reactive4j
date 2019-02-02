@@ -430,18 +430,18 @@ public interface ByteCollection {
 			return "\n ByteArrayField {"+
 					"  fieldOption : "+fieldOption+
 					" | fieldStatus : "+fieldStatus+
-					" | fieldType : "+fieldType+
-					" | fieldName : "+fieldName+
+					" | fieldType : "+fieldType+					
 					" | isPadded : "+isPadded+
 					" | paddingType : "+paddingType+
 					" | paddingArray : "+paddingArray+
-					" | charset : "+charset+
-					" | fieldValue : "+getFieldValue()+
+					" | charset : "+charset+					
 					" | byteArrayValue : "+byteArrayValue+
 					" | minLength : "+minLength+
 					" | maxLength : "+maxLength+				
 					" | startPosition : "+startPosition+
-					" | endPosition : "+endPosition+				
+					" | endPosition : "+endPosition+	
+					"\n | fieldName : "+fieldName+
+					" | fieldValue : "+getFieldValue()+
 					" } ";
 		}
 	}
