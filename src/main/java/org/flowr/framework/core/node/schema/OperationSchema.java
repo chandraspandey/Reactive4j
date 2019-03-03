@@ -10,6 +10,8 @@ import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
  */
 public interface OperationSchema extends ProtocolSchema{
 
+	public boolean isSchematicData();
+
 	/**
 	 * Defines high level marker interface for RPC operations
 	 * @author Chandra Shekhar Pandey
@@ -88,12 +90,10 @@ public interface OperationSchema extends ProtocolSchema{
 		 */
 		public enum OperationExchangeMode implements ByteEnumerableType{
 			NONE(0),
-			COMMAND(1),
-			ACK_REQUIRED(2),
-			ACK_NOT_REQUIRED(3),
-			RESPONSE_REQUIRED(4),
-			RESPONSE_NOT_REQUIRED(5)			
-			;
+			ACK_REQUIRED(1),
+			ACK_NOT_REQUIRED(2),
+			RESPONSE_REQUIRED(3),
+			RESPONSE_NOT_REQUIRED(4);
 			
 			private byte code = 0;
 			
@@ -118,18 +118,15 @@ public interface OperationSchema extends ProtocolSchema{
 						operationExchangeMode = NONE;
 						break;
 					}case 1:{
-						operationExchangeMode = COMMAND;
-						break;
-					}case 2:{
 						operationExchangeMode = ACK_REQUIRED;
 						break;
-					}case 3:{
+					}case 2:{
 						operationExchangeMode = ACK_NOT_REQUIRED;
 						break;
-					}case 4:{
+					}case 3:{
 						operationExchangeMode = RESPONSE_REQUIRED;
 						break;
-					}case 5:{
+					}case 4:{
 						operationExchangeMode = RESPONSE_NOT_REQUIRED;
 						break;
 					}default :{
@@ -151,12 +148,8 @@ public interface OperationSchema extends ProtocolSchema{
 		 */
 		public enum OperationType implements ByteEnumerableType{
 			NONE(0),
-			COMMAND(1),
-			READ(2),
-			WRITE(3),
-			FAILBACK(4),
-			FAILFORWARD(5)			
-			;
+			READ(1),
+			WRITE(2);
 			
 			private byte code = 0;
 			
@@ -181,19 +174,10 @@ public interface OperationSchema extends ProtocolSchema{
 						operationType = NONE;
 						break;
 					}case 1:{
-						operationType = COMMAND;
-						break;
-					}case 2:{
 						operationType = READ;
 						break;
-					}case 3:{
+					}case 2:{
 						operationType = WRITE;
-						break;
-					}case 4:{
-						operationType = FAILBACK;
-						break;
-					}case 5:{
-						operationType = FAILFORWARD;
 						break;
 					}default :{
 						operationType = NONE;
@@ -424,8 +408,7 @@ public interface OperationSchema extends ProtocolSchema{
 		public enum OperationExecutionType implements ByteEnumerableType{
 			NONE(0),
 			REQUEST(1),
-			RESPONSE(2),
-			TRANSACTION(3)
+			RESPONSE(2)
 			;
 			
 			private byte code = 0;
@@ -456,9 +439,6 @@ public interface OperationSchema extends ProtocolSchema{
 					}case 2:{
 						operationExecutionType = RESPONSE;
 						break;
-					}case 3:{
-						operationExecutionType = TRANSACTION;
-						break;
 					}default :{
 						operationExecutionType = NONE;
 						break;
@@ -479,12 +459,11 @@ public interface OperationSchema extends ProtocolSchema{
 		public enum OperationTransactionType implements ByteEnumerableType{
 			NONE(0),
 			LOCAL(1),
-			REMOTE(2),
-			FEDERATED(3),
-			TOKEN(4),
-			SESSION(5),
-			ATOMIC(6),
-			BATCH(7);
+			FEDERATED(2),
+			TOKEN(3),
+			SESSION(4),
+			ATOMIC(5),
+			BATCH(6);
 			
 			private byte code =0;
 			
@@ -512,21 +491,18 @@ public interface OperationSchema extends ProtocolSchema{
 						operationTransactionType = LOCAL;
 						break;
 					}case 2:{
-						operationTransactionType = REMOTE;
-						break;
-					}case 3:{
 						operationTransactionType = FEDERATED;
 						break;
-					}case 4:{
+					}case 3:{
 						operationTransactionType = TOKEN;
 						break;
-					}case 5:{
+					}case 4:{
 						operationTransactionType = SESSION;
 						break;
-					}case 6:{
+					}case 5:{
 						operationTransactionType = ATOMIC;
 						break;
-					}case 7:{
+					}case 6:{
 						operationTransactionType = BATCH;
 						break;
 					}default :{
@@ -539,7 +515,8 @@ public interface OperationSchema extends ProtocolSchema{
 			}
 		}
 		
-				
+		// CHANNEL_ESTABLISHED,
+		
 		/**
 		 * 
 		 * Defines high level operation state for state management classification & handling
@@ -550,7 +527,6 @@ public interface OperationSchema extends ProtocolSchema{
 		public enum OperationState implements ByteEnumerableType{
 			
 			NONE(0),
-			COMMAND(1),
 			
 			REQUEST_INITIATED(10),		
 			REQUEST_ACCEPTED(11),
@@ -593,9 +569,6 @@ public interface OperationSchema extends ProtocolSchema{
 					
 					case 0:{
 						operationState = NONE;
-						break;
-					}case 1:{
-						operationState = COMMAND;
 						break;
 					}case 10:{
 						operationState = REQUEST_INITIATED;
@@ -670,7 +643,6 @@ public interface OperationSchema extends ProtocolSchema{
 		 */
 		public enum OperationStatus implements ByteEnumerableType{
 			NONE(0),
-			COMMAND(1),
 			INITIATED(1),
 			PROCESSING(2),
 			COMPLETED(3),
@@ -700,21 +672,18 @@ public interface OperationSchema extends ProtocolSchema{
 						operationStatus = NONE;
 						break;
 					}case 1:{
-						operationStatus = COMMAND;
-						break;
-					}case 2:{
 						operationStatus = INITIATED;
 						break;
-					}case 3:{
+					}case 2:{
 						operationStatus = PROCESSING;
 						break;
-					}case 4:{
+					}case 3:{
 						operationStatus = COMPLETED;
 						break;
-					}case 5:{
+					}case 4:{
 						operationStatus = ERROR;
 						break;
-					}case 6:{
+					}case 5:{
 						operationStatus = TIMEOUT;
 						break;
 					}default :{

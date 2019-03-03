@@ -68,14 +68,10 @@ public interface DataProtocol {
 	 */
 	public enum DataOperationType implements ByteEnumerableType{
 		NONE(0),
-		COMMAND(1),
-		CREATE(2),
-		READ(3),
-		UPDATE(4),
-		DELETE(5),
-		CREATEORUPDATE(6),
-		ROLLBACK(7)		
-		;
+		CREATE(1),
+		READ(2),
+		UPDATE(3),
+		DELETE(4);
 		
 		private byte code = 0;
 		
@@ -100,25 +96,16 @@ public interface DataProtocol {
 					dataOperationType = NONE;
 					break;
 				}case 1:{
-					dataOperationType = COMMAND;
-					break;
-				}case 2:{
 					dataOperationType = CREATE;
 					break;
-				}case 3:{
+				}case 2:{
 					dataOperationType = READ;
 					break;
-				}case 4:{
+				}case 3:{
 					dataOperationType = UPDATE;
 					break;
-				}case 5:{
+				}case 4:{
 					dataOperationType = DELETE;
-					break;
-				}case 6:{
-					dataOperationType = CREATEORUPDATE;
-					break;
-				}case 7:{
-					dataOperationType = ROLLBACK;
 					break;
 				}default :{
 					dataOperationType = NONE;

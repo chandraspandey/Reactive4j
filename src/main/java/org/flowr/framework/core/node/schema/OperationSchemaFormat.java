@@ -38,7 +38,6 @@ import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationT
  */
 public class OperationSchemaFormat implements OperationSchema{
 
-	private String schemaFor							= null;
 	private boolean isSchematicData						= false;	
 	private IOFlowType  ioFlowType						= IOFlowType.NONE;
 	private OperationType operationType					= OperationType.NONE;
@@ -54,6 +53,7 @@ public class OperationSchemaFormat implements OperationSchema{
 	private DataDistributionType dataDistributionType	= DataDistributionType.NONE;
 	private DataSchemaFormat dataSchemaFormat			= null;
 	private FieldAttributeSet primaryFieldSet 			= new ByteArrayFieldAttributeSet();
+	private FieldAttributeSet secondaryFieldSet			= new ByteArrayFieldAttributeSet();
 	
 	public OperationSchemaFormat(OperationSchemaFormat osf,DataSchemaFormat dataSchemaFormat) 
 			throws DataAccessException{
@@ -124,9 +124,8 @@ public class OperationSchemaFormat implements OperationSchema{
 			
 				this.dataSchemaFormat 		= dataSchemaFormat;
 				
-				this.primaryFieldSet.setPrimaryBitMap(this.dataSchemaFormat.primaryBitMap());
-				this.primaryFieldSet.setSecondaryBitMap(this.dataSchemaFormat.secondaryBitMap());
-												
+				System.out.println(ioFlowType+" | "+IOFlowType.getType(2)+" | "+IOFlowType.valueOf(ioFlowType.name()).getCode());
+				
 				this.primaryFieldSet.addAttribute(asField(ioFlowType.name(), IOFlowType.valueOf(ioFlowType.name()).getCode()));
 				this.primaryFieldSet.addAttribute(asField(operationExecutionType.name(), OperationExecutionType.valueOf(operationExecutionType.name()).getCode()));
 				this.primaryFieldSet.addAttribute(asField(operationType.name(), OperationType.valueOf(operationType.name()).getCode()));
@@ -191,7 +190,9 @@ public class OperationSchemaFormat implements OperationSchema{
 		byte[] dataBuffer = null;
 		
 		if(isSchematicData) {
-						
+			
+			System.out.println(" 2. length : "+this.size());
+			
 			ByteArrayFieldBuffer byteArrayFieldBuffer = new ByteArrayFieldBuffer(size());		
 			
 			Iterator<Attribute> primaryIter = primaryFieldSet.getAttributeList().iterator();
@@ -200,7 +201,9 @@ public class OperationSchemaFormat implements OperationSchema{
 				
 				byteArrayFieldBuffer.put(((ByteArrayField)primaryIter.next()).getByteArrayValue());
 			}		
-				
+			
+			System.out.println(" 3. length : "+dataSchemaFormat.getData().length);
+			
 			byteArrayFieldBuffer.put(dataSchemaFormat.getData());
 			
 			dataBuffer = byteArrayFieldBuffer.get();
@@ -216,23 +219,18 @@ public class OperationSchemaFormat implements OperationSchema{
 		}
 		return dataBuffer;
 	}
-		
-	public void setSchemaFor(String schemaFor) {
-		this.schemaFor = schemaFor;
-	}
 	
 	public String toString(){
 		
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("OperationSchemaFormat{");
-		builder.append("\n schemaFor : "+schemaFor);		
-		builder.append("\n size : "+size());
-		builder.append("\n"+this.primaryFieldSet.toString());
+		builder.append("\n : size : "+size());
+		builder.append(this.primaryFieldSet.toString());
 
 		builder.append("\n");
 
-		builder.append(dataSchemaFormat.toString());		
+		builder.append("\t"+super.toString());		
 		
 		builder.append("\n}\n");
 		
