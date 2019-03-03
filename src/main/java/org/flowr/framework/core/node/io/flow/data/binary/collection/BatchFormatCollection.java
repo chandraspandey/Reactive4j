@@ -323,6 +323,118 @@ public interface BatchFormatCollection {
 		
 		/**
 		 * 
+		 * Provides Batch sequence based on dependent tree oriented protocols.
+		 * Supports depth & breadth upto 99 levels
+		 * @author Chandra Shekhar Pandey
+		 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+		 *
+		 */
+		public class DependentTreeDataSequence implements BatchSequence{
+			
+			//  First byte of moving depth index
+			private  byte depthFirstMovingIndex = 49;
+
+			
+			//  Third byte of moving index
+			private  byte breadthFirstMovingIndex = 49;
+			
+			//  Fourth byte of moving index, default incremented by 1 over third moving index
+			private  byte breadthSecondMovingIndex = 49;			
+			
+			// Rolling enforcement when secondMovingIndex reaches 57 
+			private  long rollingIndex = 57;
+			
+			private static DependentTreeDataSequence dependentTreeDataSequence;
+			
+			
+			private DependentTreeDataSequence(){
+				
+			}
+			
+			/**
+			 * Accept the Header if acting as recipient
+			 * @param initHeader
+			 * @return
+			 */
+			public byte[] accept(byte[] sequence){
+				
+				depthFirstMovingIndex 		= sequence[0];
+				breadthFirstMovingIndex 	= sequence[1];
+				breadthSecondMovingIndex 	= sequence[2];
+				resetIfApplies();
+				
+				return next();
+				
+			}
+			
+			
+			public static DependentTreeDataSequence getInstance(){
+				
+				if(dependentTreeDataSequence == null){
+					dependentTreeDataSequence = new DependentTreeDataSequence();
+				}
+				
+				return dependentTreeDataSequence;
+			}
+			
+			public  byte[] next(){
+				
+				byte[] sequence = null;
+				
+				if(
+						depthFirstMovingIndex <= rollingIndex && 						
+						breadthFirstMovingIndex <= rollingIndex &&
+						breadthSecondMovingIndex <= rollingIndex
+				){
+					
+					sequence = new byte[]{
+								depthFirstMovingIndex, 								
+								breadthFirstMovingIndex,
+								breadthSecondMovingIndex};
+				}else {
+					System.out.println("else");
+					System.out.println("depthFirstMovingIndex : "+depthFirstMovingIndex);					
+					System.out.println("breadthFirstMovingIndex : "+breadthFirstMovingIndex);
+					System.out.println("breadthSecondMovingIndex : "+breadthSecondMovingIndex);
+				}
+				
+				resetIfApplies();
+				
+				return sequence;
+			}
+			
+			
+			// reset at 57 byte value
+			private  void resetIfApplies(){
+				
+				if(breadthSecondMovingIndex >= rollingIndex){
+					
+					breadthSecondMovingIndex = 49;
+					
+					if(breadthFirstMovingIndex < rollingIndex) {
+						
+						breadthFirstMovingIndex++;
+					}else {
+						
+						breadthFirstMovingIndex = 49;
+						
+						if(depthFirstMovingIndex < rollingIndex) {
+							depthFirstMovingIndex++;
+						}else {
+							depthFirstMovingIndex = 49;
+						}
+					}
+					
+				}else {
+					breadthSecondMovingIndex++;
+					
+				}
+			}
+
+		}
+		
+		/**
+		 * 
 		 * Provides Batch sequence based on one character & one number change oriented protocols.
 		 * @author Chandra Shekhar Pandey
 		 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.

@@ -23,12 +23,6 @@ import org.flowr.framework.core.node.io.flow.data.binary.collection.ByteCollecti
 import org.flowr.framework.core.node.io.flow.protocol.DataProtocol.DataDistributionType;
 import org.flowr.framework.core.node.io.flow.protocol.DataProtocol.DataMode;
 import org.flowr.framework.core.node.io.flow.protocol.DataProtocol.DataOperationType;
-import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationExchangeMode;
-import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationExecutionType;
-import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationMode;
-import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationState;
-import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationStatus;
-import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationType;
 
 /**
  * 
@@ -36,17 +30,11 @@ import org.flowr.framework.core.node.schema.OperationSchema.Operation.OperationT
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
-public class OperationSchemaFormat implements OperationSchema{
+public class DataProtocolSchemaFormat implements DataProtocolSchema{
 
 	private String schemaFor							= null;
 	private boolean isSchematicData						= false;	
 	private IOFlowType  ioFlowType						= IOFlowType.NONE;
-	private OperationType operationType					= OperationType.NONE;
-	private OperationMode operationMode					= OperationMode.NONE;
-	private OperationExecutionType operationExecutionType = OperationExecutionType.NONE;
-	private OperationExchangeMode operationExchangeMode	= OperationExchangeMode.NONE;
-	private OperationState operationState				= OperationState.NONE;
-	private OperationStatus operationStatus				= OperationStatus.NONE;	
 	
 	private DataFlowType dataFlowType					= DataFlowType.NONE;
 	private DataMode dataMode							= DataMode.NONE;
@@ -55,37 +43,25 @@ public class OperationSchemaFormat implements OperationSchema{
 	private DataSchemaFormat dataSchemaFormat			= null;
 	private FieldAttributeSet primaryFieldSet 			= new ByteArrayFieldAttributeSet();
 	
-	public OperationSchemaFormat(OperationSchemaFormat osf,DataSchemaFormat dataSchemaFormat) 
+	public DataProtocolSchemaFormat(DataProtocolSchemaFormat dsf,DataSchemaFormat dataSchemaFormat) 
 			throws DataAccessException{
 		
 		if(
 			dataSchemaFormat != null &&
-			osf.ioFlowType != null && osf.ioFlowType != IOFlowType.NONE && 
-			osf.operationType != null && osf.operationType != OperationType.NONE &&
-			osf.operationExecutionType != null && operationExecutionType != OperationExecutionType.NONE &&
-			osf.operationMode != null && osf.operationMode != OperationMode.NONE &&
-			osf.operationExchangeMode != null && osf.operationExchangeMode != OperationExchangeMode.NONE &&
-			osf.operationState != null && osf.operationState != OperationState.NONE &&
-			osf.operationStatus != null && osf.operationStatus != OperationStatus.NONE &&
-			osf.dataFlowType != null && osf.dataFlowType != DataFlowType.NONE &&
-			osf.dataMode != null && osf.dataMode != DataMode.NONE &&
-			osf.dataOperationType != null && osf.dataOperationType != DataOperationType.NONE &&
-			osf.dataDistributionType != null && osf.dataDistributionType != DataDistributionType.NONE
+			dsf.ioFlowType != null && dsf.ioFlowType != IOFlowType.NONE && 
+			dsf.dataFlowType != null && dsf.dataFlowType != DataFlowType.NONE &&
+			dsf.dataMode != null && dsf.dataMode != DataMode.NONE &&
+			dsf.dataOperationType != null && dsf.dataOperationType != DataOperationType.NONE &&
+			dsf.dataDistributionType != null && dsf.dataDistributionType != DataDistributionType.NONE
 		) {
 		
 			this.dataSchemaFormat 		= dataSchemaFormat;			
-			this.ioFlowType 			= osf.ioFlowType;
-			this.operationType 			= osf.operationType;
-			this.operationMode 			= osf.operationMode;
-			this.operationExchangeMode 	= osf.operationExchangeMode;
-			this.operationExecutionType = osf.operationExecutionType;
-			this.operationState 		= osf.operationState;
-			this.operationStatus 		= osf.operationStatus;
+			this.ioFlowType 			= dsf.ioFlowType;
 			
-			this.dataFlowType			= osf.dataFlowType;
-			this.dataMode				= osf.dataMode;
-			this.dataOperationType		= osf.dataOperationType;
-			this.dataDistributionType	= osf.dataDistributionType;
+			this.dataFlowType			= dsf.dataFlowType;
+			this.dataMode				= dsf.dataMode;
+			this.dataOperationType		= dsf.dataOperationType;
+			this.dataDistributionType	= dsf.dataDistributionType;
 			
 			isSchematicData				= true;
 		}else {
@@ -100,22 +76,14 @@ public class OperationSchemaFormat implements OperationSchema{
 	
 	
 	
-	public OperationSchemaFormat(DataSchemaFormat dataSchemaFormat,IOFlowType  ioFlowType, 
-			OperationExecutionType operationExecutionType, OperationType operationType,
-			OperationMode operationMode, OperationExchangeMode operationExchangeMode, OperationState operationState,
-			OperationStatus operationStatus, DataFlowType dataFlowType,DataMode dataMode, DataOperationType dataOperationType,
+	public DataProtocolSchemaFormat(DataSchemaFormat dataSchemaFormat,IOFlowType  ioFlowType,
+			DataFlowType dataFlowType,DataMode dataMode, DataOperationType dataOperationType,
 			DataDistributionType dataDistributionType
 		) throws DataAccessException{
 					
 			if(
 				dataSchemaFormat != null &&
 				ioFlowType != null && ioFlowType != IOFlowType.NONE && 
-				operationExecutionType != null && operationExecutionType != OperationExecutionType.NONE &&
-				operationType != null && operationType != OperationType.NONE &&
-				operationMode != null && operationMode != OperationMode.NONE &&
-				operationExchangeMode != null && operationExchangeMode != OperationExchangeMode.NONE &&			
-				operationState != null && operationState != OperationState.NONE &&
-				operationStatus != null && operationStatus != OperationStatus.NONE &&
 				dataFlowType != null && dataFlowType != DataFlowType.NONE &&
 				dataMode != null && dataMode != DataMode.NONE &&
 				dataOperationType != null && dataOperationType != DataOperationType.NONE &&
@@ -128,12 +96,6 @@ public class OperationSchemaFormat implements OperationSchema{
 				this.primaryFieldSet.setSecondaryBitMap(this.dataSchemaFormat.secondaryBitMap());
 												
 				this.primaryFieldSet.addAttribute(asField(ioFlowType.name(), IOFlowType.valueOf(ioFlowType.name()).getCode()));
-				this.primaryFieldSet.addAttribute(asField(operationExecutionType.name(), OperationExecutionType.valueOf(operationExecutionType.name()).getCode()));
-				this.primaryFieldSet.addAttribute(asField(operationType.name(), OperationType.valueOf(operationType.name()).getCode()));
-				this.primaryFieldSet.addAttribute(asField(operationMode.name(), OperationMode.valueOf(operationMode.name()).getCode()));
-				this.primaryFieldSet.addAttribute(asField(operationExchangeMode.name(), OperationExchangeMode.valueOf(operationExchangeMode.name()).getCode()));
-				this.primaryFieldSet.addAttribute(asField(operationState.name(), OperationState.valueOf(operationState.name()).getCode()));
-				this.primaryFieldSet.addAttribute(asField(operationStatus.name(),OperationStatus.valueOf(operationStatus.name()).getCode()));
 				this.primaryFieldSet.addAttribute(asField(dataFlowType.name(), DataFlowType.valueOf(dataFlowType.name()).getCode()));
 				this.primaryFieldSet.addAttribute(asField(dataMode.name(), DataMode.valueOf(dataMode.name()).getCode()));
 				this.primaryFieldSet.addAttribute(asField(dataOperationType.name(), DataOperationType.valueOf(dataOperationType.name()).getCode()));
@@ -225,7 +187,7 @@ public class OperationSchemaFormat implements OperationSchema{
 		
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append("OperationSchemaFormat{");
+		builder.append("DataProtocolSchemaFormat{");
 		builder.append("\n schemaFor : "+schemaFor);		
 		builder.append("\n size : "+size());
 		builder.append("\n"+this.primaryFieldSet.toString());

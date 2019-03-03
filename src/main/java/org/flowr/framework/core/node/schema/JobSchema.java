@@ -30,8 +30,9 @@ public interface JobSchema extends ProtocolSchema{
 		 */
 		public enum JobType implements ByteEnumerableType{
 			NONE(0),
-			QUEUE(1),
-			BATCH(2)
+			UNIT(1),
+			QUEUE(2),
+			BATCH(3)
 			;
 			
 			private byte code = 0;
@@ -57,9 +58,12 @@ public interface JobSchema extends ProtocolSchema{
 						jobType = NONE;
 						break;
 					}case 1:{
-						jobType = QUEUE;
+						jobType = UNIT;
 						break;
 					}case 2:{
+						jobType = QUEUE;
+						break;
+					}case 3:{
 						jobType = BATCH;
 						break;
 					}default :{
@@ -698,9 +702,13 @@ public interface JobSchema extends ProtocolSchema{
 		 */
 		public enum JobState implements ByteEnumerableType{
 			NONE(0),
-			RUNNING(1),
-			PAUSING(2),
-			RESUMING(3);
+			INITIATING(1),
+			REGISTERING(2),
+			SCHEDULING(3),
+			RUNNING(4),
+			PAUSING(5),
+			RESUMING(6),
+			ERROR(7);
 			
 			private byte code = 0;
 			
@@ -725,13 +733,25 @@ public interface JobSchema extends ProtocolSchema{
 						jobState = NONE;
 						break;
 					}case 1:{
-						jobState = RUNNING;
+						jobState = INITIATING;
 						break;
 					}case 2:{
-						jobState = PAUSING;
+						jobState = REGISTERING;
 						break;
 					}case 3:{
+						jobState = SCHEDULING;
+						break;
+					}case 4:{
+						jobState = RUNNING;
+						break;
+					}case 5:{
+						jobState = PAUSING;
+						break;
+					}case 6:{
 						jobState = RESUMING;
+						break;
+					}case 7:{
+						jobState = ERROR;
 						break;
 					}default :{
 						jobState = NONE;
@@ -751,9 +771,14 @@ public interface JobSchema extends ProtocolSchema{
 		 */
 		public enum JobStatus implements ByteEnumerableType{
 			NONE(0),
-			EXECUTED(1),
-			SKIPPED(2),
-			UNEXECUTED(3);
+			INITIATED(1),
+			REGISTERED(2),
+			SCHEDULED(3),
+			EXECUTED(4),
+			SKIPPED(5),
+			UNEXECUTED(6),
+			ERROR(7),
+			TIMEOUT(8);
 			
 			private byte code = 0;
 			
@@ -778,13 +803,28 @@ public interface JobSchema extends ProtocolSchema{
 						jobStatus = NONE;
 						break;
 					}case 1:{
-						jobStatus = EXECUTED;
+						jobStatus = INITIATED;
 						break;
 					}case 2:{
-						jobStatus = SKIPPED;
+						jobStatus = REGISTERED;
 						break;
 					}case 3:{
+						jobStatus = SCHEDULED;
+						break;
+					}case 4:{
+						jobStatus = EXECUTED;
+						break;
+					}case 5:{
+						jobStatus = SKIPPED;
+						break;
+					}case 6:{
 						jobStatus = UNEXECUTED;
+						break;
+					}case 7:{
+						jobStatus = ERROR;
+						break;
+					}case 8:{
+						jobStatus = TIMEOUT;
 						break;
 					}default :{
 						jobStatus = NONE;
@@ -793,6 +833,68 @@ public interface JobSchema extends ProtocolSchema{
 				}
 				
 				return jobStatus;
+			}
+		}
+		
+		/**
+		 * Defines high level job exchange mode for job data exchange handling
+		 * @author Chandra Shekhar Pandey
+		 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+		 *
+		 */
+		public enum JobExchangeMode implements ByteEnumerableType{
+			NONE(0),
+			COMMAND(1),
+			ACK_REQUIRED(2),
+			ACK_NOT_REQUIRED(3),
+			RESPONSE_REQUIRED(4),
+			RESPONSE_NOT_REQUIRED(5)			
+			;
+			
+			private byte code = 0;
+			
+			JobExchangeMode(int code){
+				
+				this.code = (byte)code;
+			}
+
+			@Override
+			public byte getCode() {
+				
+				return code;
+			}	
+			
+			public static JobExchangeMode getType(int code) {
+				
+				JobExchangeMode jobExchangeMode = NONE;
+				
+				switch((byte) code) {
+					
+					case 0:{
+						jobExchangeMode = NONE;
+						break;
+					}case 1:{
+						jobExchangeMode = COMMAND;
+						break;
+					}case 2:{
+						jobExchangeMode = ACK_REQUIRED;
+						break;
+					}case 3:{
+						jobExchangeMode = ACK_NOT_REQUIRED;
+						break;
+					}case 4:{
+						jobExchangeMode = RESPONSE_REQUIRED;
+						break;
+					}case 5:{
+						jobExchangeMode = RESPONSE_NOT_REQUIRED;
+						break;
+					}default :{
+						jobExchangeMode = NONE;
+						break;
+					}			
+				}
+				
+				return jobExchangeMode;
 			}
 		}
 	}
