@@ -33,7 +33,8 @@ public interface DataSchema {
 		INERMITTENT(6),
 		STEP_TYPE(7),
 		INTERACTIVE(8),
-		COMMAND(9);
+		COMMAND(9),
+		MESSAGE(10);
 		
 		private byte code = 0;
 		
@@ -83,6 +84,9 @@ public interface DataSchema {
 					break;
 				}case 9:{
 					dataFlowType = COMMAND;
+					break;
+				}case 10:{
+					dataFlowType = MESSAGE;
 					break;
 				}default :{
 					dataFlowType = NONE;

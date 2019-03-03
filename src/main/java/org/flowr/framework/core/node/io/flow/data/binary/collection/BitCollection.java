@@ -177,13 +177,13 @@ public interface BitCollection {
 				for(int index = 0; index < bits.length;index++) {
 					
 					if(bits[index] == Boolean.TRUE) {
-						bitAttributeSet.addAttribute(new BitField(index,Boolean.TRUE,0));
+						bitAttributeSet.addAttribute(new BitField(index+1,Boolean.TRUE,0));
 					}else {
-						bitAttributeSet.addAttribute(new BitField(index,Boolean.FALSE,0));
+						bitAttributeSet.addAttribute(new BitField(index+1,Boolean.FALSE,0));
 					}
 					
 				}		
-				
+			
 				this.primaryBitMap 	= BitSet.valueOf(bitAttributeSet.asBitArray());
 			}
 		}
@@ -333,9 +333,9 @@ public interface BitCollection {
 				for(int index = 0; index < bits.length;index++) {
 					
 					if(bits[index] == Boolean.TRUE) {
-						bitAttributeSet.addAttribute(new BitField(index,Boolean.TRUE,0));
+						bitAttributeSet.addAttribute(new BitField(index+1,Boolean.TRUE,0));
 					}else {
-						bitAttributeSet.addAttribute(new BitField(index,Boolean.FALSE,0));
+						bitAttributeSet.addAttribute(new BitField(index+1,Boolean.FALSE,0));
 					}
 					
 				}		
@@ -567,8 +567,7 @@ public interface BitCollection {
 					
 					arr[index] = (byte) bitField.getBitIndex();
 				}
-			}
-			
+			}			
 			return arr;
 		}
 		

@@ -196,7 +196,7 @@ public class DataSchemaFormat implements DataFormat{
 			length += secondaryfieldAttributeSet.size();
 		}
 			
-		System.out.println("DataSchemaFormat : length : "+length);
+		//System.out.println("DataSchemaFormat : length : "+length);
 		
 		return length;
 	}
@@ -207,8 +207,8 @@ public class DataSchemaFormat implements DataFormat{
 		
 		if(isSchematicData) {
 				
-			ByteArrayFieldBuffer byteArrayFieldBuffer = new ByteArrayFieldBuffer(size());			
-				
+			ByteArrayFieldBuffer byteArrayFieldBuffer = new ByteArrayFieldBuffer(size());	
+										
 			byteArrayFieldBuffer.put(primaryBitMap.get().toByteArray());			
 			
 			Iterator<Attribute> primaryIter = primaryfieldAttributeSet.getAttributeList().iterator();
@@ -245,13 +245,25 @@ public class DataSchemaFormat implements DataFormat{
 		return dataSchemaBuffer;
 	}
 	
+	public Optional<PrimaryBitMap> primaryBitMap(){
+		
+		return Optional.of(primaryBitMap);
+	}
+	
+	public Optional<SecondaryBitMap> secondaryBitMap(){
+		
+		return Optional.of(secondaryBitMap);
+	}
+	
 	public String toString(){
 		
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("DataSchemaFormat{");
 		
-		builder.append("\n : size : "+this.size());
+		builder.append("\n "+this.dataFlowType);		
+		
+		builder.append("\n size : "+this.size());
 		
 		builder.append(primaryBitMap);
 		
