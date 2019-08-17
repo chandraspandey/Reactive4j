@@ -1,10 +1,8 @@
-Draft Version.
+Version 1.0.
 
 /**
  * 
- * 
  * @author Chandra Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
- * @param <REQUEST>
- * @param <RESPONSE>
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * 
  */
