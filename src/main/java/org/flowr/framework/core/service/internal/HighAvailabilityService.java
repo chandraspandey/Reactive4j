@@ -13,7 +13,7 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface HighAvailabilityService extends ServiceFrameworkComponent{
+public interface HighAvailabilityService extends ServiceFrameworkComponent,Runnable{
 
 	public EndPointStatus addServiceEndpoint(ConfigurationType configurationType, ServiceEndPoint serviceEndPoint) 
 			throws ConfigurationException;

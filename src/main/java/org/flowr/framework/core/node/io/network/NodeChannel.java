@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.flowr.framework.core.node.io.endpoint.NodeConfig;
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 
 /**
  * 

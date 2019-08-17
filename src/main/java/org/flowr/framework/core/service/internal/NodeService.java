@@ -14,7 +14,7 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface NodeService extends ServiceFrameworkComponent{
+public interface NodeService extends ServiceFrameworkComponent, Runnable{
 		
 	public static NodeService getInstance() {
 		

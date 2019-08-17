@@ -18,7 +18,7 @@ public class StreamPromiseServiceImpl<REQUEST,RESPONSE> implements StreamPromise
 
 	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
 	private String serviceName				= FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STREAM;
-	private ServiceType serviceType			= ServiceType.PROMISE_STTREAM;
+	private ServiceType serviceType			= ServiceType.PROMISE_STREAM;
 	@SuppressWarnings("unused")
 	private ServiceFramework<REQUEST,RESPONSE> serviceFramework			= null;
 	
@@ -62,19 +62,16 @@ public class StreamPromiseServiceImpl<REQUEST,RESPONSE> implements StreamPromise
 
 	@Override
 	public void addServiceListener(EventPublisher engineListener) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public ServiceStatus startup(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
 

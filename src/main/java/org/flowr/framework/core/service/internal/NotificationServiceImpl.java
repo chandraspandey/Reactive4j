@@ -98,7 +98,7 @@ public class NotificationServiceImpl implements NotificationService{
 	@Override
 	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
-		System.out.println("NotificationServiceImpl : startup : "+configProperties);
+		//System.out.println("NotificationServiceImpl : startup : "+configProperties);
 		
 		HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeSet = 
 				notificationHelper.getNotificationRoutes();

@@ -1,7 +1,5 @@
 package org.flowr.framework.core.node.io.flow;
 
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
-
 /**
  * 
  * 

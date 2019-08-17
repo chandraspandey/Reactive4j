@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.flowr.framework.core.flow.persistence.ProviderPersistence;
 import org.flowr.framework.core.model.Model;
 import org.flowr.framework.core.security.Identity;
 import org.flowr.framework.core.security.access.PrivilegeScope.AccessPrivilegeScope;

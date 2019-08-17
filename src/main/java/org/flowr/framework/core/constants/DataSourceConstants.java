@@ -51,6 +51,10 @@ public class DataSourceConstants {
 
 	
 	public static final int DATASOURCE_CONFIG_MIN						= 1;
-
+	
+	public static final int SEQUENCE_CHARACTER_START					= 64;
+	public static final int SEQUENCE_CHARACTER_END						= 90;
+	public static final int SEQUENCE_NUMBER_START						= 49;
+	public static final int SEQUENCE_NUMBER_END							= 57;
 
 }

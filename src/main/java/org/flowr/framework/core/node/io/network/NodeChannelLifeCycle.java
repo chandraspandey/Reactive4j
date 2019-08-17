@@ -2,7 +2,7 @@ package org.flowr.framework.core.node.io.network;
 
 import java.io.IOException;
 
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 import org.flowr.framework.core.node.io.network.NetworkGroup.NetworkGroupStatus;
 
 /**

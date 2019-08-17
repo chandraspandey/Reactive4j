@@ -1,7 +1,7 @@
 package org.flowr.framework.core.node.io.flow.handler;
 
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 import org.flowr.framework.core.node.io.flow.IOFlow.IOFlowType;
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
 
 /**
  * Defines top level marker interface & behavior for handling capabilities.

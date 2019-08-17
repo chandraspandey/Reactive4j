@@ -3,8 +3,8 @@ package org.flowr.framework.core.security.policy;
 import java.util.ArrayList;
 
 import org.flowr.framework.core.context.PolicyContext;
-import org.flowr.framework.core.flow.persistence.ProviderPersistence;
 import org.flowr.framework.core.model.Model;
+import org.flowr.framework.core.security.access.ProviderPersistence;
 
 /**
  * Marker interface for concrete policy definition, provides entry point for

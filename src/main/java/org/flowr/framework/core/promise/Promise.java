@@ -14,6 +14,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
 public interface Promise<REQUEST,RESPONSE> {
 
 	/** Marks the states that a promise can hold as a state change machine. 
+	 * DEFAULT : The default state of a promise without assignment.
 	 * NEGOTIATED : The Server has agreed for scale to be used.
 	 * ACKNOWLEDGED : The client has made a request for making a Promise.
 	 * However due to external dependencies involved it can move to ASSURED or
@@ -29,6 +30,7 @@ public interface Promise<REQUEST,RESPONSE> {
 	 * 
 	 */
 	public enum PromiseState{
+		DEFAULT,
 		NEGOTIATED,
 		ACKNOWLEDGED,
 		ASSURED,

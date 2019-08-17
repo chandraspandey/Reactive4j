@@ -1,5 +1,8 @@
 package org.flowr.framework.core.service.internal;
 
+import java.util.List;
+
+import org.flowr.framework.core.service.Service;
 import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
@@ -16,6 +19,8 @@ public interface AdministrationService extends ServiceFrameworkComponent{
 		
 		return DefaultConfigurationService.getInstance();
 	}
+	
+	public List<Service> getServiceList();
 	
 	public class DefaultConfigurationService{
 		

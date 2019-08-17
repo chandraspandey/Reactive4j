@@ -29,13 +29,12 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 	
 	public EventPipelineBusExecutor(EventBus bus) {
 		eventBus = bus; 
-		System.out.println("EventPipelineBusExecutor : eventBus : "+eventBus);
+		//System.out.println("EventPipelineBusExecutor : eventBus : "+eventBus);
 		service.execute(this);
 	}
 
 	@Override
 	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -53,7 +52,7 @@ public class EventPipelineBusExecutor implements EventBusExecutor,ServiceLifecyc
 	}
 
 	@Override
-	public NotificationBufferQueue process() {
+	public synchronized NotificationBufferQueue process() {
 				
 		NotificationBufferQueue notificationBufferQueue = new NotificationBufferQueue();
 		

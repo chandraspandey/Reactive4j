@@ -1,10 +1,12 @@
 package org.flowr.framework.core.service.internal;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.constants.FrameworkConstants;
 import org.flowr.framework.core.flow.EventPublisher;
+import org.flowr.framework.core.service.Service;
 import org.flowr.framework.core.service.ServiceFramework;
 
 /**
@@ -20,7 +22,6 @@ public class AdministrationServiceImpl implements AdministrationService{
 	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ADMINISTRATION;
 	private ServiceType serviceType			= ServiceType.ADMINISTRATION;
 
-	@SuppressWarnings("unused")
 	private ServiceFramework<?,?> serviceFramework			= null;
 	
 	@Override
@@ -28,6 +29,9 @@ public class AdministrationServiceImpl implements AdministrationService{
 		this.serviceFramework = serviceFramework;
 	}
 	
+	public List<Service> getServiceList(){
+		return this.serviceFramework.getServiceList();
+	}
 	
 	@Override
 	public void setServiceType(ServiceType serviceType) {
@@ -62,21 +66,15 @@ public class AdministrationServiceImpl implements AdministrationService{
 
 	@Override
 	public ServiceStatus startup(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
 
 	@Override
 	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
-		
 	}
-
-
 }

@@ -1,6 +1,6 @@
 package org.flowr.framework.core.node.io.network;
 
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 
 /**
  * 

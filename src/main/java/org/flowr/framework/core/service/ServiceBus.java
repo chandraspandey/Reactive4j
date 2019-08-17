@@ -155,6 +155,12 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		
 		serverContext.setSubscriptionClientId(subscriptionIdentifier);
 	}
+	
+	@Override
+	public List<Service> getServiceList(){
+		
+		return this.serviceList;
+	}
 
 	@Override
 	public Service lookup(ServiceType serviceType) {
@@ -268,18 +274,7 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 				
 				ServiceStatus serviceStatus = ((ServiceLifecycle)s).startup(configProperties);
 				System.out.println(s.getServiceName()+" | "+serviceStatus);
-				
-				/*while(
-						serviceStatus != ServiceStatus.STARTED ||
-						serviceStatus != ServiceStatus.ERROR
-				) {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}*/
-				
+					
 				if(serviceStatus == ServiceStatus.ERROR) {
 					frameworkServiceStatus = serviceStatus;
 				}
@@ -289,13 +284,6 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 		if(frameworkServiceStatus != ServiceStatus.ERROR) {
 			frameworkServiceStatus = ServiceStatus.STARTED;
 		}
-
-	/*	getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT
-				,processHandler);
-		*/
 
 		serverContext.setServiceState(ServiceState.STARTING);
 		serverContext.setServiceStatus(frameworkServiceStatus);
@@ -324,18 +312,8 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 			(s) -> {
 				
 				ServiceStatus serviceStatus = ((ServiceLifecycle)s).shutdown(configProperties);
-				System.out.println(s.getServiceName()+" | "+serviceStatus);
+				System.out.println(s.getServiceName()+" | "+serviceStatus);	
 				
-				/*while(
-						serviceStatus != ServiceStatus.STOPPED ||
-						serviceStatus != ServiceStatus.ERROR
-				) {
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}*/
 				
 				if(serviceStatus == ServiceStatus.ERROR) {
 					frameworkServiceStatus = serviceStatus;
@@ -378,18 +356,14 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 
 	@Override
 	public DependencyStatus verify() {
-		
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
+			
+		return DependencyStatus.SATISFIED;
 	}
 
 	@Override
 	public DependencyStatus loopTest() {
-		
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
+			
+		return DependencyStatus.SATISFIED;
 	}
 
 	@Override
@@ -536,7 +510,6 @@ public abstract class ServiceBus<REQUEST,RESPONSE> implements ServiceFramework<R
 	public void publishEvent(Event<EventModel> event) {
 		
 		processHandler.publishEvent(event);
-		//subscriber.onNext(event);
 	}
 
 	@Override

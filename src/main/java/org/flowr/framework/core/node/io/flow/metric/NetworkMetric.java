@@ -3,7 +3,7 @@ package org.flowr.framework.core.node.io.flow.metric;
 import java.util.Optional;
 import java.util.concurrent.Flow.Subscriber;
 
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 import org.flowr.framework.core.node.io.flow.handler.IntegrationProcessResponse;
 import org.flowr.framework.core.node.io.flow.protocol.NetworkSubscriptionContext;
 

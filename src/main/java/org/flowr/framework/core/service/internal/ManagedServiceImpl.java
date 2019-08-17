@@ -81,9 +81,8 @@ public class ManagedServiceImpl implements ManagedService,Dependency, Dependency
 
 	@Override
 	public DependencyStatus loopTest() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
 		
-		return status;
+		return DependencyStatus.SATISFIED;
 	}
 
 	@Override
@@ -98,27 +97,21 @@ public class ManagedServiceImpl implements ManagedService,Dependency, Dependency
 
 	@Override
 	public DependencyStatus verify() {
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		return status;
+		return DependencyStatus.SATISFIED;
 	}
 
 	@Override
 	public ServiceStatus startup(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
 
 	@Override
 	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

@@ -382,14 +382,12 @@ public class ConfigurationServiceImpl implements ConfigurationService{
 
 	@Override
 	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
 
 	@Override
 	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
-		
+			
 	}
 
 	public String toString(){

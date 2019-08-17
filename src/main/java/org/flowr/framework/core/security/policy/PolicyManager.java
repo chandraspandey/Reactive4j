@@ -1,6 +1,6 @@
 package org.flowr.framework.core.security.policy;
 
-import org.flowr.framework.core.flow.persistence.ProviderPersistence;
+import org.flowr.framework.core.security.access.ProviderPersistence;
 import org.flowr.framework.core.security.policy.Policy.ViolationPolicy;
 
 /**

@@ -7,7 +7,7 @@ import java.nio.channels.AsynchronousChannelGroup;
 import java.util.AbstractMap.SimpleEntry;
 
 import org.flowr.framework.core.node.io.endpoint.NodeConfig;
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 import org.flowr.framework.core.node.io.flow.handler.IntegrationPipelineHandler;
 import org.flowr.framework.core.node.io.pipeline.NetworkPipeline;
 

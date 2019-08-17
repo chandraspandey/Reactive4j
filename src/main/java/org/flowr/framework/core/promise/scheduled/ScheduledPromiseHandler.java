@@ -21,6 +21,7 @@ import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.node.ha.BackPressureExecutorService;
 import org.flowr.framework.core.node.ha.BackPressureExecutors;
 import org.flowr.framework.core.process.management.ProcessHandler;
+import org.flowr.framework.core.promise.EventLoop;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;
 import org.flowr.framework.core.promise.PromiseTypeServer;
@@ -39,7 +40,7 @@ import org.flowr.framework.core.target.ReactiveTarget;
  */
 
 public class ScheduledPromiseHandler<REQUEST, RESPONSE> implements ScheduledPromise<REQUEST, RESPONSE>,
-	SingleEventPublisher{
+	SingleEventPublisher,  EventLoop<REQUEST,RESPONSE>{
 
 	private String flowName 							= ScheduledPromise.class.getSimpleName();
 	private boolean isEnabled							= true;
@@ -251,7 +252,7 @@ public class ScheduledPromiseHandler<REQUEST, RESPONSE> implements ScheduledProm
 		return promiseResponse;
 	}
 	
-
+	@Override
 	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST> promiseRequest) throws PromiseException, 
 		InterruptedException, ExecutionException {
 		

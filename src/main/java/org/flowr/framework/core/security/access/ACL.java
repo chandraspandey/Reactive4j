@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.flowr.framework.core.flow.persistence.ProviderPersistence;
 import org.flowr.framework.core.model.Attribute;
 import org.flowr.framework.core.model.AttributeSet;
 import org.flowr.framework.core.model.Model;

@@ -8,22 +8,26 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.event.pipeline.EventPipeline;
+import org.flowr.framework.core.event.pipeline.ManagedEventPipelineBusExecutor;
+import org.flowr.framework.core.exception.ClientException;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.flow.EventPublisher;
 import org.flowr.framework.core.node.EndPoint.EndPointStatus;
 import org.flowr.framework.core.node.ha.Circuit;
-import org.flowr.framework.core.node.ha.IntegratedCircuit;
 import org.flowr.framework.core.node.ha.Circuit.CircuitStatus;
+import org.flowr.framework.core.node.ha.IntegratedCircuit;
 import org.flowr.framework.core.process.management.ManagedProcessHandler;
 import org.flowr.framework.core.service.ServiceEndPoint;
 import org.flowr.framework.core.service.ServiceFramework;
 import org.flowr.framework.core.service.dependency.Dependency;
 import org.flowr.framework.core.service.dependency.DependencyLoop;
+import org.flowr.framework.core.service.internal.EventService.EventRegistrationStatus;
 
 /**
  * 
@@ -38,25 +42,62 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService,Depe
 	private String dependencyName									= HighAvailabilityService.class.getSimpleName();
 	private DependencyType dependencyType 							= DependencyType.MANDATORY;
 	private String serviceName										= FrameworkConstants.FRAMEWORK_SERVICE_HEALTH;
-	private ServiceType serviceType									= ServiceType.HEALTH;
+	private ServiceType serviceType									= ServiceType.HEALTH;	
+	private ManagedEventPipelineBusExecutor eventBusExecutor 		= ManagedService.getDefaultEventPipelineBusExecutor();
 	private ServiceFramework<?,?> serviceFramework					= null;
 	private ManagedProcessHandler managedProcessHandler 			= ManagedService.getDefaultProcessHandler();
 	private Circuit clientCircuit 									= null;
 	private Circuit serverCircuit 									= null;	
 	private Circuit externalCircuit 								= null;
 	private ServiceStatus serviceStatus								= ServiceStatus.UNUSED;
+	private ExecutorService service 								= Executors.newSingleThreadExecutor();
+	
+	public EventRegistrationStatus registerEventPipeline() {		
+		
+		EventRegistrationStatus status = EventRegistrationStatus.UNREGISTERED;
+	
+		if(!managedProcessHandler.isSubscribed()) {
+		
+			EventPipeline processSubscriber  =  ManagedService.getDefaultEventPipeline();
+			
+			if(processSubscriber != null) {
+				managedProcessHandler.subscribe(processSubscriber);
+				status = EventRegistrationStatus.REGISTERED;
+			}
+		}else {
+			status = EventRegistrationStatus.REGISTERED;
+		}		
+		return status;
+	}
+	
+	
 	
 	@Override
 	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
 		
 		this.serviceFramework = serviceFramework;
 		
-		this.serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_HEALTH,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.HEALTH 
-				,managedProcessHandler);		
-
+		this.registerEventPipeline();		
+	}
+	
+	@Override
+	public void run() {
+		
+		while(serviceStatus != ServiceStatus.STOPPED) {
+			
+			try {
+				process();
+				Thread.sleep(FrameworkConstants.FRAMEWORK_PIPELINE_NOTIFICATION_TIME_UNIT);
+				//System.out.println("HighAvailabilityService : "+dependencyName);
+			} catch (ClientException | InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void process() throws ClientException {
+		
+		this.serviceFramework.getNotificationService().notify(eventBusExecutor.process());
 	}
 	
 	
@@ -243,7 +284,6 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService,Depe
 
 	@Override
 	public void addServiceListener(EventPublisher engineListener) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -251,6 +291,7 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService,Depe
 	public ServiceStatus startup(Optional<Properties> configProperties) {
 		
 		try {
+			service.execute(this);
 			buildCircuit();
 			serviceStatus = ServiceStatus.STARTED;
 		} catch (ConfigurationException e) {
@@ -265,6 +306,7 @@ public class HighAvailabilityServiceImpl implements HighAvailabilityService,Depe
 		
 		clientCircuit.shutdownCircuit();
 		serverCircuit.shutdownCircuit();
+		service.shutdown();
 		serviceStatus = ServiceStatus.STOPPED;
 		return serviceStatus;
 	}

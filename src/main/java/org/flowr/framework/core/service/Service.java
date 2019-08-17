@@ -21,7 +21,7 @@ public interface Service extends ServiceLifecycle{
 		PROMISE_SCHEDULED,
 		PROMISE_STAGE,
 		PROMISE_MAP,
-		PROMISE_STTREAM,
+		PROMISE_STREAM,
 		PROVIDER,
 		PROCESS,
 		REGISTRY,

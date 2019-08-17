@@ -62,19 +62,15 @@ public class MapPromiseServiceImpl<REQUEST,RESPONSE> implements MapPromiseServic
 
 	@Override
 	public void addServiceListener(EventPublisher engineListener) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public ServiceStatus startup(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
 

@@ -116,20 +116,16 @@ public class SubscriptionServiceImpl implements SubscriptionService{
 
 	@Override
 	public ServiceStatus startup(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STARTED;
 	}
 
 	@Override
 	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		// TODO Auto-generated method stub
 		return ServiceStatus.STOPPED;
 	}
 
 	@Override
 	public void addServiceListener(EventPublisher serviceListener) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

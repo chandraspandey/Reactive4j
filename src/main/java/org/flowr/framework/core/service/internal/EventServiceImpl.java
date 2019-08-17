@@ -76,15 +76,7 @@ public class EventServiceImpl implements EventService{
 				(e) -> {
 					switch(e) {
 						
-						case PIPELINE_MANAGEMENT_EVENT:{
-							EventPipeline processSubscriber  =  new EventPipeline();
-							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT);
-							processSubscriber.setPipelineType(PipelineType.TRANSFER);
-							processSubscriber.setPipelineFunctionType(PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT);
-							processSubscriber.setEventType(EventType.SERVER);
-							eventBus.addEventPipeline(processSubscriber);
-							break;
-						}case PIPELINE_PROMISE_EVENT:{
+						case PIPELINE_PROMISE_EVENT:{
 							EventPipeline processSubscriber  =  new EventPipeline();
 							processSubscriber.setPipelineName(FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE);
 							processSubscriber.setPipelineType(PipelineType.TRANSFER);
@@ -192,8 +184,7 @@ public class EventServiceImpl implements EventService{
 
 	@Override
 	public void addServiceListener(EventPublisher engineListener) {
-		// TODO Auto-generated method stub
-		
+			
 	}
 
 	@Override

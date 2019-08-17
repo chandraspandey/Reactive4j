@@ -1,5 +1,7 @@
 package org.flowr.framework.core.service;
 
+import java.util.List;
+
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.ServiceException;
 import org.flowr.framework.core.flow.SingleEventPublisher;
@@ -91,6 +93,8 @@ public interface ServiceFramework<REQUEST,RESPONSE> extends Service,Dependency, 
 	public NodeService getNodeService();
 	
 	public void configure(String configurationFilePath) throws ConfigurationException;
+	
+	public List<Service> getServiceList();
 	
 	public static ServiceFramework<?,?> getInstance() {
 		

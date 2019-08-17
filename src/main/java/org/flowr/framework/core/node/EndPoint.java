@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.node.io.flow.data.binary.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 
 /**

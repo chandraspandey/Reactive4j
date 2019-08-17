@@ -15,6 +15,12 @@ import java.util.concurrent.TimeoutException;
 import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.promise.RequestScale;
 
+/**
+ * 
+ * 
+ * @author Chandra Shekhar Pandey
+ * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+ */
 public class BackPressureExecutorService implements ExecutorService, BackPressure, Failsafe{
 
 	// Chached Thread pool for executing async tasks 

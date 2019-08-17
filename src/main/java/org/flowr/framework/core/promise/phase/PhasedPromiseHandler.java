@@ -21,6 +21,7 @@ import org.flowr.framework.core.node.Autonomic.ResponseCode;
 import org.flowr.framework.core.node.ha.BackPressureExecutorService;
 import org.flowr.framework.core.node.ha.BackPressureExecutors;
 import org.flowr.framework.core.process.management.ProcessHandler;
+import org.flowr.framework.core.promise.EventLoop;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;
 import org.flowr.framework.core.promise.PromiseTypeServer;
@@ -38,7 +39,8 @@ import org.flowr.framework.core.target.ReactiveTarget;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<REQUEST, RESPONSE>,SingleEventPublisher{
+public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<REQUEST, RESPONSE>,
+	SingleEventPublisher, EventLoop<REQUEST,RESPONSE>{
 	
 	private String flowName 							= PhasedPromise.class.getSimpleName();
 	private boolean isEnabled							= true;
@@ -232,6 +234,7 @@ public class PhasedPromiseHandler<REQUEST, RESPONSE> implements PhasedPromise<RE
 		return promiseResponse;
 	}
 
+	@Override
 	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST> promiseRequest) throws PromiseException, 
 		InterruptedException, ExecutionException {
 		

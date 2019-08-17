@@ -2,7 +2,6 @@ package org.flowr.framework.core.security.access;
 
 import org.flowr.framework.core.context.AccessContext;
 import org.flowr.framework.core.exception.AccessSecurityException;
-import org.flowr.framework.core.flow.persistence.ProviderPersistence;
 import org.flowr.framework.core.security.token.Token;
 
 /**

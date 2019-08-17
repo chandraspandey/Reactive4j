@@ -116,7 +116,7 @@ public class EventPipelineBus implements EventBus {
 				break;
 			}
 		}		
-		System.out.println("EventPipelineBus : eventPipeline : "+eventPipeline);
+		//System.out.println("EventPipelineBus : eventPipeline : "+eventPipeline);
 		
 		return eventPipeline;
 	}
