@@ -1,4 +1,3 @@
-package org.flowr.framework.core.security.token;
 
 /**
  * 
@@ -6,9 +5,11 @@ package org.flowr.framework.core.security.token;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.token;
+
 public interface Tokenization {
 
-	public void setSeed(AlgorithmSeed algorithmSeed);
-	
-	public AlgorithmSeed getSeed();
+    void setSeed(AlgorithmSeed algorithmSeed);
+    
+    AlgorithmSeed getSeed();
 }

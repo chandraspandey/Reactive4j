@@ -1,7 +1,3 @@
-package org.flowr.framework.core.promise.phase;
-
-import org.flowr.framework.core.promise.Promise;
-
 
 /**
  * Extends Promise to be honored as phased promise.
@@ -18,6 +14,12 @@ import org.flowr.framework.core.promise.Promise;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface PhasedPromise<REQUEST,RESPONSE> extends Promise<REQUEST,RESPONSE>{
+package org.flowr.framework.core.promise.phase;
+
+import org.flowr.framework.core.flow.SingleEventPublisher;
+import org.flowr.framework.core.promise.EventLoop;
+import org.flowr.framework.core.promise.Promise;
+
+public interface PhasedPromise extends Promise, SingleEventPublisher, EventLoop{
 
 }

@@ -1,34 +1,37 @@
-package org.flowr.framework.core.service.extension;
-
-import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.extension;
 
-public interface StreamPromiseService<REQUEST,RESPONSE> extends ServiceFrameworkComponent{
+import org.flowr.framework.core.service.FrameworkService;
 
-	public static StreamPromiseService<?,?> getInstance() {
-		
-		return DefaultStreamPromiseService.getInstance();
-	}
-	
-	public class DefaultStreamPromiseService<REQUEST,RESPONSE>{
-		
-		private static StreamPromiseService<?,?> streamPromiseService = null;
-		
-		@SuppressWarnings("rawtypes")
-		public static StreamPromiseService<?,?> getInstance() {
-			
-			if(streamPromiseService == null) {
-				streamPromiseService = new StreamPromiseServiceImpl();
-			}
-			
-			return streamPromiseService;
-		}
-		
-	}
+public interface StreamPromiseService extends FrameworkService{
+
+    static StreamPromiseService getInstance() {
+        
+        return DefaultStreamPromiseService.getInstance();
+    }
+    
+    public final class DefaultStreamPromiseService{
+        
+        private static StreamPromiseService streamPromiseService;
+        
+        private DefaultStreamPromiseService() {
+            
+        }
+        
+        public static StreamPromiseService getInstance() {
+            
+            if(streamPromiseService == null) {
+                streamPromiseService = new StreamPromiseServiceImpl();
+            }
+            
+            return streamPromiseService;
+        }
+        
+    }
 }

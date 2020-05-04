@@ -1,16 +1,3 @@
-package org.flowr.framework.core.service.internal;
-
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.promise.PromiseRequest;
-import org.flowr.framework.core.security.ClientIdentity;
-import org.flowr.framework.core.service.ServiceFramework;
-import org.flowr.framework.core.service.ServiceResponse;
-import org.flowr.framework.core.service.route.ServiceRouteMapping;
 
 /**
  * 
@@ -18,81 +5,72 @@ import org.flowr.framework.core.service.route.ServiceRouteMapping;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.internal;
 
-public class RoutingServiceImpl implements RoutingService{
+import java.util.Optional;
+import java.util.Properties;
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ROUTING;
-	private ServiceType serviceType			= ServiceType.ROUTING;
-	private static ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>> routeMapping = 
-			new ServiceRouteMapping<ClientIdentity,Class<? extends ServiceResponse>>();
-	@SuppressWarnings("unused")
-	private ServiceFramework<?,?> serviceFramework			= null;
-	
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = serviceFramework;
-	}
-	
-	@Override
-	public void bindServiceRoute(ClientIdentity clientIdentity,Class<? extends ServiceResponse>  responseClass) 
-		throws ConfigurationException{
-		
-		routeMapping.add(clientIdentity,responseClass);
-	}
-	
-	@Override
-	public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest<?> promiseRequest){
-		
-		ClientIdentity clientIdentity =  promiseRequest.getClientIdentity();
-		
-		return routeMapping.getRoute(clientIdentity);
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.promise.PromiseRequest;
+import org.flowr.framework.core.security.ClientIdentity;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.ServiceResponse;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
+import org.flowr.framework.core.service.route.ServiceRouteMapping;
 
-		return this.serviceName;
-	}		
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+public class RoutingServiceImpl extends AbstractService implements RoutingService{
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    private static ServiceRouteMapping routeMapping = new ServiceRouteMapping();
+    
+    private ServiceConfig serviceConfig     = new ServiceConfig(
+                                                true,
+                                                ServiceUnit.SINGELTON,
+                                                FrameworkConstants.FRAMEWORK_SERVICE_ROUTING,
+                                                ServiceType.ROUTING,
+                                                ServiceStatus.UNUSED,
+                                                this.getClass().getSimpleName(),
+                                                DependencyType.MANDATORY
+                                            );
 
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {    
+        return this.serviceConfig;
+    }    
+    
+    @Override
+    public void bindServiceRoute(ClientIdentity clientIdentity,Class<? extends ServiceResponse>  responseClass) 
+        throws ConfigurationException{
+        
+        routeMapping.add(clientIdentity,responseClass);
+    }
+    
+    @Override
+    public Class<? extends ServiceResponse> getServiceRoute(PromiseRequest promiseRequest){
+        
+        ClientIdentity clientIdentity =  promiseRequest.getClientIdentity();
+        
+        return routeMapping.getRoute(clientIdentity);
+    }
 
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public void addServiceListener(EventPublisher serviceListener) {
-	}
-
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
+    
+    @Override
+    public String toString(){
+        
+        return "RoutingService{"+
+                " | serviceConfig : "+serviceConfig+    
+                " | \n routeMapping : "+routeMapping+
+                super.toString()+  
+                "}\n";
+    }
 
 }

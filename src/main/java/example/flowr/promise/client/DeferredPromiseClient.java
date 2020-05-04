@@ -1,149 +1,109 @@
+
+/**
+ * 
+ * 
+ * @author Chandra Shekhar Pandey
+ * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+ */
+
 package example.flowr.promise.client;
 
-import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
-import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
-
 import java.util.Optional;
-import java.util.Properties;
 
-import org.flowr.framework.core.config.OperationConfig;
-import org.flowr.framework.core.config.Configuration.ConfigurationType;
-import org.flowr.framework.core.config.ServiceConfiguration;
+import org.apache.log4j.Logger;
+import org.flowr.framework.core.config.NotificationConfig;
+import org.flowr.framework.core.constants.ErrorMap;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.PromiseException;
+import org.flowr.framework.core.model.Model.ResponseModel;
 import org.flowr.framework.core.process.ProcessBuilder;
 import org.flowr.framework.core.promise.PromiseRequest;
 import org.flowr.framework.core.promise.PromiseResponse;
-import org.flowr.framework.core.promise.PromiseTypeClient;
+import org.flowr.framework.core.promise.PromiseTypeClient.AbstractPromiseClient;
 import org.flowr.framework.core.promise.PromiseTypeServer;
-import org.flowr.framework.core.security.ClientIdentity;
-import org.flowr.framework.core.service.Service.ServiceStatus;
-import org.flowr.framework.core.service.ServiceFramework;
 import org.flowr.framework.core.service.ServiceProvider;
 import org.flowr.framework.core.service.ServiceRequest.RequestType;
 
 import example.flowr.promise.server.DeferredPromiseServer;
 
-public class DeferredPromiseClient<REQUEST, RESPONSE> implements PromiseTypeClient<REQUEST, RESPONSE> {
+public class DeferredPromiseClient extends AbstractPromiseClient  {
 
-	private boolean isConfigured;
-	private RequestType requestType 						= RequestType.PROMISE_DEFFERED;
-	private ProcessBuilder<REQUEST, RESPONSE> builder 		= new ProcessBuilder<REQUEST, RESPONSE>();
-	private OperationConfig<REQUEST, RESPONSE> clientConfig;
-	private ServiceConfiguration adapterServiceConfiguration= null;
-	
-	@Override
-	public ClientIdentity buildClientIdentity() throws ConfigurationException{
-		
-		ClientIdentity clientIdentity = new ClientIdentity("PromiseClient",ClientType.PERSISTENT);
-		
-		return clientIdentity;
-	}
-	
-	@Override
-	public PromiseRequest<REQUEST>  buildPromiseRequest() throws ConfigurationException{
-		
-		PromiseRequest<REQUEST> promiseRequest = new PromiseRequest<REQUEST>();
-		
-		promiseRequest.setRequestType(requestType);
-		
-		promiseRequest.setTimelineRequired(true);
-		promiseRequest.setClientIdentity(buildClientIdentity());
-		return promiseRequest;	
-	}
-	
-	@Override
-	public PromiseTypeServer<REQUEST, RESPONSE> buildPromiseTypeServer() throws ConfigurationException{
-		
-		@SuppressWarnings("unchecked")
-		PromiseTypeServer<REQUEST, RESPONSE> integrationServer = 
-			(PromiseTypeServer<REQUEST, RESPONSE>) new DeferredPromiseServer();
-		
-		return integrationServer;
-	}
-	
-	@Override
-	public void configure(OperationConfig<REQUEST, RESPONSE> clientConfig) throws ConfigurationException{
-				
-		if( clientConfig!= null ){
-			
-			adapterServiceConfiguration = ServiceFramework.getInstance().getConfigurationService().getServiceConfiguration(
-					ConfigurationType.CLIENT);
-			
-			if(adapterServiceConfiguration != null){
-				this.clientConfig 	= clientConfig;
-				this.isConfigured	= true;
-			}
-		}
-		
-	}
-	
-	@Override
-	public REQUEST getRequest() {
-
-		return clientConfig.getREQ();
-	}
-
-	@Override
-	public void run() {
-		
-		RESPONSE response = null;
-		
-		try {
-		
-			if(isConfigured){
-				
-				startupAdapter(Optional.of(adapterServiceConfiguration.getConfigAsProperties()));
-			
-				PromiseRequest<REQUEST> promiseRequest 		= buildPromiseRequest();
-				
-				PromiseTypeServer<REQUEST, RESPONSE> integrationServer 	= buildPromiseTypeServer();
-				
-				ServiceProvider<REQUEST, RESPONSE> processProvider;
-				
-					processProvider = builder
-							.withProvider(clientConfig.getREQ(), clientConfig.getRES())
-							.withServerConfigurationAs(clientConfig.getServerSubscriptionList(), clientConfig.getServerNotificationTask(), clientConfig.getServerNotificationServiceAdapter())
-							.andClientConfigurationAs(clientConfig.getClientSubscriptionList(), clientConfig.getClientNotificationTask(), clientConfig.getClientNotificationServiceAdapter())
-							.forPromiseRequestAndResponseServerAs(promiseRequest, clientConfig.getREQ(),integrationServer)
-							.build();
-				
-				
-				PromiseResponse<RESPONSE> promiseResponse = processProvider.service(promiseRequest);
-				
-				response = promiseResponse.getResponse();
-				
-				System.out.println("PromiseClient : Response = "+response);	
-			
-				
-				shutdownAdapter(Optional.of(adapterServiceConfiguration.getConfigAsProperties()));
-		
-			}else{
-				throw new ConfigurationException(
-						ERR_CONFIG,
-						MSG_CONFIG, 
-						"Client not configured for execution.");
-				
-			}
-			
-		} catch (ConfigurationException | PromiseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	@Override
-	public ServiceStatus startupAdapter(Optional<Properties> configProperties) throws ConfigurationException{
-		
-		return clientConfig.getClientNotificationServiceAdapter().startup(configProperties);
-	}
-	
-	@Override
-	public ServiceStatus shutdownAdapter(Optional<Properties> configProperties) throws ConfigurationException{
-		
-		return clientConfig.getClientNotificationServiceAdapter().shutdown(configProperties);
-	}
-
-
+    private ProcessBuilder builder                          = new ProcessBuilder();
+    
+    public DeferredPromiseClient() {
+        super(RequestType.PROMISE_DEFFERED,DeferredPromiseClient.class.getSimpleName());
+    }
+    
+    @Override
+    public PromiseRequest  buildPromiseRequest() throws ConfigurationException{
+        
+        PromiseRequest promiseRequest = new PromiseRequest();
+        
+        promiseRequest.setRequestType(RequestType.PROMISE_DEFFERED);        
+        promiseRequest.setTimelineRequired(true);
+        promiseRequest.setClientIdentity(buildClientIdentity());
+        return promiseRequest;  
+    }
+    
+    @Override
+    public PromiseTypeServer buildPromiseTypeServer() throws ConfigurationException{
+                
+        return new DeferredPromiseServer();
+    }
+ 
+    @Override
+    public void run() {
+        
+        ResponseModel response = null;
+        
+        try {
+        
+            if(isConfigured()){
+                
+                startupAdapter(Optional.of(getAdapterServiceConfiguration().getConfigAsProperties()));
+            
+                PromiseRequest promiseRequest       = buildPromiseRequest();
+                
+                PromiseTypeServer integrationServer     = buildPromiseTypeServer();
+                
+                NotificationConfig serverConfig = getOperationConfig().getServerNotificationConfig();
+                NotificationConfig clientConfig = getOperationConfig().getClientNotificationConfig();
+                
+                ServiceProvider processProvider = 
+                builder.withProvider()
+                    .withServerConfigurationAs(
+                            serverConfig.getSubscriptionMap(), 
+                            serverConfig.getNotificationTask(), 
+                            serverConfig.getNotificationServiceAdapter()
+                     )
+                    .andClientConfigurationAs(
+                            clientConfig.getSubscriptionMap(),
+                            clientConfig.getNotificationTask(), 
+                            clientConfig.getNotificationServiceAdapter()
+                    )
+                    .forPromiseRequestAndResponseServerAs(promiseRequest, getRequest(),integrationServer)
+                    .build();
+                
+                
+                PromiseResponse promiseResponse = processProvider.service(promiseRequest);
+                
+                response = promiseResponse.getResponse();
+                
+                Logger.getRootLogger().info("PromiseClient : Response = "+response);    
+            
+                setSessionTimeline(Optional.of(promiseResponse.getTimeline()));
+                
+                shutdownAdapter(Optional.of(getAdapterServiceConfiguration().getConfigAsProperties()));
+        
+            }else{
+                throw new ConfigurationException(ErrorMap.ERR_CONFIG,"Client not configured for execution.");
+            }
+            
+        } catch (ConfigurationException | PromiseException e) {
+            Logger.getRootLogger().error(e);
+        }
+        
+    }
+    
+ 
 }

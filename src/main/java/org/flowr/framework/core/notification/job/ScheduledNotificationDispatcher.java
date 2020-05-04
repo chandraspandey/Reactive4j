@@ -1,11 +1,16 @@
-package org.flowr.framework.core.notification.job;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
-public class ScheduledNotificationDispatcher{// implements SubscriptionDispatcher {
 
+package org.flowr.framework.core.notification.job;
+
+import org.flowr.framework.core.security.policy.ScheduleCalendar;
+
+public interface ScheduledNotificationDispatcher extends SubscriptionDispatcher{
+    
+    void setNotificationCalendar(ScheduleCalendar calendar);
 }

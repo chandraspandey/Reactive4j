@@ -1,16 +1,3 @@
-package org.flowr.framework.core.node.io.flow.protocol;
-
-import java.io.IOException;
-import java.net.SocketAddress;
-import java.net.SocketOption;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.util.Set;
-
-import org.flowr.framework.core.node.io.network.NetworkGroup;
-import org.flowr.framework.core.node.io.network.NodeChannel.ChannelFlowType;
-import org.flowr.framework.core.node.io.network.NodeChannel.ChannelState;
-import org.flowr.framework.core.node.io.network.NodeChannel.ChannelStatus;
 
 /**
  * 
@@ -18,39 +5,49 @@ import org.flowr.framework.core.node.io.network.NodeChannel.ChannelStatus;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.node.io.flow.protocol;
+
+import java.io.IOException;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousSocketChannel;
+
+import org.flowr.framework.core.node.io.network.NetworkGroup;
+import org.flowr.framework.core.node.io.network.NodeChannel.ChannelFlowType;
+import org.flowr.framework.core.node.io.network.NodeChannel.ChannelState;
+import org.flowr.framework.core.node.io.network.NodeChannel.ChannelStatus;
+
 public interface FlowSocketChannel{
 
-	public Set<SocketOption<?>> getDefaultSupportedOption();
+    ChannelStatus register();
 
-	public ChannelStatus register();
+    ChannelStatus close();
 
-	public ChannelStatus close();
+    ChannelStatus connect(SocketAddress serverSocketAddress) throws IOException;
 
-	public ChannelStatus connect(SocketAddress serverSocketAddress) throws IOException;
+    ByteBuffer readFromPipeline();
 
-	public ByteBuffer readFromPipeline();
+    ByteBuffer seek();
 
-	public ByteBuffer seek();
+    SocketAddress getSocketAddress();
 
-	public SocketAddress getSocketAddress();
+    ChannelStatus getChannelStatus();
 
-	public ChannelStatus getChannelStatus();
+    void setChannelStatus(ChannelStatus channelStatus);
 
-	public void setChannelStatus(ChannelStatus channelStatus);
+    ChannelState getChannelState();
 
-	public ChannelState getChannelState();
+    void setChannelState(ChannelState channelState);
 
-	public void setChannelState(ChannelState channelState);
+    ChannelFlowType getChannelFlowType();
 
-	public ChannelFlowType getChannelFlowType();
+    NetworkGroup getNetworkGroup();
 
-	public NetworkGroup getNetworkGroup();
+    AsynchronousSocketChannel getSocketChannel();
 
-	public AsynchronousSocketChannel getSocketChannel();
+    void cancel();
 
-	public void cancel();
+    void writeToPipeline();
 
-	public void writeToPipeline();
-
-	
+    
 }

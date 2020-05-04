@@ -1,6 +1,3 @@
-package org.flowr.framework.core.target;
-
-import org.flowr.framework.core.promise.deferred.ProgressScale;
 
 /**
  * Defines DeferableResponse as a type which can support ProgressScale with 
@@ -8,12 +5,16 @@ import org.flowr.framework.core.promise.deferred.ProgressScale;
  * ProgressScale before extracting the Response of type RESPONSE. The Response  
  * can be generated at once or can be used as chunked response
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface DeferrableResponse<RES> {
+package org.flowr.framework.core.target;
 
-	public ProgressScale getProgressScale();
-	
-	public RES getResponse();
+import org.flowr.framework.core.promise.deferred.ProgressScale;
+
+public interface DeferrableResponse<R> {
+
+    ProgressScale getProgressScale();
+    
+    R getResponse();
 }

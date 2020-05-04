@@ -1,7 +1,3 @@
-package org.flowr.framework.core.security;
-
-import org.flowr.framework.core.exception.AccessSecurityException;
-
 
 /**
  * Provides wrapper functionality for security broking & delegates the calls to
@@ -11,32 +7,29 @@ import org.flowr.framework.core.exception.AccessSecurityException;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.security;
+
+import org.flowr.framework.core.exception.AccessSecurityException;
 
 public class SecurityBroker implements SecurityConfiguration{
 
-	
-	@Override
-	public SecurityConfiguration syncConfiguration(BrokingContext 
-			brokingContext) throws AccessSecurityException {
-		
-		SecurityConfiguration securityConfiguration = null;
-		
-		
-		
-		return securityConfiguration;
-	}
+    private String accessURL;
+    
+    @Override
+    public Identity syncConfiguration(BrokingContext brokingContext) throws AccessSecurityException {
+        
+        return brokingContext.getIdentity();
+    }
 
-	
-	@Override
-	public void setAccessEndpoint(String accessURL) {
-		// TODO Auto-generated method stub
-		
-	}
+    
+    @Override
+    public void setAccessEndpoint(String accessURL) {       
+        this.accessURL = accessURL;
+    }
 
-	@Override
-	public String getAccessEndpoint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getAccessEndpoint() {
+        return this.accessURL;
+    }
 
 }

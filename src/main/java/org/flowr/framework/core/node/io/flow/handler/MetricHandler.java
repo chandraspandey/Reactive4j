@@ -1,9 +1,3 @@
-package org.flowr.framework.core.node.io.flow.handler;
-
-import java.util.Optional;
-
-import org.flowr.framework.core.node.io.flow.metric.MetricContext;
-import org.flowr.framework.core.node.io.flow.metric.NetworkMetric;
 
 /**
  * 
@@ -12,10 +6,17 @@ import org.flowr.framework.core.node.io.flow.metric.NetworkMetric;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.io.flow.handler;
+
+import java.util.Optional;
+
+import org.flowr.framework.core.node.io.flow.metric.MetricContext;
+import org.flowr.framework.core.node.io.flow.metric.NetworkMetric;
+
 public interface MetricHandler extends NetworkMetric{
-	
-	public void registerMetricMapperHandler();
-	
-	public Optional<IntegrationProcessResponse> handleMetricType(MetricContext metricContext); 
+    
+    void registerMetricMapperHandler();
+    
+    Optional<IntegrationProcessResponse> handleMetricType(MetricContext metricContext); 
 
 }

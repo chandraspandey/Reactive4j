@@ -1,6 +1,3 @@
-package org.flowr.framework.core.security.policy;
-
-import java.util.Calendar;
 
 /**
  * Defines a decision with encapsulated DecisionModel as contextual data. 
@@ -10,64 +7,67 @@ import java.util.Calendar;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.policy;
+
+import java.util.Calendar;
 
 public class PolicyDecision implements Decision{
 
-	private DecisionModel decisionModel;
-	private Calendar decisionTime;
+    private DecisionModel decisionModel;
+    private Calendar decisionTime;
 
-	
-	// Identity
-	private String policyActorIdentifier; 
-	
-	// Identity
-	private String userActorIdentifier; 
-	
+    
+    // Identity
+    private String policyActorIdentifier; 
+    
+    // Identity
+    private String userActorIdentifier; 
+    
 
-	@Override
-	public void setDecisionModel(DecisionModel decisionModel) {
-		this.decisionModel = decisionModel;
-	}
+    @Override
+    public void setDecisionModel(DecisionModel decisionModel) {
+        this.decisionModel = decisionModel;
+    }
 
-	@Override
-	public DecisionModel getDecisionModel() {
-		return this.decisionModel;
-	}
-	
+    @Override
+    public DecisionModel getDecisionModel() {
+        return this.decisionModel;
+    }
+    
 
-	public Calendar getDecisionTime() {
-		return decisionTime;
-	}
+    public Calendar getDecisionTime() {
+        return decisionTime;
+    }
 
-	public void setDecisionTime(Calendar decisionTime) {
-		this.decisionTime = decisionTime;
-	}
+    public void setDecisionTime(Calendar decisionTime) {
+        this.decisionTime = decisionTime;
+    }
 
-	public String getPolicyActorIdentifier() {
-		return policyActorIdentifier;
-	}
+    public String getPolicyActorIdentifier() {
+        return policyActorIdentifier;
+    }
 
-	public void setPolicyActorIdentifier(String policyActorIdentifier) {
-		this.policyActorIdentifier = policyActorIdentifier;
-	}
+    public void setPolicyActorIdentifier(String policyActorIdentifier) {
+        this.policyActorIdentifier = policyActorIdentifier;
+    }
 
-	public String getUserActorIdentifier() {
-		return userActorIdentifier;
-	}
+    public String getUserActorIdentifier() {
+        return userActorIdentifier;
+    }
 
-	public void setUserActorIdentifier(String userActorIdentifier) {
-		this.userActorIdentifier = userActorIdentifier;
-	}	
-	
-	
-	public String toString(){
-		
-		return "PolicyDecision{"+
-				"\n decisionModel : "+decisionModel+	
-				"\n decisionTime : "+decisionTime+
-				"\n policyActorIdentifier : "+policyActorIdentifier+
-				"\n userActorIdentifier : "+userActorIdentifier+	
-				"\n}\n";
-	}
-	
+    public void setUserActorIdentifier(String userActorIdentifier) {
+        this.userActorIdentifier = userActorIdentifier;
+    }   
+    
+    
+    public String toString(){
+        
+        return "PolicyDecision{"+
+                "\n decisionModel : "+decisionModel+    
+                "\n decisionTime : "+decisionTime+
+                "\n policyActorIdentifier : "+policyActorIdentifier+
+                "\n userActorIdentifier : "+userActorIdentifier+    
+                "\n}\n";
+    }
+    
 }

@@ -1,6 +1,3 @@
-package org.flowr.framework.core.service.extension;
-
-import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
  * 
@@ -9,26 +6,33 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface StagePromiseService<REQUEST,RESPONSE> extends ServiceFrameworkComponent{
+package org.flowr.framework.core.service.extension;
 
-	public static StagePromiseService<?,?> getInstance() {
-		
-		return DefaultStagedPromiseService.getInstance();
-	}
-	
-	public class DefaultStagedPromiseService<REQUEST,RESPONSE>{
-		
-		private static StagePromiseService<?,?> stagedPromiseService = null;
-		
-		@SuppressWarnings("rawtypes")
-		public static StagePromiseService<?,?> getInstance() {
-			
-			if(stagedPromiseService == null) {
-				stagedPromiseService = new StagePromiseServiceImpl();
-			}
-			
-			return stagedPromiseService;
-		}
-		
-	}
+import org.flowr.framework.core.service.FrameworkService;
+
+public interface StagePromiseService extends FrameworkService{
+
+   static StagePromiseService getInstance() {
+        
+        return DefaultStagedPromiseService.getInstance();
+    }
+    
+    public final class DefaultStagedPromiseService{
+        
+        private static StagePromiseService stagedPromiseService;
+        
+        private DefaultStagedPromiseService() {
+            
+        }
+        
+        public static StagePromiseService getInstance() {
+            
+            if(stagedPromiseService == null) {
+                stagedPromiseService = new StagePromiseServiceImpl();
+            }
+            
+            return stagedPromiseService;
+        }
+        
+    }
 }

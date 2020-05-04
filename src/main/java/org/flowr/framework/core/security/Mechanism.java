@@ -1,4 +1,3 @@
-package org.flowr.framework.core.security;
 
 /**
  * High level marker definition for a mechanism which can be used to represent
@@ -15,6 +14,8 @@ package org.flowr.framework.core.security;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+
+package org.flowr.framework.core.security;
 
 public interface Mechanism {
 

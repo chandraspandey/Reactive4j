@@ -1,17 +1,3 @@
-package org.flowr.framework.core.service.extension;
-
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.process.management.ManagedProcessHandler;
-import org.flowr.framework.core.promise.deferred.DeferredPromiseHandler;
-import org.flowr.framework.core.promise.deferred.DefferedPromise;
-import org.flowr.framework.core.service.ServiceFramework;
-import org.flowr.framework.core.service.internal.ManagedService;
 
 /**
  * 
@@ -19,88 +5,75 @@ import org.flowr.framework.core.service.internal.ManagedService;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.extension;
 
-public class DefferedPromiseServiceImpl<REQUEST,RESPONSE> implements DefferedPromiseService<REQUEST,RESPONSE>{
+import java.util.Optional;
+import java.util.Properties;
 
-	private ServiceUnit serviceUnit 								= ServiceUnit.SINGELTON;
-	private String serviceName										= FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED;
-	private ServiceType serviceType									= ServiceType.PROMISE;
-	@SuppressWarnings("unused")
-	private ServiceFramework<REQUEST,RESPONSE> serviceFramework		= null;
-	private ManagedProcessHandler managedProcessHandler 			= ManagedService.getDefaultProcessHandler();
-	private DeferredPromiseHandler<REQUEST,RESPONSE> promiseHandler = new DeferredPromiseHandler<REQUEST,RESPONSE>();
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		
-		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
-		
-		serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_PROMISE_DEFFERED_EVENT 
-				,promiseHandler);
-		
-		serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT
-				,managedProcessHandler);
-		
-		promiseHandler.associateProcessHandler(managedProcessHandler);		
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.promise.deferred.DeferredPromiseHandler;
+import org.flowr.framework.core.promise.deferred.DefferedPromise;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
 
-	}
-	
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+public class DefferedPromiseServiceImpl extends AbstractService implements DefferedPromiseService{
 
-		return this.serviceName;
-	}
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+    private DeferredPromiseHandler promiseHandler       = new DeferredPromiseHandler();
+    private ServiceConfig serviceConfig                 = new ServiceConfig(
+                                                            true,
+                                                            ServiceUnit.SINGELTON,
+                                                            FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED,
+                                                            ServiceType.PROMISE,
+                                                            ServiceStatus.UNUSED,
+                                                            this.getClass().getSimpleName(),
+                                                            DependencyType.MANDATORY
+                                                        );
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {
+    
+        return this.serviceConfig;
+    }
 
-	@Override
-	public void addServiceListener(EventPublisher engineListener) {
-	}
+    @Override
+    public void setServiceFramework(ServiceFramework serviceFramework) {
+        
+        super.setServiceFramework(serviceFramework);
+        
+        serviceFramework.getCatalog().getEventService().registerEventPipeline(
+                FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED,
+                PipelineType.TRANSFER, 
+                PipelineFunctionType.PIPELINE_PROMISE_DEFFERED_EVENT 
+                ,promiseHandler);
+        
+        serviceFramework.getCatalog().getEventService().registerEventPipeline(
+                FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
+                PipelineType.TRANSFER, 
+                PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT
+                ,getManagedProcessHandler());
+        
+        promiseHandler.associateProcessHandler(getManagedProcessHandler());      
 
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
+    }
+    
+ 
 
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
+
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
 
 
-	@Override
-	public DefferedPromise<REQUEST, RESPONSE> getPromise() {
-		return this.promiseHandler;
-	}
+    @Override
+    public DefferedPromise getPromise() {
+        return this.promiseHandler;
+    }
 }

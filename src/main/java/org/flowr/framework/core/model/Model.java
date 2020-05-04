@@ -1,26 +1,49 @@
-package org.flowr.framework.core.model;
 
 /**
  * 
- * 
+ * Marker interface for object models. 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+
+package org.flowr.framework.core.model;
+
+import java.util.Optional;
 
 public interface Model {
 
-	/**
-	 * Defines composite Relationship for a DataModel. IS_A is a must existence for
-	 * domain type objects and concrete implementation must qualify it with 
-	 * instanceOf function. HAS_A is an optional relationship that may or may not 
-	 * exist or be used for persistence of composite change in terms of data models.
-	 * @author Chandra Shekhar Pandey
-	 *
-	 */
-	public enum ModelType {
-		IS_A,
-		HAS_A
-	}
-
-
+    
+    /**
+     * Marker interface for Request object models. 
+     * @author Chandra Shekhar Pandey
+     * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
+     *
+     */
+    public interface RequestModel extends Model{
+        
+    }
+    
+    /**
+     * Marker interface for Response object models. 
+     * @author Chandra Shekhar Pandey
+     * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
+     *
+     */
+    public interface ResponseModel extends Model{
+        
+    }
+    
+    /**
+     * Marker interface for persistence object models. 
+     * @author Chandra Shekhar Pandey
+     * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
+     *
+     */
+    public interface ModelORM extends Model{
+        
+        
+        Optional<Model> toModel(Model model);
+        
+        Optional<ModelORM> fromModel(Model model);
+    }
 }

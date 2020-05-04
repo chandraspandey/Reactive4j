@@ -1,8 +1,3 @@
-package org.flowr.framework.core.promise;
-
-import java.util.concurrent.ExecutionException;
-
-import org.flowr.framework.core.exception.PromiseException;
 
 /**
  * 
@@ -10,9 +5,11 @@ import org.flowr.framework.core.exception.PromiseException;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.promise;
 
-public interface EventLoop<REQUEST,RESPONSE> {
+import org.flowr.framework.core.exception.PromiseException;
 
-	public PromiseResponse<RESPONSE> iterate(PromiseRequest<REQUEST> promiseRequest) throws PromiseException, 
-	InterruptedException, ExecutionException;
+public interface EventLoop {
+
+    PromiseResponse iterate(PromiseRequest promiseRequest) throws PromiseException;
 }

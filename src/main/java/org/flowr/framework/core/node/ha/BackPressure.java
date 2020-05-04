@@ -1,6 +1,4 @@
-package org.flowr.framework.core.node.ha;
 
-import java.util.concurrent.ExecutionException;
 /**
  * 
  * 
@@ -8,9 +6,13 @@ import java.util.concurrent.ExecutionException;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.ha;
+
+import org.flowr.framework.core.exception.ConfigurationException;
+
 public interface BackPressure {
-	
-	public <V> V react(FailsafeCallable<V> callable) throws InterruptedException, ExecutionException;
-	
-	public boolean isTimedOut();
+    
+    <V> V react(FailsafeCallable<V> callable) throws ConfigurationException;
+    
+    boolean isTimedOut();
 }

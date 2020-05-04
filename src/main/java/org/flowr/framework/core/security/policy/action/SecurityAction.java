@@ -1,6 +1,3 @@
-package org.flowr.framework.core.security.policy.action;
-
-import org.flowr.framework.action.Action;
 
 /**
  * Extends Action Interface to provide Security specific instrumentation
@@ -8,36 +5,39 @@ import org.flowr.framework.action.Action;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.policy.action;
+
+import org.flowr.framework.action.Action;
 
 public interface SecurityAction extends Action{
-	
-	public enum CauseType {
-		OUTAGE,
-		REMEDIATION,
-		THREAT
-	}
-	
-	public enum ActionType {	
-		FIREWALL,
-		MASKING,
-		OBFUSCATION,
-		REMOVAL
-	}
-	
-	public void setPolicySubject(PolicySubject policySubject);
-	
-	public PolicySubject getPolicySubject();
-	
-	public void setPolicyTarget(PolicyTarget PolicyTarget);
-	
-	public PolicyTarget getPolicyTarget();
-	
-	public void setCauseType(CauseType causeType);
-	
-	public CauseType getCauseType();
+    
+    public enum CauseType {
+        OUTAGE,
+        REMEDIATION,
+        THREAT
+    }
+    
+    public enum ActionType {    
+        FIREWALL,
+        MASKING,
+        OBFUSCATION,
+        REMOVAL
+    }
+    
+    void setPolicySubject(PolicySubject policySubject);
+    
+    PolicySubject getPolicySubject();
+    
+    void setPolicyTarget(PolicyTarget policyTarget);
+    
+    PolicyTarget getPolicyTarget();
+    
+    void setCauseType(CauseType causeType);
+    
+    CauseType getCauseType();
 
-	public void setActionType(ActionType securityActionType);
-	
-	public ActionType getActionType();
+    void setActionType(ActionType securityActionType);
+    
+    ActionType getActionType();
 
 }

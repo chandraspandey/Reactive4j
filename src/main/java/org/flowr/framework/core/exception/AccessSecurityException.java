@@ -1,4 +1,3 @@
-package org.flowr.framework.core.exception;
 
 /**
  * 
@@ -7,38 +6,45 @@ package org.flowr.framework.core.exception;
  *
  */
 
+package org.flowr.framework.core.exception;
+
+import org.flowr.framework.core.constants.ErrorMap;
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+
 public class AccessSecurityException extends Exception{
+   
+    private static final long serialVersionUID = FrameworkConstants.FRAMEWORK_VERSION_ID;
 
-	private static final long serialVersionUID = 1L;
+    private final int errorCode;
+    private final String warningMessage;
+    private final String securityMessage;
 
-	private String warningMessage;
-	private String securityMessage;
-	
-	public AccessSecurityException(int errorCode,String errorMessage,String 
-		contextMessage){
-		//super(errorCode,errorMessage,contextMessage);
-	}
-	
-	public String getWarningMessage() {
-		return warningMessage;
-	}
+    public AccessSecurityException(ErrorMap errorMap,String warningMessage){
+        
+        super(errorMap.getErrorMessage());
+        this.errorCode          = errorMap.getErrorCode();
+        this.securityMessage    = errorMap.getErrorMessage();
+        this.warningMessage     = warningMessage;
+    }
+    
+    
+    public String getWarningMessage() {
+        return warningMessage;
+    }
 
-	public void setWarningMessage(String warningMessage) {
-		this.warningMessage = warningMessage;
-	}
+    public String getSecurityMessage() {
+        return securityMessage;
+    }
+    
+    public int getErrorCode() {
+        return errorCode;
+    }
 
-	public String getSecurityMessage() {
-		return securityMessage;
-	}
-
-	public void setSecurityMessage(String securityMessage) {
-		this.securityMessage = securityMessage;
-	}
-	
-	public String getLocalizedMessage(){		
-		
-		return super.toString()+" : "+warningMessage+" : "+securityMessage;		
-	}
+    @Override
+    public String getLocalizedMessage(){        
+        
+        return super.toString()+" : "+warningMessage+" : "+securityMessage;     
+    }
 
 
 }

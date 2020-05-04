@@ -1,17 +1,3 @@
-package org.flowr.framework.core.service.extension;
-
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.process.management.ManagedProcessHandler;
-import org.flowr.framework.core.promise.scheduled.ScheduledPromise;
-import org.flowr.framework.core.promise.scheduled.ScheduledPromiseHandler;
-import org.flowr.framework.core.service.ServiceFramework;
-import org.flowr.framework.core.service.internal.ManagedService;
 
 /**
  * 
@@ -20,89 +6,72 @@ import org.flowr.framework.core.service.internal.ManagedService;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class ScheduledPromiseServiceImpl<REQUEST,RESPONSE> implements ScheduledPromiseService<REQUEST,RESPONSE>{
+package org.flowr.framework.core.service.extension;
 
-	private ServiceUnit serviceUnit 						= ServiceUnit.SINGELTON;
-	private String serviceName								= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_SCHEDULED;
-	private ServiceType serviceType							= ServiceType.PROMISE_SCHEDULED;
-	@SuppressWarnings("unused")
-	private ServiceFramework<REQUEST,RESPONSE> serviceFramework	= null;
-	private ManagedProcessHandler managedProcessHandler 	= ManagedService.getDefaultProcessHandler();
-	private ScheduledPromiseHandler<REQUEST,RESPONSE> scheduledPromiseHandler 	
-															= new ScheduledPromiseHandler<REQUEST,RESPONSE>();
+import java.util.Optional;
+import java.util.Properties;
 
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		
-		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
-		
-		serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_SCHEDULED,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_PROMISE_SCHEDULED_EVENT,
-				scheduledPromiseHandler);
-		
-		serviceFramework.getEventService().registerEventPipeline(
-				FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
-				PipelineType.TRANSFER, 
-				PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT,
-				managedProcessHandler);
-		
-		scheduledPromiseHandler.associateProcessHandler(managedProcessHandler);
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.promise.scheduled.ScheduledPromise;
+import org.flowr.framework.core.promise.scheduled.ScheduledPromiseHandler;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
 
-		return this.serviceName;
-	}		
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+public class ScheduledPromiseServiceImpl extends AbstractService implements ScheduledPromiseService{
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    private ScheduledPromiseHandler scheduledPromiseHandler = new ScheduledPromiseHandler();
+    
+    private ServiceConfig serviceConfig                     = new ServiceConfig(
+                                                                true,
+                                                                ServiceUnit.SINGELTON,
+                                                                FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_SCHEDULED,
+                                                                ServiceType.PROMISE_SCHEDULED,
+                                                                ServiceStatus.UNUSED,
+                                                                this.getClass().getSimpleName(),
+                                                                DependencyType.MANDATORY
+                                                            );
 
-	@Override
-	public void addServiceListener(EventPublisher engineListener) {
-		
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {    
+        return this.serviceConfig;
+    }
+    
+    @Override
+    public void setServiceFramework(ServiceFramework serviceFramework) {
+           
+        super.setServiceFramework(serviceFramework);
+        
+        serviceFramework.getCatalog().getEventService().registerEventPipeline(
+                FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_SCHEDULED,
+                PipelineType.TRANSFER, 
+                PipelineFunctionType.PIPELINE_PROMISE_SCHEDULED_EVENT,
+                scheduledPromiseHandler);
+        
+        serviceFramework.getCatalog().getEventService().registerEventPipeline(
+                FrameworkConstants.FRAMEWORK_PIPELINE_MANAGEMENT,
+                PipelineType.TRANSFER, 
+                PipelineFunctionType.PIPELINE_MANAGEMENT_EVENT,
+                getManagedProcessHandler());
+        
+        scheduledPromiseHandler.associateProcessHandler(getManagedProcessHandler());
+    }
+    
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
 
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
-
-	@Override
-	public ScheduledPromise<REQUEST, RESPONSE> getPromise() {
-		return this.scheduledPromiseHandler;
-	}
+    @Override
+    public ScheduledPromise getPromise() {
+        return this.scheduledPromiseHandler;
+    }
 
 }

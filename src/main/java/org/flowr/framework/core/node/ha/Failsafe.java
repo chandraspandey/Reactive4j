@@ -1,8 +1,3 @@
-package org.flowr.framework.core.node.ha;
-
-import java.util.concurrent.ExecutionException;
-
-import org.flowr.framework.core.node.Autonomic.ResponseCode;
 
 /**
  * 
@@ -11,10 +6,15 @@ import org.flowr.framework.core.node.Autonomic.ResponseCode;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.ha;
+
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.node.Autonomic.ResponseCode;
+import org.flowr.framework.core.promise.PromiseRequest;
+
 public interface Failsafe{
 
-	public <V> V fallforward(FailsafeCallable<V> callable)  throws InterruptedException, 
-		ExecutionException;
-	
-	public <V> V fallback(FailsafeCallable<V> callable,ResponseCode responseCode);
+    <V> V fallforward(FailsafeCallable<V> callable)  throws ConfigurationException;
+    
+    <V> V fallback(FailsafeCallable<V> callable,PromiseRequest promiseRequest,ResponseCode responseCode);
 }

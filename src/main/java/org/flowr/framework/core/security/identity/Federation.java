@@ -1,4 +1,3 @@
-package org.flowr.framework.core.security.identity;
 
 /**
  * Defines Federation in terms FederationPolicy, FederatedIdentifier & 
@@ -7,30 +6,31 @@ package org.flowr.framework.core.security.identity;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.identity;
 
 public interface Federation {
 
-	public enum FederationPolicy{
-		IMPLICIT_SESSION,
-		EXPLICIT_SESSION
-	}
-	
-	public enum FederationMechanism{
-		TOKEN,
-		IDENTITY
-	}
-	
-	
-	public void setFederationMechanism(FederationMechanism federationMechanism);
-	
-	public FederationMechanism getFederationMechanism();
-	
-	public void setFederationPolicy(FederationPolicy federationPolicy);
-	
-	public FederationPolicy getFederationPolicy();
-	
-	public String getFederatedIdentifier();
+    public enum FederationPolicy{
+        IMPLICIT_SESSION,
+        EXPLICIT_SESSION
+    }
+    
+    public enum FederationMechanism{
+        TOKEN,
+        IDENTITY
+    }
+    
+    
+    void setFederationMechanism(FederationMechanism federationMechanism);
+    
+    FederationMechanism getFederationMechanism();
+    
+    void setFederationPolicy(FederationPolicy federationPolicy);
+    
+    FederationPolicy getFederationPolicy();
+    
+    String getFederatedIdentifier();
 
-	public void setFederatedIdentifier(String federatedIdentifier);
+    void setFederatedIdentifier(String federatedIdentifier);
 
 }

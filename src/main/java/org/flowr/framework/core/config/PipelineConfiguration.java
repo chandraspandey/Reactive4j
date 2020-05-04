@@ -1,6 +1,3 @@
-package org.flowr.framework.core.config;
-
-import java.util.List;
 
 /**
  * 
@@ -9,71 +6,75 @@ import java.util.List;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.config;
+
+import java.util.List;
+
 public class PipelineConfiguration implements Configuration{
 
-	private PipelinePolicy pipelinePolicy 		= PipelinePolicy.DISPOSE_AFTER_PROCESSING;
-	private String pipelineName					= null;
-	private long MAX_ELEMENTS 					= 10000;
-	private boolean batchMode					= false;
-	private int batchSize						= 1;	
-	private List<ServiceConfiguration> configurationList = null;
+    private PipelinePolicy pipelinePolicy       = PipelinePolicy.DISPOSE_AFTER_PROCESSING;
+    private String pipelineName;
+    private long maxElements                   = 10000;
+    private boolean batchMode;
+    private int batchSize                       = 1;    
+    private List<ServiceConfiguration> configurationList;
 
-	public PipelinePolicy getPipelinePolicy() {
-		return pipelinePolicy;
-	}
+    public PipelinePolicy getPipelinePolicy() {
+        return pipelinePolicy;
+    }
 
-	public void setPipelinePolicy(PipelinePolicy pipelinePolicy) {
-		this.pipelinePolicy = pipelinePolicy;
-	}
+    public void setPipelinePolicy(PipelinePolicy pipelinePolicy) {
+        this.pipelinePolicy = pipelinePolicy;
+    }
 
-	public long getMAX_ELEMENTS() {
-		return MAX_ELEMENTS;
-	}
+    public long getMaxElements() {
+        return maxElements;
+    }
 
-	public void setMAX_ELEMENTS(long mAX_ELEMENTS) {
-		MAX_ELEMENTS = mAX_ELEMENTS;
-	}
+    public void setMaxElements(long maxElements) {
+        this.maxElements = maxElements;
+    }
 
-	public boolean isBatchMode() {
-		return batchMode;
-	}
+    public boolean isBatchMode() {
+        return batchMode;
+    }
 
-	public void setBatchMode(boolean batchMode) {
-		this.batchMode = batchMode;
-	}
+    public void setBatchMode(boolean batchMode) {
+        this.batchMode = batchMode;
+    }
 
-	public int getBatchSize() {
-		return batchSize;
-	}
+    public int getBatchSize() {
+        return batchSize;
+    }
 
-	public void setBatchSize(int batchSize) {
-		this.batchSize = batchSize;
-	}
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }
 
-	public String getPipelineName() {
-		return pipelineName;
-	}
+    public String getPipelineName() {
+        return pipelineName;
+    }
 
-	public void setPipelineName(String pipelineName) {
-		this.pipelineName = pipelineName;
-	}
-	
-	public List<ServiceConfiguration> getConfigurationList() {
-		return configurationList;
-	}
+    public void setPipelineName(String pipelineName) {
+        this.pipelineName = pipelineName;
+    }
+    
+    public List<ServiceConfiguration> getConfigurationList() {
+        return configurationList;
+    }
 
-	public void setConfigurationList(List<ServiceConfiguration> configurationList) {
-		this.configurationList = configurationList;
-	}
+    public void setConfigurationList(List<ServiceConfiguration> configurationList) {
+        this.configurationList = configurationList;
+    }
 
-	public String toString(){
-		
-		return "PipelineConfiguration{\n"+
-				" pipelineName : "+pipelineName+
-				" | pipelinePolicy : "+pipelinePolicy+	
-				" | batchMode : "+batchMode+	
-				" | batchSize : "+batchSize+	
-				" | configurationList : "+configurationList+
-				"}\n";
-	}
+    public String toString(){
+        
+        return "\n PipelineConfiguration{\n"+
+                " pipelineName : "+pipelineName+
+                " | pipelinePolicy : "+pipelinePolicy+  
+                " | batchMode : "+batchMode+    
+                " | batchSize : "+batchSize+    
+                " | configurationList : "+configurationList+
+                "}\n";
+    }
 }

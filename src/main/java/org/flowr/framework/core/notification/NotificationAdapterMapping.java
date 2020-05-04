@@ -1,21 +1,3 @@
-package org.flowr.framework.core.notification;
-
-import static org.flowr.framework.core.constants.ExceptionConstants.ERR_CONFIG;
-import static org.flowr.framework.core.constants.ExceptionMessages.MSG_CONFIG;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-
-import org.flowr.framework.core.constants.ExceptionConstants;
-import org.flowr.framework.core.constants.ExceptionMessages;
-import org.flowr.framework.core.event.Event.EventType;
-import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.exception.ServerException;
-import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
-import org.flowr.framework.core.notification.NotificationServiceAdapter.NotificationServiceAdapterType;
 
 /**
  * Provides Route Mapping capabilities associated with notification routing capabilities for different mapped route 
@@ -24,220 +6,210 @@ import org.flowr.framework.core.notification.NotificationServiceAdapter.Notifica
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class NotificationAdapterMapping<K,V> {
+package org.flowr.framework.core.notification;
 
-	
-	private HashSet<NotificationRoute<NotificationServiceAdapter,NotificationProtocolType>> notificationRouteSet = 
-			new HashSet<NotificationRoute<NotificationServiceAdapter,NotificationProtocolType>>();
-	
-	public HashSet<NotificationRoute<NotificationServiceAdapter,NotificationProtocolType>> getRouteList() {
-		return notificationRouteSet;
-	}
-	
-	public void add(NotificationServiceAdapter notificationServiceAdapterInstance,NotificationProtocolType  notificationProtocolType)
-		throws ConfigurationException{
-				
-		NotificationProtocolType existingMapping = lookupMapping(notificationServiceAdapterInstance);
-		
-		if(existingMapping == null){
-			
-			NotificationRoute<NotificationServiceAdapter,NotificationProtocolType> notificationRoute = 
-					new NotificationRoute<NotificationServiceAdapter,	NotificationProtocolType>();
-			
-			notificationRoute.set(notificationServiceAdapterInstance, notificationProtocolType);
-			
-			notificationRouteSet.add(notificationRoute) ;
-			
-			//System.out.println("NotificationAdapterMapping : Added : \n :"+notificationRoute+"\n to : "+notificationRouteSet);
-			
-		}else if(existingMapping instanceof ServerNotificationProtocolType){
-			System.out.println(" IGNORED : NotificationProtocolType : "+notificationProtocolType+
-					" already configured for NotificationServiceAdapter instance with name : "+
-					notificationServiceAdapterInstance.getNotificationServiceAdapterName());
-		}else if(existingMapping instanceof ClientNotificationProtocolType){
-			System.out.println(" IGNORED : NotificationProtocolType : "+notificationProtocolType+
-					" already configured for NotificationServiceAdapter instance with name : "+
-					notificationServiceAdapterInstance.getNotificationServiceAdapterName());
-		}else{
-								
-			throw new ConfigurationException(			
-				ERR_CONFIG,
-				MSG_CONFIG, 
-				"NotificationProtocolType : "+notificationProtocolType+
-				" already configured for NotificationServiceAdapter instance with name : "+
-						notificationServiceAdapterInstance.getNotificationServiceAdapterName());
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-		}
-		
-		
-	}
-	
-	
-	public NotificationProtocolType lookupMapping(NotificationServiceAdapter notificationServiceAdapterInstance){
-		
-		NotificationProtocolType existingMapping = null;
-		
-		if(!notificationRouteSet.isEmpty()){
-			
-			Iterator<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeIterator = 
-					notificationRouteSet.iterator();
-			
-			while(routeIterator.hasNext()){
-				
-				NotificationRoute<NotificationServiceAdapter, NotificationProtocolType> route = routeIterator.next();
-				
-				if(route.isKeyPresent(notificationServiceAdapterInstance)){
-					
-					existingMapping = route.getValues();
-					break;
-				}
-			}
-			
-		}
-		
-		return existingMapping;
-	}
-	
-	public ArrayList<NotificationServiceAdapter> getRoute(NotificationProtocolType notificationProtocolType, 
-		EventType eventType) throws ServerException{
-		
-		ArrayList<NotificationServiceAdapter> adapterList = new ArrayList<NotificationServiceAdapter>();
-		
-		
-		if(!notificationRouteSet.isEmpty()){
-			
-			if(notificationProtocolType != null){
-			
-				Iterator<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeIterator = 
-						notificationRouteSet.iterator();
-				
-				while(routeIterator.hasNext()){
-					
-					NotificationRoute<NotificationServiceAdapter, NotificationProtocolType> notificationRoute = 
-							routeIterator.next();
-					
-					//System.out.println("NotificationAdapterMapping : notificationRouteSet : "+notificationRouteSet);
-					
-					//System.out.println("NotificationAdapterMapping : "+notificationProtocolType +" | "+notificationRoute);
-					
-					if(notificationRoute.getKey().getNotificationServiceAdapterType().equals(eventType)){
-												
-	
-						if(
-							notificationProtocolType == ServerNotificationProtocolType.SERVER_INFORMATION &&
-							notificationRoute.getKey().getNotificationServiceAdapterType() == NotificationServiceAdapterType.SERVER	){
-							
-							adapterList.add(notificationRoute.getKey());
-							break;
-							
-						}else if(notificationRoute.isValuePresent(notificationProtocolType)){
-						
-							adapterList.add(notificationRoute.getKey());
-						}else{
-														
-							//System.out.println("NotificationAdapterMapping : notificationProtocolTypes[index] : "+notificationProtocolType+" | "+notificationRoute);
-							ServerException serverException = new ServerException(
-									ExceptionConstants.ERR_SERVER_PROCESSING,
-									ExceptionMessages.MSG_SERVER_PROCESSING,
-									"Notification Route Not defined for notificationProtocolType : "+
-											notificationProtocolType);
-							throw serverException;
-						}
+import org.apache.log4j.Logger;
+import org.flowr.framework.core.constants.ErrorMap;
+import org.flowr.framework.core.event.Event.EventType;
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.exception.ServerException;
+import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
+import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
+import org.flowr.framework.core.notification.dispatcher.NotificationServiceAdapter;
+import org.flowr.framework.core.notification.dispatcher.NotificationServiceAdapter.NotificationServiceAdapterType;
 
-						/*System.out.println("NotificationAdapterMapping : "+notificationRoute.getKey().getNotificationServiceAdapterType() +" : "+eventType+
-								" | adapterList : "+adapterList);*/
-					}								
-				}
-			}else{
-				
-				ServerException serverException = new ServerException(
-						ExceptionConstants.ERR_NOTIFICATION_PROTOCOL,
-						ExceptionMessages.MSG_NOTIFICATION_PROTOCOL,
-						"Notification Protocol not defined for processing : notificationProtocolTypeList : "+
-						notificationProtocolType);
-				throw serverException;
-			}
-		}else{
-			ServerException serverException = new ServerException(
-					ExceptionConstants.ERR_SERVER_PROCESSING,
-					ExceptionMessages.MSG_SERVER_PROCESSING,
-					"Notification Route Not defined for processing : routeSet : "+notificationRouteSet);
-			throw serverException;
-		}
-		
-		if(adapterList.isEmpty()){
-			
-			//System.out.println(" NotificationAdapterMapping : "+eventType+	" | adapterList : "+adapterList);
-			
-			ServerException serverException = new ServerException(
-					ExceptionConstants.ERR_SERVER_PROCESSING,
-					ExceptionMessages.MSG_SERVER_PROCESSING,
-					"Notification Route Not defined for event type : "+eventType);
-			throw serverException;
-		}
-		
-		return adapterList;
-	}
-	
-	public ArrayList<NotificationServiceAdapter> getRoute(EventType eventType) throws ServerException{
-			
-		ArrayList<NotificationServiceAdapter> adapterList = new ArrayList<NotificationServiceAdapter>();
-		
-		
-		if(!notificationRouteSet.isEmpty()){
-			
-			Iterator<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeIterator = 
-					notificationRouteSet.iterator();
-			
-			while(routeIterator.hasNext()){
-				
-				NotificationRoute<NotificationServiceAdapter, NotificationProtocolType> notificationRoute = 
-						routeIterator.next();
-				
-				//System.out.println("NotificationAdapterMapping : notificationRouteSet : "+notificationRouteSet);
-				
-				//System.out.println("NotificationAdapterMapping : "+notificationProtocolType +" | "+notificationRoute);
-				
-				if(notificationRoute.getKey().getNotificationServiceAdapterType().equals(eventType)){
-						
-					
-					adapterList.add(notificationRoute.getKey());
+public class NotificationAdapterMapping {
 
-					/*System.out.println("NotificationAdapterMapping : "+notificationRoute.getKey().getNotificationServiceAdapterType() +" : "+eventType+
-							" | adapterList : "+adapterList);*/
-				}								
-			}
+    
+    private Set<NotificationRoute> notificationRouteSet = 
+            new HashSet<>();
+    
+    public Set<NotificationRoute> getRouteList() {
+        return notificationRouteSet;
+    }
+    
+    public void add(NotificationServiceAdapter adapter, NotificationProtocolType  notificationProtocolType) 
+        throws ConfigurationException{
+                
+        NotificationProtocolType existingMapping = lookupMapping(adapter);
+        
+        if(existingMapping == null){
+            
+            NotificationRoute notificationRoute = new NotificationRoute();
+            
+            notificationRoute.set(adapter, notificationProtocolType);
+            
+            notificationRouteSet.add(notificationRoute) ;
+                
+        }else if(existingMapping instanceof ServerNotificationProtocolType){
+            Logger.getRootLogger().info(" IGNORED : NotificationProtocolType : "+notificationProtocolType+
+                    " already configured NotificationServiceAdapter instance with name : "+
+                    adapter.getAdapterNotificationConfig().getAdapterName());
+        }else if(existingMapping instanceof ClientNotificationProtocolType){
+            Logger.getRootLogger().info(" IGNORED : NotificationProtocolType : "+notificationProtocolType+
+                    " already configured for NotificationServiceAdapter instance with name : "+
+                    adapter.getAdapterNotificationConfig().getAdapterName());
+        }else{
+                                
+            throw new ConfigurationException(           
+                    ErrorMap.ERR_CONFIG,"NotificationProtocolType : "+notificationProtocolType+
+                " already configured for NotificationServiceAdapter instance with name : "+
+                        adapter.getAdapterNotificationConfig().getAdapterName());
 
-		}else{
-			ServerException serverException = new ServerException(
-					ExceptionConstants.ERR_SERVER_PROCESSING,
-					ExceptionMessages.MSG_SERVER_PROCESSING,
-					"Notification Route Not defined for processing : routeSet : "+notificationRouteSet);
-			throw serverException;
-		}
-		
-		if(adapterList.isEmpty()){
-			
-			//System.out.println(" NotificationAdapterMapping : "+eventType+	" | adapterList : "+adapterList);
-			
-			ServerException serverException = new ServerException(
-					ExceptionConstants.ERR_SERVER_PROCESSING,
-					ExceptionMessages.MSG_SERVER_PROCESSING,
-					"Notification Route Not defined for event type : "+eventType);
-			throw serverException;
-		}
-		System.out.println(" NotificationAdapterMapping : "+eventType+	" | adapterList : "+adapterList);
-		return adapterList;
-	}
+        }
+    }
+    
+    
+    public NotificationProtocolType lookupMapping(NotificationServiceAdapter notificationServiceAdapterInstance){
+        
+        NotificationProtocolType existingMapping = null;
+        
+        if(!notificationRouteSet.isEmpty()){
+            
+            Iterator<NotificationRoute> routeIterator = notificationRouteSet.iterator();
+            
+            while(routeIterator.hasNext()){
+                
+                NotificationRoute route = routeIterator.next();
+                
+                if(route.isKeyPresent(notificationServiceAdapterInstance)){
+                    
+                    existingMapping = route.getValues();
+                    break;
+                }
+            }
+            
+        }
+        
+        return existingMapping;
+    }
+    
+    public List<NotificationServiceAdapter> getRoute(NotificationProtocolType notificationProtocolType, 
+        EventType eventType) throws ServerException{
+        
+        List<NotificationServiceAdapter> adapterList = null;        
+        
+        if(!notificationRouteSet.isEmpty()){
+            
+            if(notificationProtocolType != null){
+            
+                adapterList =  buildNoticationServiceAdapter(notificationProtocolType, eventType);
+            }else{
+    
+                throw new ServerException(
+                        ErrorMap.ERR_NOTIFICATION_PROTOCOL,
+                        "Notification Protocol not defined for processing : notificationProtocolTypeList : "+
+                        notificationProtocolType
+                );
+            }
+        }else{
 
-	
-	public String toString(){
-		
-		return "NotificationAdapterMapping{"+
-				" routeSet : "+notificationRouteSet+	
-				"}\n";
-	}
+            throw new ServerException(
+                    ErrorMap.ERR_SERVER_PROCESSING,
+                    "Notification Route Not defined for processing : routeSet : "+notificationRouteSet
+            );
+        }
+                
+        return adapterList;
+    }
 
+    private List<NotificationServiceAdapter>  buildNoticationServiceAdapter(NotificationProtocolType 
+        notificationProtocolType, EventType eventType) throws ServerException {
+        
+        ArrayList<NotificationServiceAdapter> adapterList = new ArrayList<>();
+        
+        Iterator<NotificationRoute> routeIterator = notificationRouteSet.iterator();
+        
+        while(routeIterator.hasNext()){
+            
+            NotificationRoute notificationRoute = routeIterator.next();
+            
+            if(notificationRoute.getKey().getAdapterNotificationConfig().getAdapterType().equalsType(eventType)){
+                                        
 
-	
+                if(
+                    notificationProtocolType == ServerNotificationProtocolType.SERVER_INFORMATION &&
+                    notificationRoute.getKey().getAdapterNotificationConfig().getAdapterType() == 
+                    NotificationServiceAdapterType.SERVER   
+                ){
+                    
+                    adapterList.add(notificationRoute.getKey());
+                    break;
+                    
+                }else if(notificationRoute.isValuePresent(notificationProtocolType)){
+                
+                    adapterList.add(notificationRoute.getKey());
+                }else{
+                    
+                    throw new ServerException(
+                         ErrorMap.ERR_SERVER_PROCESSING,
+                        "Notification Route Not defined for notificationProtocolType : "+notificationProtocolType
+                    );
+                }
+            }                               
+        }
+        
+        if(adapterList.isEmpty()){
+                        
+            throw new ServerException(
+                    ErrorMap.ERR_SERVER_PROCESSING,
+                "Notification Route Not defined for event type : "+eventType
+            );
+        }
+        
+        return adapterList;
+    }
+    
+    public List<NotificationServiceAdapter> getRoute(EventType eventType) throws ServerException{
+            
+        ArrayList<NotificationServiceAdapter> adapterList = new ArrayList<>();
+        
+        
+        if(!notificationRouteSet.isEmpty()){
+            
+            Iterator<NotificationRoute> routeIterator = notificationRouteSet.iterator();
+            
+            while(routeIterator.hasNext()){
+                
+                NotificationRoute notificationRoute = routeIterator.next();
+                
+                if(notificationRoute.getKey().getAdapterNotificationConfig().getAdapterType().equalsType(eventType)){
+                    
+                    adapterList.add(notificationRoute.getKey());
+                }                               
+            }
+
+        }else{
+
+            throw new ServerException(
+                    ErrorMap.ERR_SERVER_PROCESSING,
+                    "Notification Route Not defined for processing : routeSet : "+notificationRouteSet
+            );
+        }
+        
+        if(adapterList.isEmpty()){
+            
+            throw new ServerException(
+                    ErrorMap.ERR_SERVER_PROCESSING,
+                    "Notification Route Not defined for event type : "+eventType
+            );
+        }
+        Logger.getRootLogger().info(" NotificationAdapterMapping : "+eventType+ " | adapterList : "+adapterList);
+        return adapterList;
+    }
+
+    
+    public String toString(){
+        
+        return "NotificationAdapterMapping{"+
+                " routeSet : "+notificationRouteSet+    
+                "}\n";
+    }
 }

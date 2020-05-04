@@ -1,4 +1,3 @@
-package org.flowr.framework.core.node.io.network;
 
 /**
  * 
@@ -6,6 +5,8 @@ package org.flowr.framework.core.node.io.network;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+
+package org.flowr.framework.core.node.io.network;
 
 public interface IngressController {
 

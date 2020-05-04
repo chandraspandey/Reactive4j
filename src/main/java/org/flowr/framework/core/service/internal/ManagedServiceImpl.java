@@ -1,15 +1,3 @@
-package org.flowr.framework.core.service.internal;
-
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.process.management.ManagedRegistry;
-import org.flowr.framework.core.process.management.ProcessHandler;
-import org.flowr.framework.core.service.ServiceFramework;
-import org.flowr.framework.core.service.dependency.Dependency;
-import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * 
@@ -17,101 +5,76 @@ import org.flowr.framework.core.service.dependency.DependencyLoop;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.internal;
 
-public class ManagedServiceImpl implements ManagedService,Dependency, DependencyLoop{
+import java.util.Optional;
+import java.util.Properties;
 
-	private ServiceUnit serviceUnit 				= ServiceUnit.POOL;
-	private String dependencyName					= ManagedServiceImpl.class.getSimpleName();
-	private DependencyType dependencyType 			= DependencyType.MANDATORY;
-	private String serviceName						= FrameworkConstants.FRAMEWORK_SERVICE_MANAGEMENT;
-	private ServiceType serviceType					= ServiceType.MANAGEMENT;
-	private static ManagedRegistry managedRegistry 	= new ManagedRegistry();
-	@SuppressWarnings("unused")
-	private ServiceFramework<?,?> serviceFramework	= null;
-	
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = serviceFramework;
-	}
-	
-	public ManagedServiceImpl() {
-		
-	}
-	
-	public void put(String name, ProcessHandler handler) {
-		managedRegistry.bind(name, handler);		
-	}
-	
-	public ProcessHandler get(String name) {
-		
-		return managedRegistry.lookup(name);
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.process.management.ManagedRegistry;
+import org.flowr.framework.core.process.management.ProcessHandler;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyStatus;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
-		return this.serviceName;
-	}	
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+public class ManagedServiceImpl extends AbstractService implements ManagedService, DependencyLoop{
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    private static ManagedRegistry managedRegistry  = new ManagedRegistry();
+    
+    private ServiceConfig serviceConfig             = new ServiceConfig(
+                                                        true,
+                                                        ServiceUnit.POOL,
+                                                        FrameworkConstants.FRAMEWORK_SERVICE_MANAGEMENT,
+                                                        ServiceType.MANAGEMENT,
+                                                        ServiceStatus.UNUSED,
+                                                        this.getClass().getSimpleName(),
+                                                        DependencyType.MANDATORY
+                                                    );
 
-	@Override
-	public DependencyStatus loopTest() {
-		
-		return DependencyStatus.SATISFIED;
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {    
+        return this.serviceConfig;
+    }
+    
+    public void put(String name, ProcessHandler handler) {
+        managedRegistry.bind(name, handler);        
+    }
+    
+    public ProcessHandler get(String name) {
+        
+        return managedRegistry.lookup(name);
+    }
+    
 
-	@Override
-	public String getDependencyName() {
-		return this.dependencyName;
-	}
+    @Override
+    public DependencyStatus verify() {
+ 
+        DependencyStatus status = DependencyStatus.UNSATISFIED;
+        
+        if(!managedRegistry.list().isEmpty()) {
+            status = DependencyStatus.SATISFIED;
+        }        
+        return status;
+    }
 
-	@Override
-	public DependencyType getDependencyType() {
-		return this.dependencyType;
-	}
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public DependencyStatus verify() {
-		return DependencyStatus.SATISFIED;
-	}
-
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
-
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
-
-	@Override
-	public void addServiceListener(EventPublisher serviceListener) {
-	}
-
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
+    
+    @Override
+    public String toString(){
+        
+        return "ManagedService{"+
+                " | serviceConfig : "+serviceConfig+    
+                " | \n managedRegistry : "+managedRegistry+
+                super.toString()+  
+                "}\n";
+    }
 }

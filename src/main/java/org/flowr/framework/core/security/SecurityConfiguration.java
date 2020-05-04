@@ -1,6 +1,3 @@
-package org.flowr.framework.core.security;
-
-import org.flowr.framework.core.exception.AccessSecurityException;
 
 /**
  * Defines the interlinking capabilities of Agent using Configuration to the
@@ -9,17 +6,19 @@ import org.flowr.framework.core.exception.AccessSecurityException;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.security;
+
+import org.flowr.framework.core.exception.AccessSecurityException;
 
 public interface SecurityConfiguration {
 
-	
-	public SecurityConfiguration syncConfiguration(BrokingContext 
-			brokingContext) throws AccessSecurityException;
-	
-	
-	public void setAccessEndpoint(String accessURL);
-	
+    
+    Identity syncConfiguration(BrokingContext brokingContext) throws AccessSecurityException;
+    
+    
+    void setAccessEndpoint(String accessURL);
+    
 
-	public String getAccessEndpoint();
+    String getAccessEndpoint();
 
 }

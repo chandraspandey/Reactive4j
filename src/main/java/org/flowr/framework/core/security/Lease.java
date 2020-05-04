@@ -1,6 +1,3 @@
-package org.flowr.framework.core.security;
-
-import java.util.Calendar;
 
 /**
  * 
@@ -8,9 +5,13 @@ import java.util.Calendar;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.security;
+
+import java.util.Calendar;
+
 public interface Lease {
 
-	public Calendar leaseStartTime();
-	
-	public Calendar leaseEndTime();
+    Calendar leaseStartTime();
+    
+    Calendar leaseEndTime();
 }

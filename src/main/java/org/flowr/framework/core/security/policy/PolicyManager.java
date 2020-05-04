@@ -1,7 +1,3 @@
-package org.flowr.framework.core.security.policy;
-
-import org.flowr.framework.core.security.access.ProviderPersistence;
-import org.flowr.framework.core.security.policy.Policy.ViolationPolicy;
 
 /**
  * Defines the behavior of PolicyManager which can be used Policy enforcement.
@@ -10,15 +6,19 @@ import org.flowr.framework.core.security.policy.Policy.ViolationPolicy;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.security.policy;
+
+import org.flowr.framework.core.model.PersistenceProvider;
+import org.flowr.framework.core.security.policy.Policy.ViolationPolicy;
 
 public interface PolicyManager {
-	
-	public ProviderPersistence<?> getSecurePersistence();
-	
-	public void setSecurePersistence(ProviderPersistence<?> securePersistence);
-	
-	public void setViolationPolicy(ViolationPolicy violationPolicy);
-	
-	public ViolationPolicy getViolationPolicy();
-		
+    
+    PersistenceProvider getSecurePersistence();
+    
+    void setSecurePersistence(PersistenceProvider securePersistence);
+    
+    void setViolationPolicy(ViolationPolicy violationPolicy);
+    
+    ViolationPolicy getViolationPolicy();
+        
 }

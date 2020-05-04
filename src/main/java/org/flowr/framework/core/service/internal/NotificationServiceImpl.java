@@ -1,25 +1,3 @@
-package org.flowr.framework.core.service.internal;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.context.RouteContext;
-import org.flowr.framework.core.event.Event.EventType;
-import org.flowr.framework.core.exception.ClientException;
-import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.exception.ServerException;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.notification.NotificationBufferQueue;
-import org.flowr.framework.core.notification.NotificationEventHelper;
-import org.flowr.framework.core.notification.NotificationHelper;
-import org.flowr.framework.core.notification.NotificationRoute;
-import org.flowr.framework.core.notification.NotificationServiceAdapter;
-import org.flowr.framework.core.notification.NotificationServiceAdapter.NotificationServiceAdapterType;
-import org.flowr.framework.core.service.ServiceFramework;
 
 /**
  * 
@@ -27,172 +5,193 @@ import org.flowr.framework.core.service.ServiceFramework;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.internal;
 
-public class NotificationServiceImpl implements NotificationService{
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
 
-	private ServiceUnit serviceUnit 							= ServiceUnit.SINGELTON;
-	private String serviceName									= FrameworkConstants.FRAMEWORK_SERVICE_NOTIFICATION;
-	private ServiceType serviceType								= ServiceType.NOTIFICATION;	
-	private NotificationHelper notificationHelper				= new NotificationEventHelper();
-	private boolean isEnabled 									= true;
-	@SuppressWarnings("unused")
-	private EventPublisher 	notificationServiceListener			= null;
-	@SuppressWarnings("unused")
-	private ServiceFramework<?,?> serviceFramework				= null;
-	
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = serviceFramework;
-	}
-	
-	@Override
-	public void setNotificationRouteContext(RouteContext routeContext) throws ConfigurationException {
-		this.notificationHelper.bindRoutes(routeContext.getRouteSet());
-	}
+import org.apache.log4j.Logger;
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.context.Context.RouteContext;
+import org.flowr.framework.core.event.Event.EventType;
+import org.flowr.framework.core.exception.ClientException;
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.exception.ServerException;
+import org.flowr.framework.core.flow.EventPublisher;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
+import org.flowr.framework.core.notification.NotificationEventHelper;
+import org.flowr.framework.core.notification.NotificationHelper;
+import org.flowr.framework.core.notification.NotificationRoute;
+import org.flowr.framework.core.notification.dispatcher.NotificationBufferQueue;
+import org.flowr.framework.core.notification.dispatcher.NotificationServiceAdapter;
+import org.flowr.framework.core.notification.dispatcher.NotificationServiceAdapter.NotificationServiceAdapterType;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.ServiceListener;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
 
-	@Override
-	public void publishEvent(NotificationBufferQueue notificationBufferQueue) throws ClientException{
+public class NotificationServiceImpl extends AbstractService implements NotificationService,ServiceListener{
 
-		//System.out.println("NotificationServiceImpl : notificationBufferQueue : "+notificationBufferQueue);
-		
-		if(!notificationBufferQueue.isEmpty()) {
-	
-			ArrayList<NotificationServiceAdapter> adapterList = null;
-			
-			try {						
-			
-				adapterList = notificationHelper.getNotificationRoute(notificationBufferQueue.getEventType());
-				
-				adapterList.forEach((k)-> ((NotificationServiceAdapter)k).publishEvent(notificationBufferQueue));
-				
-			} catch (ServerException serverException) {
-				System.err.println("NotificationServiceImpl : ServerException : "+serverException.getContextMessage());	
-				serverException.printStackTrace();
-			}
-		}
-	}
-	
-	@Override
-	public ArrayList<NotificationServiceAdapter> getNotificationRoute(NotificationProtocolType notificationProtocolType,
-			EventType eventType) throws ServerException{
-		
-		return notificationHelper.getNotificationRoute(notificationProtocolType, eventType);
-	}
-	
-	@Override
-	public HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> getNotificationRoutes() {
-		return notificationHelper.getNotificationRoutes();
-	}
+    private NotificationHelper notificationHelper               = new NotificationEventHelper();
+    private EventPublisher  notificationServiceListener;
+    private ServiceConfig serviceConfig                         = new ServiceConfig(
+                                                                    true,
+                                                                    ServiceUnit.SINGELTON,
+                                                                    FrameworkConstants.FRAMEWORK_SERVICE_NOTIFICATION,
+                                                                    ServiceType.NOTIFICATION,
+                                                                    ServiceStatus.UNUSED,
+                                                                    this.getClass().getSimpleName(),
+                                                                    DependencyType.MANDATORY
+                                                                );
 
-	@Override
-	public void notify(NotificationBufferQueue bufferQueue) throws ClientException {
-		
-		publishEvent(bufferQueue);
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {
+    
+        return this.serviceConfig;
+    }
+    
+    @Override
+    public void setNotificationRouteContext(RouteContext routeContext) throws ConfigurationException {
+        this.notificationHelper.bindRoutes(routeContext.getRouteSet());
+    }
 
-	@Override
-	public void addServiceListener(EventPublisher notificationServiceListener) {
-		this.notificationServiceListener = notificationServiceListener;
-	}
+    @Override
+    public void publishEvent(NotificationBufferQueue notificationBufferQueue) throws ClientException{
+        
+        if(!notificationBufferQueue.isEmpty()) {
+    
+            List<NotificationServiceAdapter> adapterList = null;
+            
+            try {                       
+            
+                adapterList = notificationHelper.getNotificationRoute(notificationBufferQueue.getEventType());
+                
+                adapterList.forEach(k-> k.publishEvent(notificationBufferQueue));
+                
+            } catch (ServerException serverException) {
+                Logger.getRootLogger().error(serverException);
+            }
+        }
+    }
+    
+    @Override
+    public List<NotificationServiceAdapter> getNotificationRoute(NotificationProtocolType notificationProtocolType,
+            EventType eventType) throws ServerException{
+        
+        return notificationHelper.getNotificationRoute(notificationProtocolType, eventType);
+    }
+    
+    @Override
+    public Set<NotificationRoute> getNotificationRoutes() {
+        return notificationHelper.getNotificationRoutes();
+    }
 
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		
-		//System.out.println("NotificationServiceImpl : startup : "+configProperties);
-		
-		HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeSet = 
-				notificationHelper.getNotificationRoutes();
+    @Override
+    public void notify(NotificationBufferQueue bufferQueue) throws ClientException {
+        
+        publishEvent(bufferQueue);
+    }
 
-		// Starts all the server adapter's for event processing 
-		if(!routeSet.isEmpty()){
-			
-			routeSet.forEach(
-				(k)-> 
-					{
-						NotificationServiceAdapter adapter = 
-								((NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>)k).getKey();
-						
-						if(	adapter.getNotificationServiceAdapterType() == NotificationServiceAdapterType.SERVER
-						){
-							((NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>)k).
-							getKey().startup(configProperties);
-							
-						}
-					}
-			);
-		}
+    @Override
+    public void addServiceListener(EventPublisher notificationServiceListener) {
+        this.notificationServiceListener = notificationServiceListener;
+    }
+    
+    @Override
+    public void removeServiceListener(EventPublisher notificationServiceListener) {
+        this.notificationServiceListener = null;
+    }   
+    
+    @Override
+    public EventPublisher getServiceListener() {
+        
+        return notificationServiceListener;
+    }
 
-		return ServiceStatus.STARTED;
-	}
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        
+        Set<NotificationRoute> routeSet = notificationHelper.getNotificationRoutes();
 
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		
-		HashSet<NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>> routeSet = 
-				notificationHelper.getNotificationRoutes();
-		
-		// Shuts all the server adapter's running for event processing 
-		if(!routeSet.isEmpty()){
-			
-			routeSet.forEach(
-				(k)-> 
-					{
-						NotificationServiceAdapter adapter = 
-								((NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>)k).getKey();
-						
-						if(	adapter.getNotificationServiceAdapterType() == NotificationServiceAdapterType.SERVER
-						){
-							((NotificationRoute<NotificationServiceAdapter, NotificationProtocolType>)k).
-							getKey().shutdown(configProperties);
-							
-						}
-					}
-			);
-		}
-		
-		return ServiceStatus.STOPPED;
-	}
+        // Starts all the server adapter's for event processing 
+        if(!routeSet.isEmpty()){
+            
+            routeSet.forEach(
+                    
+                ( NotificationRoute k)-> 
+                    {
+                        NotificationServiceAdapter adapter = k.getKey();
+                        
+                        if( adapter.getAdapterNotificationConfig().getAdapterType()
+                                == NotificationServiceAdapterType.SERVER
+                        ){
+                            try {
+                                k.getKey().startup(configProperties);
+                            } catch (ConfigurationException e) {                                
+                                Logger.getRootLogger().error(e);
+                                Thread.currentThread().interrupt();
+                            }
+                            
+                        }
+                    }
+            );
+        }
 
-	@Override
-	public boolean isEnabled() {
-		return this.isEnabled;
-	}
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        
+        Set<NotificationRoute> routeSet = notificationHelper.getNotificationRoutes();
+        
+        // Shuts all the server adapter's running for event processing 
+        if(!routeSet.isEmpty()){
+            
+            routeSet.forEach(
+                
+               (NotificationRoute k)-> 
+                    {
+                        NotificationServiceAdapter adapter = k.getKey();
+                        
+                        if( adapter.getAdapterNotificationConfig().getAdapterType()
+                                == NotificationServiceAdapterType.SERVER
+                        ){
+                            try {
+                                k.getKey().shutdown(configProperties);
+                            } catch (ConfigurationException e) {
+                                Logger.getRootLogger().error(e);
+                                Thread.currentThread().interrupt();
+                            }
+                            
+                        }
+                    }
+            );
+        }
+        
+        return ServiceStatus.STOPPED;
+    }
 
-		return this.serviceName;
-	}	
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+    @Override
+    public boolean isEnabled() {
+        return this.serviceConfig.isEnabled();
+    }
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    @Override
+    public void setEnabled(boolean isEnabled) {
+        this.serviceConfig.setEnabled(isEnabled);
+    }
+    
+    @Override
+    public String toString(){
+        
+        return "NotificationService{"+
+                " | serviceConfig : "+serviceConfig+    
+                " | \n notificationHelper : "+notificationHelper+
+                " | \n notificationServiceListener : "+notificationServiceListener+
+                super.toString()+  
+                "}\n";
+    }
 
 }

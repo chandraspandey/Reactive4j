@@ -1,4 +1,3 @@
-package org.flowr.framework.core.exception;
 
 /**
  * Extends Exception to provide framework specific instrumentation. Provides additional instrumentation for linking the
@@ -7,59 +6,68 @@ package org.flowr.framework.core.exception;
  *
  */
 
+package org.flowr.framework.core.exception;
+
+import java.io.Serializable;
+
+import org.flowr.framework.core.constants.ErrorMap;
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+
 public class FrameworkException extends Exception{
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = FrameworkConstants.FRAMEWORK_VERSION_ID;
 
-	private int errorCode;
-	private String errorMessage;
-	private String contextMessage;
-	private Object input;
-	
-	public FrameworkException(int errorCode,String errorMessage,String 
-		contextMessage){
-		super(errorMessage);
-		this.errorCode		= errorCode;
-		this.errorMessage 	= errorMessage;
-		this.contextMessage = contextMessage;
-	}
-	
-	public Object getInput() {
-		return input;
-	}
+    private final int errorCode;
+    private final String errorMessage;
+    private final String contextMessage;
+    private final Serializable input;
+    
+   public FrameworkException(ErrorMap errorMap,String contextMessage){
+        
+        super(errorMap.getErrorMessage());
+        this.errorCode      = errorMap.getErrorCode();
+        this.errorMessage   = errorMap.getErrorMessage();
+        this.contextMessage = contextMessage;
+        this.input          = null;
+    }
+    
+    public FrameworkException(ErrorMap errorMap,String contextMessage, Throwable cause){
+        
+        super(errorMap.getErrorMessage(),cause);
+        this.errorCode      = errorMap.getErrorCode();
+        this.errorMessage   = errorMap.getErrorMessage();
+        this.contextMessage = contextMessage;
+        this.input          = null;
+    }
+    
+    public FrameworkException(ErrorMap errorMap,String contextMessage, Serializable input){
+        
+        super(errorMap.getErrorMessage());
+        this.errorCode      = errorMap.getErrorCode();
+        this.errorMessage   = errorMap.getErrorMessage();
+        this.contextMessage = contextMessage;
+        this.input          = input;
+    }
+    
+    public Serializable getInput() {
+        return input;
+    }
 
-	public void setInput(Object input) {
-		this.input = input;
-	}
-	
-	public String getLocalizedMessage(){		
-		
-		return errorCode+" : "+errorMessage+" : "+contextMessage;		
-	}
-	
+    public int getErrorCode() {
+        return errorCode;
+    }
 
-	public int getErrorCode() {
-		return errorCode;
-	}
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
-	}
-
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public String getContextMessage() {
-		return contextMessage;
-	}
-
-	public void setContextMessage(String contextMessage) {
-		this.contextMessage = contextMessage;
-	}
-
+    public String getContextMessage() {
+        return contextMessage;
+    }
+    
+    @Override
+    public String getLocalizedMessage(){        
+        
+        return errorCode+" : "+errorMessage+" : "+contextMessage;       
+    } 
 }

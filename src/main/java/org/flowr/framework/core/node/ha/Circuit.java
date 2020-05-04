@@ -1,17 +1,3 @@
-package org.flowr.framework.core.node.ha;
-
-import java.util.Collection;
-import java.util.concurrent.ExecutionException;
-
-import org.flowr.framework.core.config.Configuration.ConfigurationType;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.exception.ConfigurationException;
-import org.flowr.framework.core.node.EndPoint;
-import org.flowr.framework.core.node.EndPoint.EndPointStatus;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-import org.flowr.framework.core.service.ServiceEndPoint;
-import org.flowr.framework.core.service.dependency.Dependency;
-import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 /**
  * Defines HA as deployment of an integrated Circuit for facilitating automatic fallback & fallforward features
@@ -19,38 +5,48 @@ import org.flowr.framework.core.service.dependency.DependencyLoop;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.ha;
+
+import java.util.Collection;
+
+import org.flowr.framework.core.config.Configuration.ConfigurationType;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.node.EndPoint.EndPointStatus;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
+import org.flowr.framework.core.service.ServiceEndPoint;
+import org.flowr.framework.core.service.dependency.Dependency;
+import org.flowr.framework.core.service.dependency.DependencyLoop;
 
 public interface Circuit extends Dependency, DependencyLoop{
 
-	public enum CircuitStatus{
-		AVAILABLE,
-		UNAVAILABLE
-	}
-	
-	public EndPointStatus addServiceEndpoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;
-		
-	public EndPointStatus removeServiceEndpoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;	
-	
-	public void buildCircuit(ConfigurationType configurationType) throws ConfigurationException, 
-		InterruptedException, ExecutionException;
-	
-	public EndPointStatus handleEndPoint(ServiceEndPoint serviceEndPoint) throws InterruptedException, 
-		ExecutionException;
-	
-	public void heartbeat() throws InterruptedException, ExecutionException;
-	
-	public void shutdownCircuit();
+    public enum CircuitStatus{
+        AVAILABLE,
+        UNAVAILABLE
+    }
+    
+    EndPointStatus addServiceEndpoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;
+        
+    EndPointStatus removeServiceEndpoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;    
+    
+    void buildCircuit(ConfigurationType configurationType) throws ConfigurationException;
+    
+    EndPointStatus handleEndPoint(ServiceEndPoint serviceEndPoint) throws ConfigurationException;
+    
+    void heartbeat() throws ConfigurationException;
+    
+    void shutdownCircuit();
 
-	public Collection<ServiceEndPoint> getAvailableServiceEndPoints(NotificationProtocolType notificationProtocolType);
-	
-	public CircuitStatus getCircuitStatus();
-	
-	public void setCircuitStatus(CircuitStatus circuitStatus);
+    Collection<ServiceEndPoint> getAvailableServiceEndPoints(NotificationProtocolType notificationProtocolType);
+    
+    CircuitStatus getCircuitStatus();
+    
+    void setCircuitStatus(CircuitStatus circuitStatus);
 
-	public Collection<ServiceEndPoint> getAllServiceEndPoints();
+    Collection<ServiceEndPoint> getAllServiceEndPoints();
 
-	public Collection<ServiceEndPoint> getAllAvailableServiceEndPoints();
+    Collection<ServiceEndPoint> getAllAvailableServiceEndPoints();
 
-	public Collection<ServiceEndPoint> getAvailableServiceEndPoints(NotificationProtocolType notificationProtocolType,
-			PipelineFunctionType pipelineFunctionType);
+    Collection<ServiceEndPoint> getAvailableServiceEndPoints(NotificationProtocolType notificationProtocolType,
+            PipelineFunctionType pipelineFunctionType);
 }

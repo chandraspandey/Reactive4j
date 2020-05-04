@@ -1,9 +1,3 @@
-package org.flowr.framework.core.service.internal;
-
-import java.util.List;
-
-import org.flowr.framework.core.service.Service;
-import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
  * 
@@ -12,28 +6,38 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public interface AdministrationService extends ServiceFrameworkComponent{
+package org.flowr.framework.core.service.internal;
 
-		
-	public static AdministrationService getInstance() {
-		
-		return DefaultConfigurationService.getInstance();
-	}
-	
-	public List<Service> getServiceList();
-	
-	public class DefaultConfigurationService{
-		
-		private static AdministrationService administrationrationService = null;
-		
-		public static AdministrationService getInstance() {
-			
-			if(administrationrationService == null) {
-				administrationrationService = new AdministrationServiceImpl();
-			}
-			
-			return administrationrationService;
-		}
-		
-	}
+import java.util.List;
+
+import org.flowr.framework.core.service.FrameworkService;
+import org.flowr.framework.core.service.ServiceFrameworkComponent;
+
+public interface AdministrationService extends FrameworkService{
+        
+    static AdministrationService getInstance() {
+        
+        return DefaultConfigurationService.getInstance();
+    }
+    
+    List<ServiceFrameworkComponent> getServiceList();
+    
+    public final class DefaultConfigurationService{
+        
+        private static AdministrationService administrationrationService;
+        
+        private DefaultConfigurationService() {
+            
+        }
+        
+        public static AdministrationService getInstance() {
+            
+            if(administrationrationService == null) {
+                administrationrationService = new AdministrationServiceImpl();
+            }
+            
+            return administrationrationService;
+        }
+        
+    }
 }

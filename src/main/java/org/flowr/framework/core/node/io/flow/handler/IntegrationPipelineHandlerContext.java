@@ -1,8 +1,3 @@
-package org.flowr.framework.core.node.io.flow.handler;
-
-import org.flowr.framework.core.context.Context;
-import org.flowr.framework.core.node.io.flow.handler.IntegrationPipelineHandler.HandlerType;
-import org.flowr.framework.core.service.Service.ServiceType;
 
 /**
  * Defines contextual processing model for selection of appropriate handler for Handling processing of different file 
@@ -13,44 +8,50 @@ import org.flowr.framework.core.service.Service.ServiceType;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.io.flow.handler;
+
+import org.flowr.framework.core.context.Context;
+import org.flowr.framework.core.node.io.flow.handler.IntegrationPipelineHandler.HandlerType;
+import org.flowr.framework.core.service.Service.ServiceType;
+
 public class IntegrationPipelineHandlerContext implements Context{
 
-	private NetworkBufferQueue networkBufferQueue;
-	private HandlerType handlerType;
-		
-	public IntegrationPipelineHandlerContext() {
-		
-	}
-	
-	public IntegrationPipelineHandlerContext(HandlerType handlerType, NetworkBufferQueue networkBufferQueue) {
-		
-		this.handlerType		= handlerType; 
-		this.networkBufferQueue = networkBufferQueue;
-	}	
-	
-	public HandlerType getHandlerType() {
-		return handlerType;
-	}
-	public void setHandlerType(HandlerType handlerType) {
-		this.handlerType = handlerType;
-	}	
+    private NetworkBufferQueue networkBufferQueue;
+    private HandlerType handlerType;
+        
+    public IntegrationPipelineHandlerContext() {
+        
+    }
+    
+    public IntegrationPipelineHandlerContext(HandlerType handlerType, NetworkBufferQueue networkBufferQueue) {
+        
+        this.handlerType        = handlerType; 
+        this.networkBufferQueue = networkBufferQueue;
+    }   
+    
+    public HandlerType getHandlerType() {
+        return handlerType;
+    }
+    public void setHandlerType(HandlerType handlerType) {
+        this.handlerType = handlerType;
+    }   
 
-	public NetworkBufferQueue getNetworkBufferQueue() {
-		return networkBufferQueue;
-	}
-	public void setNetworkBufferQueue(NetworkBufferQueue networkBufferQueue) {
-		this.networkBufferQueue = networkBufferQueue;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		return ServiceType.NETWORK;
-	}
-	
-	public String toString(){
-		
-		return "HandlerContext { "+handlerType+" | "+networkBufferQueue+" }\n";
-	}
+    public NetworkBufferQueue getNetworkBufferQueue() {
+        return networkBufferQueue;
+    }
+    public void setNetworkBufferQueue(NetworkBufferQueue networkBufferQueue) {
+        this.networkBufferQueue = networkBufferQueue;
+    }
+    
+    @Override
+    public ServiceType getServiceType() {
+        return ServiceType.NETWORK;
+    }
+    
+    public String toString(){
+        
+        return "HandlerContext { "+handlerType+" | "+networkBufferQueue+" }\n";
+    }
 
 
 }

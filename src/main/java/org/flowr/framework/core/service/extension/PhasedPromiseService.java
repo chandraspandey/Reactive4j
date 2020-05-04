@@ -1,37 +1,40 @@
-package org.flowr.framework.core.service.extension;
-
-import org.flowr.framework.core.promise.phase.PhasedPromise;
-import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.extension;
 
-public interface PhasedPromiseService<REQUEST,RESPONSE> extends ServiceFrameworkComponent{
+import org.flowr.framework.core.promise.phase.PhasedPromise;
+import org.flowr.framework.core.service.FrameworkService;
 
-	public PhasedPromise<REQUEST,RESPONSE> getPromise();
-	
-	public static PhasedPromiseService<?,?> getInstance() {
-		
-		return DefaultPhasedPromiseService.getInstance();
-	}
-	
-	public class DefaultPhasedPromiseService<REQUEST,RESPONSE>{
-		
-		private static PhasedPromiseService<?,?> phasedPromiseService = null;
-		
-		@SuppressWarnings("rawtypes")
-		public static PhasedPromiseService<?,?> getInstance() {
-			
-			if(phasedPromiseService == null) {
-				phasedPromiseService = new PhasedPromiseServiceImpl();
-			}
-			
-			return phasedPromiseService;
-		}
-		
-	}
+public interface PhasedPromiseService extends FrameworkService{
+
+    PhasedPromise getPromise();
+    
+    static PhasedPromiseService getInstance() {
+        
+        return DefaultPhasedPromiseService.getInstance();
+    }
+    
+    public final class DefaultPhasedPromiseService{
+        
+        private static PhasedPromiseService phasedPromiseService;
+    
+        private DefaultPhasedPromiseService() {
+            
+        }
+        
+        public static PhasedPromiseService getInstance() {
+            
+            if(phasedPromiseService == null) {
+                phasedPromiseService = new PhasedPromiseServiceImpl();
+            }
+            
+            return phasedPromiseService;
+        }
+        
+    }
 }

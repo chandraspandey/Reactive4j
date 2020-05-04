@@ -1,6 +1,3 @@
-package org.flowr.framework.core.node.io.pipeline;
-
-import org.flowr.framework.core.service.ServiceLifecycle;
 
 /**
  * 
@@ -9,7 +6,11 @@ import org.flowr.framework.core.service.ServiceLifecycle;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.io.pipeline;
+
+import org.flowr.framework.core.service.ServiceLifecycle;
+
 public interface NetworkBusExecutor extends ServiceLifecycle,Runnable{
 
-	public void process();
+    void process();
 }

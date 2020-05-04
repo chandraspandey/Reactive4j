@@ -1,7 +1,3 @@
-package org.flowr.framework.core.security.access;
-
-import org.flowr.framework.core.security.Identity;
-import org.flowr.framework.core.security.token.Token;
 
 /**
  * Defines Lifecycle behavior for Access. Federation mechanism leverage the 
@@ -12,12 +8,17 @@ import org.flowr.framework.core.security.token.Token;
  *
  */
 
+package org.flowr.framework.core.security.access;
+
+import org.flowr.framework.core.security.Identity;
+import org.flowr.framework.core.security.token.Token;
+
 public interface AccessLifecycle {
 
-	public void login(Identity identity);
-	
-	public Token renewToken(Token token);
-	
-	public void logout(Identity identity);	
-	
+    void login(Identity identity);
+    
+    Token renewToken(Token token);
+    
+    void logout(Identity identity);  
+    
 }

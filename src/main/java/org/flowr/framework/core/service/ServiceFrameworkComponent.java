@@ -1,6 +1,13 @@
+
+/**
+ *  
+ * 
+ * @author Chandra Shekhar Pandey
+ * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+ */
 package org.flowr.framework.core.service;
 
 public interface ServiceFrameworkComponent extends Service{
 
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework);
+    void setServiceFramework(ServiceFramework serviceFramework);
 }

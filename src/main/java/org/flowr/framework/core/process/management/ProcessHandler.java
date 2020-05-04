@@ -1,8 +1,3 @@
-package org.flowr.framework.core.process.management;
-
-import org.flowr.framework.core.context.Context;
-import org.flowr.framework.core.event.Event.EventType;
-import org.flowr.framework.core.flow.SingleEventPublisher;
 
 /**
  * Defines Process Handler capabilities as a managed process.
@@ -11,7 +6,13 @@ import org.flowr.framework.core.flow.SingleEventPublisher;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.process.management;
+
+import org.flowr.framework.core.context.Context;
+import org.flowr.framework.core.event.Event.EventType;
+import org.flowr.framework.core.flow.SingleEventPublisher;
+
 public interface ProcessHandler extends SingleEventPublisher{
 
-	public void publishProcessEvent(EventType eventType,Context context);
+    void publishProcessEvent(EventType eventType,Context context);
 }

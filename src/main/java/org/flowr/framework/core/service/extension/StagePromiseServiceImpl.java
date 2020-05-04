@@ -1,11 +1,3 @@
-package org.flowr.framework.core.service.extension;
-
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.service.ServiceFramework;
 
 /**
  * 
@@ -14,65 +6,41 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class StagePromiseServiceImpl<REQUEST,RESPONSE> implements StagePromiseService<REQUEST,RESPONSE>{
+package org.flowr.framework.core.service.extension;
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_STAGE;
-	private ServiceType serviceType			= ServiceType.PROMISE_STAGE;
-	@SuppressWarnings("unused")
-	private ServiceFramework<REQUEST,RESPONSE> serviceFramework			= null;
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+import java.util.Optional;
+import java.util.Properties;
 
-		return this.serviceName;
-	}		
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+public class StagePromiseServiceImpl extends AbstractService implements StagePromiseService{
+    
+    private ServiceConfig serviceConfig      = new ServiceConfig(
+                                                true,
+                                                ServiceUnit.SINGELTON,
+                                                FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_STAGE,
+                                                ServiceType.PROMISE_STAGE,
+                                                ServiceStatus.UNUSED,
+                                                this.getClass().getSimpleName(),
+                                                DependencyType.MANDATORY
+                                            );
 
-	@Override
-	public void addServiceListener(EventPublisher engineListener) {
-		
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {    
+        return this.serviceConfig;
+    }
+    
+ 
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
-
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
 
 }

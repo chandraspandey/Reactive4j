@@ -1,4 +1,3 @@
-package org.flowr.framework.core.node.ha;
 
 /**
  * 
@@ -7,13 +6,15 @@ package org.flowr.framework.core.node.ha;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.ha;
+
 public interface BackPressureWindow {
 
-	public int getRetryCount();
-	
-	public long getRetryInterval();
+    int getRetryCount();
+    
+    long getRetryInterval();
 
-	public long getTimeout();
+    long getTimeout();
 
 
 }

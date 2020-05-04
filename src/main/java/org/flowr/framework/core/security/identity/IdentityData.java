@@ -1,52 +1,51 @@
-package org.flowr.framework.core.security.identity;
-
-import org.flowr.framework.core.model.AttributeSet;
-import org.flowr.framework.core.security.Identity;
-import org.flowr.framework.core.security.Security.SecurityStatus;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
- *
  */
-public class IdentityData implements Identity{
+package org.flowr.framework.core.security.identity;
 
-	private String identifier;
-	private AttributeSet attributeSet;
-	private SecurityStatus securityStatus;
+import java.util.UUID;
 
+import org.flowr.framework.core.model.AttributeSet;
+import org.flowr.framework.core.model.Model;
+import org.flowr.framework.core.security.Security.SecurityStatus;
 
-	public AttributeSet getAttributeSet() {
-		return attributeSet;
-	}
+public class IdentityData implements Model{
 
-	public void setAttributeSet(AttributeSet attributeSet) {
-		this.attributeSet = attributeSet;
-	}
+    private String identifier;
+    private AttributeSet attributeSet;
+    private SecurityStatus securityStatus;
+    
+    public IdentityData() {
+        
+        this.identifier = UUID.randomUUID().toString();
+    }
 
+    public AttributeSet getAttributeSet() {
+        return attributeSet;
+    }
 
-	//@Override
-	public void setSecurityStatus(SecurityStatus securityStatus) {
-		this.securityStatus=securityStatus;
-	}
+    public void setAttributeSet(AttributeSet attributeSet) {
+        this.attributeSet = attributeSet;
+    }
 
-	//@Override
-	public SecurityStatus getSecurityStatus() {
-		return this.securityStatus;
-	}
+    public void setSecurityStatus(SecurityStatus securityStatus) {
+        this.securityStatus=securityStatus;
+    }
 
-	//@Override
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
+    public SecurityStatus getSecurityStatus() {
+        return this.securityStatus;
+    }
 
-	//@Override
-	public String getIdentifier() {
-		return this.identifier;
-	}
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
-
+    public String getIdentifier() {
+        return this.identifier;
+    }
 
 }

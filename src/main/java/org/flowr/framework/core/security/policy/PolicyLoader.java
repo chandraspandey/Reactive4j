@@ -1,7 +1,3 @@
-package org.flowr.framework.core.security.policy;
-
-import org.flowr.framework.core.context.PolicyContext;
-import org.flowr.framework.core.model.Model;
 
 /**
  * Defines Policy loading & configuration capabilities.
@@ -9,12 +5,16 @@ import org.flowr.framework.core.model.Model;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.policy;
+
+import org.flowr.framework.core.context.Context.PolicyContext;
+import org.flowr.framework.core.model.Model;
 
 public interface PolicyLoader {
 
-	public Policy loadPolicy(PolicyContext policyContext);
-	
-	public Model getPolicyConfig(PolicyContext policyContext);
+    Policy loadPolicy(PolicyContext policyContext);
+    
+    Model getPolicyConfig(PolicyContext policyContext);
 
-	public void setPolicyConfig(PolicyContext policyContext);
+    void setPolicyConfig(PolicyContext policyContext);
 }

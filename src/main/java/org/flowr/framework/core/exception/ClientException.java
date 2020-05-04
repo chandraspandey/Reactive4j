@@ -1,57 +1,57 @@
-package org.flowr.framework.core.exception;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+
+package org.flowr.framework.core.exception;
+
+import org.flowr.framework.core.constants.ErrorMap;
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
 
 public class ClientException extends Exception{
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = FrameworkConstants.FRAMEWORK_VERSION_ID;
 
-	private int errorCode;
-	private String errorMessage;
-	private String contextMessage;
-	
-	public ClientException(int errorCode,String errorMessage,String 
-		contextMessage){
-		super(errorMessage);
-		this.errorCode		= errorCode;
-		this.errorMessage 	= errorMessage;
-		this.contextMessage = contextMessage;
-	}
-	
-	
-	public String getLocalizedMessage(){		
-		
-		return errorCode+" : "+errorMessage+" : "+contextMessage;		
-	}
-	
+    private final int errorCode;
+    private final String errorMessage;
+    private final String contextMessage;
+    
+    public ClientException(ErrorMap errorMap,String contextMessage, Throwable cause){
+        
+        super(errorMap.getErrorMessage(),cause);
+        this.errorCode      = errorMap.getErrorCode();
+        this.errorMessage   = errorMap.getErrorMessage();
+        this.contextMessage = contextMessage;
+    }
+    
+    public ClientException(ErrorMap errorMap,String contextMessage){
+        
+        super(errorMap.getErrorMessage());
+        this.errorCode      = errorMap.getErrorCode();
+        this.errorMessage   = errorMap.getErrorMessage();
+        this.contextMessage = contextMessage;
+    }
+    
+    @Override
+    public String getLocalizedMessage(){        
+        
+        return errorCode+" : "+errorMessage+" : "+contextMessage;       
+    }   
 
-	public int getErrorCode() {
-		return errorCode;
-	}
+    public int getErrorCode() {
+        return errorCode;
+    }
 
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
-	}
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 
-	public String getErrorMessage() {
-		return errorMessage;
-	}
+    public String getContextMessage() {
+        return contextMessage;
+    }
 
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-
-	public String getContextMessage() {
-		return contextMessage;
-	}
-
-	public void setContextMessage(String contextMessage) {
-		this.contextMessage = contextMessage;
-	}
 
 }

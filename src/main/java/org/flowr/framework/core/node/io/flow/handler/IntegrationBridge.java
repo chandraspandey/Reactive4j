@@ -1,4 +1,3 @@
-package org.flowr.framework.core.node.io.flow.handler;
 
 /**
  * 
@@ -6,7 +5,10 @@ package org.flowr.framework.core.node.io.flow.handler;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+
+package org.flowr.framework.core.node.io.flow.handler;
+
 public interface IntegrationBridge {
 
-	public void handle(IntegrationPipelineHandlerContext handlerContext);
+    void handle(IntegrationPipelineHandlerContext handlerContext);
 }

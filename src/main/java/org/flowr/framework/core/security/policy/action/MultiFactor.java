@@ -1,4 +1,3 @@
-package org.flowr.framework.core.security.policy.action;
 
 /**
  * Defines MultiFactor authentication as series of steps for proving idenity in
@@ -8,6 +7,7 @@ package org.flowr.framework.core.security.policy.action;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.policy.action;
 
 public interface MultiFactor {
 

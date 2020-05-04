@@ -1,11 +1,14 @@
-package org.flowr.framework.api;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+
+package org.flowr.framework.api;
+
+
 public interface Builder {
 
 }

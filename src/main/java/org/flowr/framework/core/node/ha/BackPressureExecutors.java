@@ -1,4 +1,3 @@
-package org.flowr.framework.core.node.ha;
 
 /**
  * 
@@ -6,14 +5,18 @@ package org.flowr.framework.core.node.ha;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
-public class BackPressureExecutors {
 
+package org.flowr.framework.core.node.ha;
 
-	public static BackPressureExecutorService newCachedBackPressureThreadPool(){
-		
-		BackPressureExecutorService backPressureExecutorService = new BackPressureExecutorService();
-		
-		return backPressureExecutorService;
-	}
+public final class BackPressureExecutors {
+
+    private BackPressureExecutors() {
+        
+    }
+    
+    public static BackPressureExecutorService newCachedBackPressureThreadPool(){
+        
+        return new BackPressureExecutorService();
+    }
 
 }

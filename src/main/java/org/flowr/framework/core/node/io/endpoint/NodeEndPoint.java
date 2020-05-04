@@ -1,9 +1,3 @@
-package org.flowr.framework.core.node.io.endpoint;
-
-import java.io.IOException;
-
-import org.flowr.framework.core.node.EndPoint;
-import org.flowr.framework.core.node.io.network.NodeChannel;
 
 /**
  * 
@@ -12,8 +6,14 @@ import org.flowr.framework.core.node.io.network.NodeChannel;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.io.endpoint;
+
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.node.EndPoint;
+import org.flowr.framework.core.node.io.network.NodeChannel;
+
 public interface NodeEndPoint  extends EndPoint{
 
-	public NodeChannel configureAsPipeline(NodeEndPointConfiguration nodeEndPointConfiguration) throws IOException;
-		
+    NodeChannel configureAsPipeline(NodeEndPointConfiguration nodeEndPointConfiguration) throws ConfigurationException;
+        
 }

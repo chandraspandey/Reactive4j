@@ -1,4 +1,3 @@
-package org.flowr.framework.core.security.policy;
 
 /**
  * Defines high level abstraction of Decision. Concrete implemntation may vary 
@@ -12,10 +11,12 @@ package org.flowr.framework.core.security.policy;
  *
  */
 
+package org.flowr.framework.core.security.policy;
+
 public interface Decision {
 
-	public void setDecisionModel(DecisionModel decisionModel);
-	
-	public DecisionModel getDecisionModel();
-	
+    void setDecisionModel(DecisionModel decisionModel);
+    
+    DecisionModel getDecisionModel();
+    
 }

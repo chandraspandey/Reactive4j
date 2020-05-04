@@ -1,6 +1,3 @@
-package org.flowr.framework.core.node.io.network;
-
-import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
 
 /**
  * 
@@ -9,54 +6,58 @@ import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
+package org.flowr.framework.core.node.io.network;
+
+import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
+
 public interface ServiceMesh extends IngressController, EgressController{
 
-	/**
-	 * Defines service topology for classification & handling
-	 * @author Chandra Shekhar Pandey
-	 * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
-	 *
-	 */
-	public enum ServiceTopologyMode implements ByteEnumerableType{
-		NONE(0),
-		LOCAL(1),
-		DISTRIBUTED(2);
-		
-		private byte code = 0;
-		
-		ServiceTopologyMode(int code){
-			
-			this.code = (byte)code;
-		}
+    /**
+     * Defines service topology for classification & handling
+     * @author Chandra Shekhar Pandey
+     * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+     *
+     */
+    public enum ServiceTopologyMode implements ByteEnumerableType{
+        NONE(0),
+        LOCAL(1),
+        DISTRIBUTED(2);
+        
+        private byte code;
+        
+        ServiceTopologyMode(int code){
+            
+            this.code = (byte)code;
+        }
 
-		@Override
-		public byte getCode() {
-			
-			return code;
-		}	
-		
-		public static ServiceTopologyMode getType(int code) {
-			
-			ServiceTopologyMode serviceTopologyMode = NONE;
-			
-			switch((byte) code) {
-				
-				case 0:{
-					serviceTopologyMode = NONE;
-					break;
-				}case 1:{
-					serviceTopologyMode = LOCAL;
-					break;
-				}case 2:{
-					serviceTopologyMode = DISTRIBUTED;
-					break;
-				}default :{
-					serviceTopologyMode = NONE;
-					break;
-				}			
-			}
-			
-			return serviceTopologyMode;
-		}		
-	}
+        @Override
+        public byte getCode() {
+            
+            return code;
+        }   
+        
+        public static ServiceTopologyMode getType(int code) {
+            
+            ServiceTopologyMode serviceTopologyMode = null;
+            
+            switch((byte) code) {
+                
+                case 0:{
+                    serviceTopologyMode = NONE;
+                    break;
+                }case 1:{
+                    serviceTopologyMode = LOCAL;
+                    break;
+                }case 2:{
+                    serviceTopologyMode = DISTRIBUTED;
+                    break;
+                }default :{
+                    serviceTopologyMode = NONE;
+                    break;
+                }           
+            }
+            
+            return serviceTopologyMode;
+        }       
+    }
 }

@@ -1,57 +1,57 @@
-package org.flowr.framework.core.service.dependency;
-
-import java.util.Iterator;
-import java.util.TreeSet;
 
 /**
  * 
  * 
  * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.dependency;
 
-public class ProcessDependency implements Dependency{
+import java.util.Iterator;
+import java.util.TreeSet;
 
-	private static String dependencyName 					= ProcessDependency.class.getSimpleName();
-	private static DependencyType dependencyType			=	DependencyType.MANDATORY;
-	private static TreeSet<DependencyItem> dependencyChain 	= new TreeSet<DependencyItem>();
-	
-	public void addDependency(DependencyItem dependencyItem){
-		
-		dependencyChain.add(dependencyItem);
-	}
-	
-	public DependencyStatus verify(){
-		
-		DependencyStatus status = DependencyStatus.UNSATISFIED;
-		
-		Iterator<DependencyItem>  dependencyIterator = dependencyChain.iterator();
-		
-		while(dependencyIterator.hasNext()){
-			
-			if(dependencyIterator.next().getDependency().verify() == DependencyStatus.SATISFIED){
-				status = DependencyStatus.SATISFIED;
-			}else{
-				status = DependencyStatus.UNSATISFIED;
-				break;
-			}
-		}		
-		
-		return status;
-	}
+public class ProcessDependency implements Dependency, DependencyLoop{
 
-	@Override
-	public String getDependencyName() {
-		return dependencyName;
-	}
+    private static String dependencyName                    = ProcessDependency.class.getSimpleName();
+    private static DependencyType dependencyType            =   DependencyType.MANDATORY;
+    private static TreeSet<DependencyItem> dependencyChain  = new TreeSet<>();
+    
+    public void addDependency(DependencyItem dependencyItem){
+        
+        dependencyChain.add(dependencyItem);
+    }
+    
+    public DependencyStatus verify(){
+        
+        DependencyStatus status = DependencyStatus.UNSATISFIED;
+        
+        Iterator<DependencyItem>  dependencyIterator = dependencyChain.iterator();
+        
+        while(dependencyIterator.hasNext()){
+            
+            if(dependencyIterator.next().verify() == DependencyStatus.SATISFIED){
+                status = DependencyStatus.SATISFIED;
+            }else{
+                status = DependencyStatus.UNSATISFIED;
+                break;
+            }
+        }       
+        
+        return status;
+    }
 
-	@Override
-	public DependencyType getDependencyType() {
-		return dependencyType;
-	}
-	
-	public String toString(){
-		
-		return "\n ProcessDependency { "+dependencyChain+" }";
-	}
+    @Override
+    public String getDependencyName() {
+        return dependencyName;
+    }
+
+    @Override
+    public DependencyType getDependencyType() {
+        return dependencyType;
+    }
+    
+    public String toString(){
+        
+        return "\n ProcessDependency { "+dependencyChain+" }";
+    }
 }

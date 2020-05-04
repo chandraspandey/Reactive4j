@@ -1,6 +1,3 @@
-package org.flowr.framework.core.service.extension;
-
-import org.flowr.framework.core.service.ServiceFrameworkComponent;
 
 /**
  * 
@@ -8,27 +5,33 @@ import org.flowr.framework.core.service.ServiceFrameworkComponent;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.extension;
 
-public interface MapPromiseService<REQUEST,RESPONSE> extends ServiceFrameworkComponent{
+import org.flowr.framework.core.service.FrameworkService;
 
-	public static MapPromiseService<?,?> getInstance() {
-		
-		return DefaultMapPromiseService.getInstance();
-	}
-	
-	public class DefaultMapPromiseService<REQUEST,RESPONSE>{
-		
-		private static MapPromiseService<?,?> mapPromiseService = null;
-		
-		@SuppressWarnings("rawtypes")
-		public static MapPromiseService<?,?> getInstance() {
-			
-			if(mapPromiseService == null) {
-				mapPromiseService = new MapPromiseServiceImpl();
-			}
-			
-			return mapPromiseService;
-		}
-		
-	}
+public interface MapPromiseService extends FrameworkService{
+        
+    static MapPromiseService getInstance() {
+        
+        return DefaultMapPromiseService.getInstance();
+    }
+    
+    public final class DefaultMapPromiseService{
+        
+        private static MapPromiseService mapPromiseService;
+        
+        private DefaultMapPromiseService() {
+            
+        }
+        
+        public static MapPromiseService getInstance() {
+            
+            if(mapPromiseService == null) {
+                mapPromiseService = new MapPromiseServiceImpl();
+            }
+            
+            return mapPromiseService;
+        }
+        
+    }
 }

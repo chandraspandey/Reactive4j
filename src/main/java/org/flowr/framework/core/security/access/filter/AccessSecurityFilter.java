@@ -1,7 +1,3 @@
-package org.flowr.framework.core.security.access.filter;
-
-import org.flowr.framework.core.security.policy.Qualifier.QualifierResult;
-
 
 /**
  * 
@@ -9,12 +5,13 @@ import org.flowr.framework.core.security.policy.Qualifier.QualifierResult;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.access.filter;
 
-public interface AccessSecurityFilter extends Filter<QualifierResult>{
-	
-	public void setFilterName(String filterName);
-	
-	public String getFilterName();
-	
-	
+public interface AccessSecurityFilter extends Filter{
+    
+    void setFilterName(String filterName);
+    
+    String getFilterName();
+    
+    
 }

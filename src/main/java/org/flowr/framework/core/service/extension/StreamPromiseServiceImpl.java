@@ -1,11 +1,3 @@
-package org.flowr.framework.core.service.extension;
-
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.service.ServiceFramework;
 
 /**
  * 
@@ -13,66 +5,40 @@ import org.flowr.framework.core.service.ServiceFramework;
  * @author Chandra Shekhar Pandey
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
+package org.flowr.framework.core.service.extension;
 
-public class StreamPromiseServiceImpl<REQUEST,RESPONSE> implements StreamPromiseService<REQUEST,RESPONSE>{
+import java.util.Optional;
+import java.util.Properties;
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STREAM;
-	private ServiceType serviceType			= ServiceType.PROMISE_STREAM;
-	@SuppressWarnings("unused")
-	private ServiceFramework<REQUEST,RESPONSE> serviceFramework			= null;
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = (ServiceFramework<REQUEST, RESPONSE>) serviceFramework;
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
 
-		return this.serviceName;
-	}		
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+public class StreamPromiseServiceImpl extends AbstractService implements StreamPromiseService{
+     
+    private ServiceConfig serviceConfig     = new ServiceConfig(
+                                                true,
+                                                ServiceUnit.SINGELTON,
+                                                FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STREAM,
+                                                ServiceType.PROMISE_STREAM,
+                                                ServiceStatus.UNUSED,
+                                                this.getClass().getSimpleName(),
+                                                DependencyType.MANDATORY
+                                            );
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {    
+        return this.serviceConfig;
+    }
+    
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public void addServiceListener(EventPublisher engineListener) {
-		
-	}
-
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
-
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
 
 }

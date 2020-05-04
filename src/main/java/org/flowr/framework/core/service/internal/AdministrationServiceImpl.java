@@ -1,13 +1,3 @@
-package org.flowr.framework.core.service.internal;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
-import org.flowr.framework.core.constants.FrameworkConstants;
-import org.flowr.framework.core.flow.EventPublisher;
-import org.flowr.framework.core.service.Service;
-import org.flowr.framework.core.service.ServiceFramework;
 
 /**
  * 
@@ -16,65 +6,57 @@ import org.flowr.framework.core.service.ServiceFramework;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  */
 
-public class AdministrationServiceImpl implements AdministrationService{
+package org.flowr.framework.core.service.internal;
 
-	private ServiceUnit serviceUnit 		= ServiceUnit.SINGELTON;
-	private String serviceName				= FrameworkConstants.FRAMEWORK_SERVICE_ADMINISTRATION;
-	private ServiceType serviceType			= ServiceType.ADMINISTRATION;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
-	private ServiceFramework<?,?> serviceFramework			= null;
-	
-	@Override
-	public void setServiceFramework(ServiceFramework<?,?> serviceFramework) {
-		this.serviceFramework = serviceFramework;
-	}
-	
-	public List<Service> getServiceList(){
-		return this.serviceFramework.getServiceList();
-	}
-	
-	@Override
-	public void setServiceType(ServiceType serviceType) {
-		
-		this.serviceType = serviceType;
-	}
-	
-	@Override
-	public ServiceType getServiceType() {
-		
-		return this.serviceType;
-	}
-	@Override
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
-	@Override
-	public String getServiceName() {
+import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.service.AbstractService;
+import org.flowr.framework.core.service.ServiceFrameworkComponent;
+import org.flowr.framework.core.service.dependency.Dependency.DependencyType;
 
-		return this.serviceName;
-	}		
-	
-	@Override
-	public void setServiceUnit(ServiceUnit serviceUnit) {
-		this.serviceUnit = serviceUnit;
-	}
+public class AdministrationServiceImpl extends AbstractService implements AdministrationService{
+  
+    private ServiceConfig serviceConfig         = new ServiceConfig(
+                                                    true,
+                                                    ServiceUnit.SINGELTON,
+                                                    FrameworkConstants.FRAMEWORK_SERVICE_ADMINISTRATION,
+                                                    ServiceType.ADMINISTRATION,
+                                                    ServiceStatus.UNUSED,
+                                                    this.getClass().getSimpleName(),
+                                                    DependencyType.MANDATORY
+                                                );
 
-	@Override
-	public ServiceUnit getServiceUnit() {
-		return this.serviceUnit;
-	}
+    @Override
+    public ServiceConfig getServiceConfig() {
+    
+        return this.serviceConfig;
+    }
+    
+    @Override
+    public List<ServiceFrameworkComponent> getServiceList(){
+        return this.getServiceFramework().getServiceList();
+    }
+ 
+    @Override
+    public ServiceStatus startup(Optional<Properties> configProperties) {
+        return ServiceStatus.STARTED;
+    }
 
-	@Override
-	public ServiceStatus startup(Optional<Properties> configProperties) {
-		return ServiceStatus.STARTED;
-	}
+    @Override
+    public ServiceStatus shutdown(Optional<Properties> configProperties) {
+        return ServiceStatus.STOPPED;
+    }
+    
+    @Override
+    public String toString(){
+        
+        return "AdministrationService{"+
+                " | serviceConfig : "+serviceConfig+    
+                super.toString()+  
+                "}\n";
+    }
 
-	@Override
-	public ServiceStatus shutdown(Optional<Properties> configProperties) {
-		return ServiceStatus.STOPPED;
-	}
-
-	@Override
-	public void addServiceListener(EventPublisher serviceListener) {
-	}
 }

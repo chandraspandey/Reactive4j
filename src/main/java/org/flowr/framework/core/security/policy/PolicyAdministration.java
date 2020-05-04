@@ -1,4 +1,3 @@
-package org.flowr.framework.core.security.policy;
 
 /**
  * 
@@ -7,6 +6,8 @@ package org.flowr.framework.core.security.policy;
  * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
  *
  */
+package org.flowr.framework.core.security.policy;
+
 public interface PolicyAdministration {
 
 }

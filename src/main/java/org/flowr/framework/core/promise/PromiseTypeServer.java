@@ -1,44 +1,46 @@
+
+/**
+ * Defines PromiseServer as end point for serving requests. Inherits ReactiveTarget for delegating requests for
+ * response. 
+ * @author Chandra Shekhar Pandey
+ * Copyright ï¿½ 2018 by Chandra Shekhar Pandey. All rights reserved.
+ */
 package org.flowr.framework.core.promise;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.flowr.framework.core.exception.ConfigurationException;
+import org.apache.log4j.Logger;
+import org.flowr.framework.core.exception.PromiseException;
 import org.flowr.framework.core.promise.Promisable.PromisableType;
 import org.flowr.framework.core.target.ReactiveTarget;
 
 
-/**
- * Defines PromiseServer as end point for serving requests. Inherits ReactiveTarget for delegating requests for
- * response. 
- * @author Chandra Shekhar Pandey
- * Copyright © 2018 by Chandra Shekhar Pandey. All rights reserved.
- */
+public interface PromiseTypeServer extends ReactiveTarget{
 
-public interface PromiseTypeServer<REQUEST,RESPONSE> extends ReactiveTarget<REQUEST,RESPONSE>{
+    Scale buildProgressScale(PromisableType promisableType,double now) throws PromiseException;    
 
-	public Scale buildProgressScale(PromisableType promisableType,double now) throws ConfigurationException;	
+    PromisableType getPromisableType();
+    
+    static String serverIdentifier(){
+        
+        String hostname = "Unknown";
 
-	public PromisableType getPromisableType();
-	
-	public static String ServerIdentifier(){
-		
-		String hostname = "Unknown";
-
-		try
-		{
-			hostname = InetAddress.getLocalHost().getHostName();
-		}catch (UnknownHostException ex){
-		    System.out.println("Hostname can not be resolved");
-		}
-		return hostname;
-		
-	}
-	
-	public static String ProcessIdentifier(){
-		
-		return ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-	}
+        try
+        {
+            hostname = InetAddress.getLocalHost().getHostName();
+        }catch (UnknownHostException ex){
+            Logger.getRootLogger().error("Hostname can not be resolved");
+            Logger.getRootLogger().error(ex);
+        }
+        return hostname;
+        
+    }
+    
+    static String processIdentifier(){
+        
+        return ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
+    }
 
 }
