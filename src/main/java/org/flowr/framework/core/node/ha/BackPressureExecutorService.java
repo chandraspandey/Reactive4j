@@ -43,8 +43,10 @@ public class BackPressureExecutorService implements ExecutorService, BackPressur
         }
         this.timeout        = requestScale.getTimeout();
         this.retryCount     = requestScale.getRetryCount(); 
-        this.startTime      =  Timestamp.from(Instant.now());
+        this.startTime      = Timestamp.from(Instant.now());
         this.isConfigured   = true;
+        
+        Logger.getRootLogger().info(requestScale);
     }
     
     
@@ -100,16 +102,14 @@ public class BackPressureExecutorService implements ExecutorService, BackPressur
     @Override
     public boolean isTimedOut(){
         
-        boolean isTimedOut = true;
+        boolean isTimedOut = false;
         
-        if( ( Timestamp.from(Instant.now()).getTime() - this.startTime.getTime())   > timeout ){
+        if( ( Timestamp.from(Instant.now()).getTime() - this.startTime.getTime()) > timeout ){
             isTimedOut = true;
-        }else{
-            isTimedOut = false;
         }
         
-        Logger.getRootLogger().info("BackPressureExecutorService : isTimedOut : "+isTimedOut+" | "+timeout+" > "+ 
-                ( Timestamp.from(Instant.now()).getTime() - this.startTime.getTime()));
+        Logger.getRootLogger().info("BackPressureExecutorService : isTimedOut : "+isTimedOut+" | "+ 
+                ( Timestamp.from(Instant.now()).getTime() - this.startTime.getTime())+" > "+timeout);
         
         return isTimedOut;
     }
@@ -137,6 +137,9 @@ public class BackPressureExecutorService implements ExecutorService, BackPressur
 
     @Override
     public <V> V fallback(FailsafeCallable<V> callable,PromiseRequest promiseRequest,ResponseCode responseCode) {
+        
+        Logger.getRootLogger().info("BackPressureExecutorService : fallback | responseCode : "
+                +responseCode+" | promiseRequest : "+promiseRequest);
         
         return callable.handlePromiseError(promiseRequest,responseCode);
     }

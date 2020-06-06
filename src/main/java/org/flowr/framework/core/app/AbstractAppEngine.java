@@ -124,7 +124,9 @@ public abstract class AbstractAppEngine implements AppEngineBuilder{
                     
                     SimpleEntry<Thread, Thread> serverThreadHooks = bus.startInboundNetworkPipeline(server, client);
                     
-                    bus.clientToServer("ECHO".getBytes(Charset.defaultCharset()), client,server);
+                    
+                    bus.clientToServer(FrameworkConstants.FRAMEWORK_NETWORK_IO_PING.getBytes(
+                            Charset.defaultCharset()), client,server);
                     
                     bus.addToNetworkThreadPool(serverThreadHooks);
                     
@@ -136,7 +138,8 @@ public abstract class AbstractAppEngine implements AppEngineBuilder{
                     entrySet = new SimpleEntry<>(server,client);
                 }
                 
-                bus.serverToClient("ECHO".getBytes(Charset.defaultCharset()), server,client);   
+                bus.serverToClient(FrameworkConstants.FRAMEWORK_NETWORK_IO_PING.getBytes(
+                        Charset.defaultCharset()), server,client);   
                 
                 Logger.getRootLogger().info("AppEngine : server : "+server);
                 
@@ -163,7 +166,7 @@ public abstract class AbstractAppEngine implements AppEngineBuilder{
         ConfigurationService configurationService = ServiceFramework.getInstance().getCatalog()
                 .getConfigurationService();
 
-        Logger.getRootLogger().info("AppEngine : configurationService : "+configurationService);        
+        Logger.getRootLogger().info("AbstractAppEngine : configurationService : "+configurationService);        
 
         ServiceStatus serviceStatus = ServiceFramework.getInstance().startup(
                 Optional.of(configurationService.getServiceConfiguration(ConfigurationType.SERVER)
@@ -194,8 +197,6 @@ public abstract class AbstractAppEngine implements AppEngineBuilder{
 
         ConfigurationService configurationService = ServiceFramework.getInstance().getCatalog()
                 .getConfigurationService();
-
-        Logger.getRootLogger().info("FlowR : configurationService : "+configurationService);
 
         bus.closeNetworkBusExecutor(Optional.empty());
 

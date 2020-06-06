@@ -279,6 +279,28 @@ public class NodePipelineServer extends AbstractPipelineComponent implements Run
     }
     
     @Override
+    public NetworkServerSocketChannel getSocketChannel(ChannelFlowType channelFlowType) {
+
+        NetworkServerSocketChannel socketChannel = null;
+        
+        switch(channelFlowType) {
+        
+            case INBOUND:{
+                
+                socketChannel = inServerSocketChannel;
+                break;
+            }case OUTBOUND:{
+                
+                socketChannel = outServerSocketChannel;
+                break;
+            }default:{
+                break;
+            }
+        }
+        return socketChannel;
+    }
+    
+    @Override
     public NetworkGroupStatus close() {
         
         NetworkGroupStatus networkGroupStatus = NetworkGroupStatus.UNKNOWN;

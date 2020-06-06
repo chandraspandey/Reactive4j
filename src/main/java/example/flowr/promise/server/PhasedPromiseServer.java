@@ -78,7 +78,7 @@ public class PhasedPromiseServer implements PromiseTypeServer{
     @Override
     public Scale invokeAndReturn(RequestModel request, RequestScale requestScale) throws PromiseException {
         
-        PhasedProgressScale scale = (PhasedProgressScale) buildProgressScale(promisableType,increment(10.0));
+        PhasedProgressScale scale = (PhasedProgressScale) buildProgressScale(promisableType,increment(20.0));
         
         scale.setPromiseState(PromiseState.ACKNOWLEDGED);
         scale.setPromiseStatus(PromiseStatus.INITIATED);
@@ -103,7 +103,9 @@ public class PhasedPromiseServer implements PromiseTypeServer{
     
     private static double increment(double now) {
 
-        artificialNow+=now;
+        if((artificialNow+now) <= 100) {
+            artificialNow+=now;
+        }
         return artificialNow;
     }
     
@@ -173,6 +175,12 @@ public class PhasedPromiseServer implements PromiseTypeServer{
             throw new PromiseException(ErrorMap.ERR_CONFIG, e.getMessage(),e);
         }
         
+        PhasedProgressScale scale = (PhasedProgressScale) buildProgressScale(promisableType,100);
+        scale.setPromiseState(PromiseState.FULFILLED);
+        scale.setPromiseStatus(PromiseStatus.COMPLETED);    
+        scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
+        scale.setSeverityScale(new SeverityScale(Severity.HIGH,25));
+        
         Logger.getRootLogger().info("PhasedPromiseServer : invokeWhenComplete : "+new PhasedPromiseMockResponse());
         
         return new PhasedPromiseMockResponse();
@@ -191,6 +199,7 @@ public class PhasedPromiseServer implements PromiseTypeServer{
                 buildProgressScale(promisableType,increment(20.0));
         scale.acceptIfApplicable(requestScale);
         scale.setPromiseState(PromiseState.NEGOTIATED);
+        scale.setPromiseStatus(PromiseStatus.REGISTERED);   
         scale.setPriorityScale(new PriorityScale(Priority.HIGH, 100));
         scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
         isNegotiated = true;

@@ -34,6 +34,18 @@ public final class PhasedProgressScale implements Scale{
     private PriorityScale priorityScale;
     private ScaleOption scaleOption;
     
+    public boolean isValid(){
+        
+        boolean isValid = false;
+        
+        if(subscriptionClientId != null &&  notificationDeliveryType != null){
+            
+            isValid = true;
+        }
+        
+        return isValid;
+    }
+    
     public void setScaleOption(ScaleOption scaleOption) {
         
         this.scaleOption = scaleOption;

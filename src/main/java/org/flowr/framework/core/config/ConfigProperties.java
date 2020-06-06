@@ -36,6 +36,10 @@ public class ConfigProperties extends Properties{
         BOOLEAN
     }
     
+    public ConfigProperties() {
+        
+    }
+    
     public ConfigProperties(String fileName, String filePath) throws ConfigurationException{
         
         System.setProperty(fileName, filePath);

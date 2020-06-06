@@ -106,6 +106,19 @@ public abstract class AbstractServiceBus implements ServiceFramework, ServicePro
             }
         }
         
+        iter = this.catalog.getFrameworkServiceList().iterator();
+        
+        while(iter.hasNext()) {
+            
+            Service svc = iter.next();
+            
+            if(svc.getServiceConfig().getServiceType() == serviceType) {
+                
+                service = svc;
+                break;
+            }
+        }
+        
         return service;
     }
     
@@ -115,6 +128,20 @@ public abstract class AbstractServiceBus implements ServiceFramework, ServicePro
         Service service = null;
         
         Iterator<ServiceFrameworkComponent> iter = this.catalog.getServiceList().iterator();
+        
+        while(iter.hasNext()) {
+            
+            Service svc = iter.next();
+            
+            if(svc.getServiceConfig().getServiceType() == serviceType && 
+                    svc.getServiceConfig().getServiceName().equals(serviceName) ) {
+                
+                service = svc;
+                break;
+            }
+        }
+        
+        iter = this.catalog.getFrameworkServiceList().iterator();
         
         while(iter.hasNext()) {
             

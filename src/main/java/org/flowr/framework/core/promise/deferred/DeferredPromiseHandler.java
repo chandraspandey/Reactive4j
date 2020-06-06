@@ -199,6 +199,8 @@ public class DeferredPromiseHandler implements DefferedPromise, SingleEventPubli
                 PromiseServerState.COMPLETE,PromiseServerStatus.RUNNING, snapshotScale.getSubscriptionClientId(),
                 this.getClass().getName()));
         
+        publishClientEvent(EventType.CLIENT,promiseResponse.getProgressScale());
+        
         if(promiseRequest.isTimelineRequired()){        
             
             promiseResponse.setTimeline(timeline);

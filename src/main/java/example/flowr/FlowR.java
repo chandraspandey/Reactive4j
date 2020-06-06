@@ -18,17 +18,21 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.flowr.framework.api.Provider;
 import org.flowr.framework.api.Provider.ProviderType;
-import org.flowr.framework.concurrent.PromiseCoRoutine;
 import org.flowr.framework.api.ProviderFactory;
-import org.flowr.framework.core.app.AppBuilder.PromiseConfigBuilder;
+import org.flowr.framework.concurrent.PromiseCoRoutine;
 import org.flowr.framework.core.app.AbstractAppEngine;
+import org.flowr.framework.core.app.AppBuilder.PromiseConfigBuilder;
 import org.flowr.framework.core.app.AppNodeBuilder.NodePipelineConfigBuilder;
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
 import org.flowr.framework.core.config.NodeServiceConfiguration;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.NodeManager.NodePipelineConfig;
+import org.flowr.framework.core.node.NodeManager.ProtocolConfig;
 import org.flowr.framework.core.node.io.endpoint.NodePipelineClient;
 import org.flowr.framework.core.node.io.endpoint.NodePipelineServer;
+import org.flowr.framework.core.notification.Notification.ClientNotificationProtocolType;
+import org.flowr.framework.core.notification.Notification.ServerNotificationProtocolType;
 import org.flowr.framework.core.promise.PromiseTypeClient;
 import org.flowr.framework.core.security.Identity.IdentityType;
 import org.flowr.framework.core.security.SecurityBuilder.IdentityBuilder;
@@ -194,6 +198,12 @@ public class FlowR extends AbstractAppEngine{
         Properties serverProperties = new Properties();
         serverProperties.put("id", "server-101");
         
+        ProtocolConfig serverProtocolConfig = new ProtocolConfig(
+                                                ServerNotificationProtocolType.SERVER_INTEGRATION,
+                                                PipelineFunctionType.PIPELINE_SERVER_SERVICE, 
+                                                PipelineFunctionType.PIPELINE_SERVER_SERVICE.name()
+                                              );
+        
         NodePipelineConfig serverConfig = new NodePipelineConfigBuilder()
                                             .withInboundBridgeAs(new ProviderIntegrationBridge())
                                             .withOutboundBridgeAs(new ProviderIntegrationBridge())
@@ -201,10 +211,11 @@ public class FlowR extends AbstractAppEngine{
                                             .withOutboundConfigurationAs(outboundConfiguration)
                                             .withProcessOptionAs(Optional.of(new SimpleEntry<Integer,Integer>(1,1)))
                                             .withPropertiesOptionAs(Optional.of(serverProperties))
+                                            .withProtocolConfigAs(serverProtocolConfig)
                                             .withIdentityConfigAs(
                                                 new IdentityBuilder()
-                                                .withIdentityNameAs(inboundConfiguration.getHostName()+":"+
-                                                        inboundConfiguration.getHostPort())
+                                                .withIdentityNameAs(inboundConfiguration.getServerHostName()+":"+
+                                                        inboundConfiguration.getServerHostPort())
                                                 .withEntitlementsAs(new DefaultEntitlements())
                                                 .withIdentityDataAs(new IdentityData())
                                                 .withIdentityTypeAs(IdentityType.LOGICAL)
@@ -216,6 +227,13 @@ public class FlowR extends AbstractAppEngine{
         clientProperties.put("id", "client-101");
         
         // Flip outboundConfiguration & inboundConfiguration Here, need to have validate method overall 
+        
+        ProtocolConfig clientProtocolConfig = new ProtocolConfig(
+                                                ClientNotificationProtocolType.CLIENT_INTEGRATION,
+                                                PipelineFunctionType.PIPELINE_CLIENT_SERVICE, 
+                                                PipelineFunctionType.PIPELINE_CLIENT_SERVICE.name()
+                                              );
+
        
         NodePipelineConfig clientConfig = new NodePipelineConfigBuilder()
                                             .withInboundBridgeAs(new ProviderIntegrationBridge())
@@ -224,10 +242,11 @@ public class FlowR extends AbstractAppEngine{
                                             .withOutboundConfigurationAs(outboundConfiguration)
                                             .withProcessOptionAs(Optional.of(new SimpleEntry<Integer,Integer>(1,1)))
                                             .withPropertiesOptionAs(Optional.of(clientProperties))
+                                            .withProtocolConfigAs(clientProtocolConfig)
                                             .withIdentityConfigAs(
                                                 new IdentityBuilder()
-                                                .withIdentityNameAs(outboundConfiguration.getHostName()+":"+
-                                                        outboundConfiguration.getHostPort())
+                                                .withIdentityNameAs(outboundConfiguration.getServerHostName()+":"+
+                                                        outboundConfiguration.getServerHostPort())
                                                 .withEntitlementsAs(new DefaultEntitlements())
                                                 .withIdentityDataAs(new IdentityData())
                                                 .withIdentityTypeAs(IdentityType.LOGICAL)
@@ -241,7 +260,7 @@ public class FlowR extends AbstractAppEngine{
     public void runWithNodeOperation() throws ConfigurationException{
         
         SimpleEntry<NodePipelineServer,NodePipelineClient> serverClientConfigEntry = configureApp();
-        Logger.getRootLogger().info("FlowR : testNodeOperation"+serverClientConfigEntry);
+        Logger.getRootLogger().info("FlowR : runWithNodeOperation : "+serverClientConfigEntry);
     }
     
     @Override 
@@ -255,21 +274,21 @@ public class FlowR extends AbstractAppEngine{
 
     public void test() throws ConfigurationException{
         
-        runWithPromise(promiseClient());
+        //runWithPromise(promiseClient());
         
         //runWithPromise(defferedPromiseClient());
-        //runWithPromise(scheduledPromiseClient());
+        runWithPromise(scheduledPromiseClient());
         //runWithPromise(phasedPromiseClient());
 
     }  
      
     private static void printUsage() {
         
-        Logger.getRootLogger().info("USAGE : Reguires FRAMEWORK_CONFIG_PATH as key for loading framework.properties"
+        Logger.getRootLogger().info("USAGE : Reguires FRAMEWORK_CONFIG_PATH as key for loading flowr.xml"
                 + " in classpath settings for running.");
         Logger.getRootLogger().info("USAGE : It can be provided as part of VM of program arguments for execution.");
         Logger.getRootLogger().info("USAGE : -D<property-name>=<value> i.e. "
-                + "-DFRAMEWORK_CONFIG_PATH=<Install_HOME>/../../framework.properties");
+                + "-DFRAMEWORK_CONFIG_PATH=<Install_HOME>/../../flowr.xml");
     }
 
     public static void main(String[] args) {
@@ -282,9 +301,9 @@ public class FlowR extends AbstractAppEngine{
         
             flowr.startup(Optional.empty());
     
-            flowr.test(); 
+            //flowr.test(); 
     
-            //flowr.runWithNodeOperation();
+            flowr.runWithNodeOperation();
     
             //flowr.shutdown(Optional.empty());
         

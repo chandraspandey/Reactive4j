@@ -12,10 +12,17 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.flowr.framework.core.event.Event.EventType;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineType;
+import org.flowr.framework.core.node.io.pipeline.NetworkPipeline;
+
 public class NodeServiceConfiguration extends ServiceConfiguration{
 
     private List<SimpleEntry<String, Integer>> clientEndPointList = new ArrayList<>();
-    private String nodePipelineName;
+    private PipelineConfiguration clientPipelineConfiguration;
+    private PipelineConfiguration serverPipelineConfiguration;
+    private NetworkPipeline clientPipeline;
+    private NetworkPipeline serverPipeline;
     private String nodeChannelName;
 
     @Override
@@ -23,8 +30,7 @@ public class NodeServiceConfiguration extends ServiceConfiguration{
         
         boolean isValid = false;
         
-        if(!clientEndPointList.isEmpty() && nodePipelineName != null &&
-                nodeChannelName != null && super.isValid()){
+        if(clientPipeline != null && serverPipeline != null && nodeChannelName != null && super.isValid()){
             
             isValid = true;
         }
@@ -38,11 +44,7 @@ public class NodeServiceConfiguration extends ServiceConfiguration{
     }
     
     public String getNodePipelineName() {
-        return nodePipelineName;
-    }
-
-    public void setNodePipelineName(String nodePipelineName) {
-        this.nodePipelineName = nodePipelineName;
+        return clientPipeline.getPipelineName();
     }
 
     public String getNodeChannelName() {
@@ -57,10 +59,42 @@ public class NodeServiceConfiguration extends ServiceConfiguration{
         return clientEndPointList;
     }
     
+    public PipelineConfiguration getClientPipelineConfiguration() {
+        return clientPipelineConfiguration;
+    }
+
+    public void setClientPipelineConfiguration(PipelineConfiguration clientPipelineConfiguration) {
+        
+        this.clientPipelineConfiguration = clientPipelineConfiguration;
+        
+        this.clientPipeline = new NetworkPipeline();
+        this.clientPipeline.setEventType(EventType.NETWORK);
+        this.clientPipeline.setPipelineConfiguration(clientPipelineConfiguration);
+        this.clientPipeline.setPipelineName(clientPipelineConfiguration.getPipelineName());
+        this.clientPipeline.setPipelineType(PipelineType.TRANSFER);
+    }
+
+    public PipelineConfiguration getServerPipelineConfiguration() {
+        return serverPipelineConfiguration;
+    }
+
+    public void setServerPipelineConfiguration(PipelineConfiguration serverPipelineConfiguration) {
+        
+        this.serverPipelineConfiguration = serverPipelineConfiguration;
+        
+        this.serverPipeline = new NetworkPipeline();
+        this.serverPipeline.setEventType(EventType.NETWORK);
+        this.serverPipeline.setPipelineConfiguration(serverPipelineConfiguration);
+        this.serverPipeline.setPipelineName(serverPipelineConfiguration.getPipelineName());
+        this.serverPipeline.setPipelineType(PipelineType.TRANSFER);
+    }
+    
     @Override
     public String toString(){
         
-        return "\nServiceConfiguration{"+             
+        return "\n NodeServiceConfiguration{"+             
+                " serverPipeline : "+serverPipeline+
+                " clientPipeline : "+clientPipeline+
                 " clientEndPointList : "+clientEndPointList+
                 " | "+super.toString()+ 
                 "}\n";

@@ -34,29 +34,19 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
     private ServiceConfiguration serviceConfiguration; 
     private boolean keepRunning;
     private Timestamp lastUpdated;
-    private NotificationProtocolType notificationProtocolType;
-    private PipelineFunctionType pipelineFunctionType;
     private Callback<SimpleEntry<ServiceEndPoint, EndPointStatus>> callback;
+    private NotificationProtocolType notificationProtocolType;
+    private PipelineFunctionType pipelineFunctionType;    
     
     public ServiceEndPoint(ServiceConfiguration serviceConfiguration){
         
         this.serviceConfiguration       = serviceConfiguration;
-        this.notificationProtocolType   = serviceConfiguration.getNotificationProtocolType();
-        this.pipelineFunctionType       = serviceConfiguration.getPipelineFunctionType();
     }
     
     @Override
     public EndPointStatus getEndPointStatus() {
 
         return endPointStatus;
-    }
-    
-    public void setNotificationProtocolType(NotificationProtocolType notificationProtocolType){
-        this.notificationProtocolType = notificationProtocolType;
-    }
-    
-    public NotificationProtocolType getNotificationProtocolType(){
-        return this.notificationProtocolType;
     }
 
     @Override
@@ -152,27 +142,36 @@ public class ServiceEndPoint implements EndPoint,RunnableCallback<SimpleEntry<Se
         return this.callback.doCallback(status);
     }
     
-    @Override
+    public void setNotificationProtocolType(NotificationProtocolType notificationProtocolType){
+        this.notificationProtocolType = notificationProtocolType;
+    }
+    
+    public NotificationProtocolType getNotificationProtocolType(){
+        return this.notificationProtocolType;
+    }
+    
     public PipelineFunctionType getPipelineFunctionType() {
         return pipelineFunctionType;
     }
 
-    @Override   
     public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
         this.pipelineFunctionType = pipelineFunctionType;
     }
+
     
     public String toString(){
         
         return "ServiceEndPoint{"+
-                " endPointStatus : "+endPointStatus+    
-                " | notificationProtocolType : "+notificationProtocolType+  
-                " | pipelineFunctionType : "+pipelineFunctionType+  
-                " | isNegotiated : "+isNegotiated+  
-                " | keepRunning : "+keepRunning+                
-                " | lastUpdated : "+lastUpdated+
-                " | serviceConfiguration : "+serviceConfiguration+
+                " endPointStatus                : "+endPointStatus+    
+                " | pipelineFunctionType        : "+pipelineFunctionType+  
+                " | notificationProtocolType    : "+notificationProtocolType+  
+                " | isNegotiated                : "+isNegotiated+  
+                " | keepRunning                 : "+keepRunning+                
+                " | lastUpdated                 : "+lastUpdated+
+                " | serviceConfiguration        : "+serviceConfiguration+
                 "}\n";
 
     }
+
+
 }

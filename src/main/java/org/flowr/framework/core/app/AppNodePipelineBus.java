@@ -53,12 +53,13 @@ public class AppNodePipelineBus extends AbstractNodePipelineManager implements A
                                     .withNetworkMetricSubscriberAs(this)
                                     .withNetworkGroupTypeAs(NetworkGroupType.LOCAL)
                                     .withReuseNetworkGroupAs(true)
+                                    .withProtocolConfigAs(serverConfig.getProtocolConfig())
                                     .build()
                             )
-                            .withInboundHostPortAs(serverConfig.getInboundConfiguration().getHostName(), 
-                                    serverConfig.getInboundConfiguration().getHostPort())
-                            .withOutboundHostPortAs(serverConfig.getOutboundConfiguration().getHostName(), 
-                                    serverConfig.getOutboundConfiguration().getHostPort())
+                            .withInboundHostPortAs(serverConfig.getInboundConfiguration().getServerHostName(), 
+                                    serverConfig.getInboundConfiguration().getServerHostPort())
+                            .withOutboundHostPortAs(serverConfig.getOutboundConfiguration().getServerHostName(), 
+                                    serverConfig.getOutboundConfiguration().getServerHostPort())
                             .build()
                     )
                     .withNetworkIntegrationConfigAs(
@@ -66,7 +67,7 @@ public class AppNodePipelineBus extends AbstractNodePipelineManager implements A
                             .withInboundRequestHandlerAs(
                                     new IntegrationPipelineBuilder()
                                     .withNameAs(
-                                        serverConfig.getInboundConfiguration().getConfigName()+"-"+
+                                        serverConfig.getInboundConfiguration().getNodePipelineName()+"-"+
                                         ConfigurationType.SERVER.name())
                                     .withIntegrationBridgeAs(serverConfig.getInboundBridge())
                                     .withHandlerTypeAs(HandlerType.IO)
@@ -76,7 +77,7 @@ public class AppNodePipelineBus extends AbstractNodePipelineManager implements A
                             .withOutboundResponseHandlerAs(
                                     new IntegrationPipelineBuilder()
                                     .withNameAs(
-                                        serverConfig.getInboundConfiguration().getConfigName()+"-"+
+                                        serverConfig.getInboundConfiguration().getNodePipelineName()+"-"+
                                         ConfigurationType.CLIENT.name())
                                     .withIntegrationBridgeAs(serverConfig.getOutboundBridge())
                                     .withHandlerTypeAs(HandlerType.IO)
@@ -123,14 +124,15 @@ public class AppNodePipelineBus extends AbstractNodePipelineManager implements A
                                .withNetworkMetricSubscriberAs(this)
                                .withNetworkGroupTypeAs(NetworkGroupType.LOCAL)
                                .withReuseNetworkGroupAs(true)
+                               .withProtocolConfigAs(clientConfig.getProtocolConfig())
                                .build()
                        )
                        .withInboundHostPortAs(
-                               clientConfig.getInboundConfiguration().getHostName(), 
-                               clientConfig.getInboundConfiguration().getHostPort()
+                               clientConfig.getInboundConfiguration().getServerHostName(), 
+                               clientConfig.getInboundConfiguration().getServerHostPort()
                        ).withOutboundHostPortAs(
-                               clientConfig.getOutboundConfiguration().getHostName(), 
-                               clientConfig.getOutboundConfiguration().getHostPort())
+                               clientConfig.getOutboundConfiguration().getServerHostName(), 
+                               clientConfig.getOutboundConfiguration().getServerHostPort())
                        .build()
                 )
                .withNetworkIntegrationConfigAs(
@@ -139,7 +141,7 @@ public class AppNodePipelineBus extends AbstractNodePipelineManager implements A
                        .withProtocolPublishTypeAs(ProtocolPublishType.INTERNAL)
                        .withInboundRequestHandlerAs(
                             new IntegrationPipelineBuilder()
-                               .withNameAs(clientConfig.getOutboundConfiguration().getConfigName()+
+                               .withNameAs(clientConfig.getOutboundConfiguration().getNodePipelineName()+
                                        "-"+ConfigurationType.CLIENT.name())
                                .withIOFlowTypeAs(IOFlowType.INBOUND)
                                .withHandlerTypeAs(HandlerType.IO)
@@ -148,7 +150,7 @@ public class AppNodePipelineBus extends AbstractNodePipelineManager implements A
                        )
                        .withOutboundResponseHandlerAs(
                                new IntegrationPipelineBuilder()
-                               .withNameAs(clientConfig.getOutboundConfiguration().getConfigName()+
+                               .withNameAs(clientConfig.getOutboundConfiguration().getNodePipelineName()+
                                        "-"+ConfigurationType.SERVER.name())
                                .withIOFlowTypeAs(IOFlowType.OUTBOUND)
                                .withHandlerTypeAs(HandlerType.IO)

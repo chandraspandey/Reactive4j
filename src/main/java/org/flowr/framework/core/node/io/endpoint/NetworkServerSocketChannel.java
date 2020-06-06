@@ -148,6 +148,8 @@ public class NetworkServerSocketChannel implements FlowSocketChannel{
         ByteBuffer buffer = ByteBuffer.allocateDirect(FrameworkConstants.FRAMEWORK_NETWORK_IO_BUFFER_BLOCK);    
                     
         channelState    = ChannelState.READ_INITIATED;
+        
+        Logger.getRootLogger().info("NetworkServerSocketChannel : readFromPipeline : ");
     
         socketChannel.read(buffer,  channelPublisher,new CompletionHandler<Integer,NetworkProcessor>() {
 
@@ -157,6 +159,8 @@ public class NetworkServerSocketChannel implements FlowSocketChannel{
                 networkPipeline.add(new NetworkByteBuffer(buffer));
                 channelProcessor.onNext(ChannelMetric.readSuccessMetric(networkPipeline));
                 buffer.flip();
+                
+                Logger.getRootLogger().info("NetworkServerSocketChannel : readFromPipeline : completed");
             }
 
             @Override
@@ -168,6 +172,8 @@ public class NetworkServerSocketChannel implements FlowSocketChannel{
         });
         
         channelState    = ChannelState.READ_COMPLETED;
+        
+        Logger.getRootLogger().info("NetworkServerSocketChannel : readFromPipeline : "+buffer);
         
         return buffer;
     }

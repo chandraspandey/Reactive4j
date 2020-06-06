@@ -18,16 +18,16 @@ import org.flowr.framework.core.model.Model.ModelORM;
 
 public class DataSourceConfiguration implements Configuration{
 
-    private String dataSource;  
     private String dataSourceName;  
     private String dataSourceProvider;  
-    private String dialect;
+
     private String jpaVersion;
     private boolean showQuery;
     private boolean formatQuery;
     
     private ConnectionConfiguration connectionConfiguration; 
-    private DataSourceCacheConfiguration cacheConfiguration;
+    private QueryCacheConfiguration queryCacheConfiguration;
+    private CacheConfiguration cacheConfiguration;
 
     private List<Class<? extends ModelORM>> mappingEntityList = new ArrayList<>();
     
@@ -50,10 +50,10 @@ public class DataSourceConfiguration implements Configuration{
     
     private boolean isValidDataSource() {
         
-        return ( dataSource != null && dataSourceName != null && dataSourceProvider != null);
+        return (  dataSourceName != null && dataSourceProvider != null);
     }
     
- 
+
     
     public void addMappingEntityClass(Class<? extends ModelORM> canonicalClassName) {
         
@@ -77,16 +77,6 @@ public class DataSourceConfiguration implements Configuration{
     public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
     }
-
-    public String getDialect() {
-        return dialect;
-    }
-
-    public void setDialect(String dialect) {
-        this.dialect = dialect;
-    }
-
-
 
     public boolean isShowQuery() {
         return showQuery;
@@ -113,14 +103,7 @@ public class DataSourceConfiguration implements Configuration{
         this.dataSourceProvider = dataSourceProvider;
     }
     
-    public String getDataSource() {
-        return dataSource;
-    }
-
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
-    }
-    
+     
     public Map<String, String> getProviderConfig() {
         return persistenceUnitInfoMap;
     }
@@ -149,12 +132,12 @@ public class DataSourceConfiguration implements Configuration{
         this.jpaVersion = jpaVersion;
     }
     
-    public DataSourceCacheConfiguration getCacheConfiguration() {
-        return cacheConfiguration;
+    public QueryCacheConfiguration getQueryCacheConfiguration() {
+        return queryCacheConfiguration;
     }
 
-    public void setCacheConfiguration(DataSourceCacheConfiguration cacheConfiguration) {
-        this.cacheConfiguration = cacheConfiguration;
+    public void setQueryCacheConfiguration(QueryCacheConfiguration cacheConfiguration) {
+        this.queryCacheConfiguration = cacheConfiguration;
     }
     
     public ConnectionConfiguration getConnectionConfiguration() {
@@ -164,24 +147,29 @@ public class DataSourceConfiguration implements Configuration{
     public void setConnectionConfiguration(ConnectionConfiguration connectionConfiguration) {
         this.connectionConfiguration = connectionConfiguration;
     } 
+    
+    public void setCacheConfiguration(CacheConfiguration cacheConfiguration) {
+        this.cacheConfiguration = cacheConfiguration;
+    }
+    
+    public CacheConfiguration getCacheConfiguration() {
+        return cacheConfiguration;
+    }
+
 
     public String toString(){
         
         return "\n DataSourceConfiguration{\n"+
                 " dataSourceName : "+dataSourceName+
-                " | dataSource : "+dataSource+  
                 " | jpaVersion : "+jpaVersion+  
-                " | dialect : "+dialect+    
                 " | dataSourceProvider : "+dataSourceProvider+  
                 " | showQuery : "+showQuery+
                 " | formatQuery : "+formatQuery+
                 " | mappingEntityList : "+mappingEntityList+
                 " | persistenceUnitInfoMap : "+persistenceUnitInfoMap+
+                " | queryCacheConfiguration : "+queryCacheConfiguration+
                 " | cacheConfiguration : "+cacheConfiguration+
                 " | connectionConfiguration : "+connectionConfiguration+
                 "}\n";
     }
-
-   
 }
-

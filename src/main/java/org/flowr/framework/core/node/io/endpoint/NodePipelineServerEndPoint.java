@@ -52,12 +52,11 @@ public class NodePipelineServerEndPoint implements NodeEndPoint {
         return this.lastUpdated;
     }
     
-    @Override
+
     public PipelineFunctionType getPipelineFunctionType() {
         return pipelineFunctionType;
     }
 
-    @Override   
     public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
         this.pipelineFunctionType = pipelineFunctionType;
     }

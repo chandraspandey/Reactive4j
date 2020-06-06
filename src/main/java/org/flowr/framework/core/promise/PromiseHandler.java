@@ -197,6 +197,10 @@ public class PromiseHandler implements Promise,SingleEventPublisher{
                 PromiseServerState.COMPLETE,PromiseServerStatus.RUNNING, snapshotScale.getSubscriptionClientId(),
                 this.getClass().getName()));
         
+        promiseResponse.getProgressScale().setPromiseState(PromiseState.FULFILLED);
+        promiseResponse.getProgressScale().setPromiseStatus(PromiseStatus.COMPLETED);
+        publishClientEvent(EventType.CLIENT,promiseResponse.getProgressScale());
+        
         if(promiseRequest.isTimelineRequired()){        
             
             promiseResponse.setTimeline(timeline);

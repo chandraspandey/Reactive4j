@@ -11,7 +11,7 @@ package example.flowr.promise.client;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
-import org.flowr.framework.core.config.NotificationConfig;
+import org.flowr.framework.core.config.Configuration.NotificationConfig;
 import org.flowr.framework.core.constants.ErrorMap;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.PromiseException;

@@ -18,9 +18,9 @@ import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.promise.Promisable.PromisableType;
-import org.flowr.framework.core.service.FrameworkService;
 import org.flowr.framework.core.promise.RequestScale;
 import org.flowr.framework.core.promise.Scale;
+import org.flowr.framework.core.service.FrameworkService;
 
 public interface ConfigurationService extends FrameworkService{
 

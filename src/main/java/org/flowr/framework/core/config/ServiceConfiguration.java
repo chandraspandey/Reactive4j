@@ -11,21 +11,16 @@ package org.flowr.framework.core.config;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
-
 
 public class ServiceConfiguration implements Configuration{
 
-    private NotificationProtocolType notificationProtocolType;
+    private String serverHostName;
+    private int serverHostPort;
+    private String clientHostName;
+    private int clientHostPort;
     
-    // Value is assigned at run time for creation of pipeline
-    private PipelineFunctionType pipelineFunctionType;  
-    private String configName;
-    private String filePath;
-    private String hostName;
     private String notificationEndPoint;
-    private int hostPort;
+
     private long timeout;
     private TimeUnit timeoutTimeUnit;
     
@@ -34,19 +29,19 @@ public class ServiceConfiguration implements Configuration{
     private long defaultTimeout = 30000;
     private int minThreads;
     private int maxThreads; 
-    private ConfigProperties configAsProperties;
+    private ConfigProperties configAsProperties = new ConfigProperties();
 
     public boolean isValid(){
         
         boolean isValid = false;
         
-        if(configName != null && isValidTimeout() ){
+        if(isValidTimeout() && isValidNotificationConfiguration()){
             
             isValid = true;
         }
         
         if(!isValid) {
-            Logger.getRootLogger().info("isValid() : "+configName +","+ isValidTimeout()+this);
+            Logger.getRootLogger().info("isValid() : "+ isValidTimeout()+this);
         }        
         
         return isValid;
@@ -58,18 +53,55 @@ public class ServiceConfiguration implements Configuration{
                 heartbeatTimeUnit != null);
     }
 
-    public String getHostName() {
-        return hostName;
+   public boolean isValidNotificationConfiguration() {
+
+       return ( notificationEndPoint != null && (isValidServerConfiguration() || isValidClientConfiguration()));
+
+   }
+
+   public boolean isValidServerConfiguration() {
+       
+       return ( serverHostName != null  && serverHostPort > 0 );
+   }
+
+   public boolean isValidClientConfiguration() {
+       
+       return ( clientHostName != null && clientHostPort > 0 );
+   }
+
+   public boolean isValidThreadConfiguration() {
+       
+       return ( minThreads > 0 && maxThreads > 0 );
+   }
+
+    public String getServerHostName() {
+        return serverHostName;
     }
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
+    public void setServerHostName(String hostName) {
+        this.serverHostName = hostName;
     }
     
-    public int getHostPort() {
-        return hostPort;
+    public int getServerHostPort() {
+        return serverHostPort;
     }
-    public void setHostPort(int hostPort) {
-        this.hostPort = hostPort;
+    public void setServerHostPort(int hostPort) {
+        this.serverHostPort = hostPort;
+    }
+    
+    public String getClientHostName() {
+        return clientHostName;
+    }
+
+    public void setClientHostName(String clientHostName) {
+        this.clientHostName = clientHostName;
+    }
+
+    public int getClientHostPort() {
+        return clientHostPort;
+    }
+
+    public void setClientHostPort(int clientHostPort) {
+        this.clientHostPort = clientHostPort;
     }
     public String getNotificationEndPoint() {
         return notificationEndPoint;
@@ -120,22 +152,6 @@ public class ServiceConfiguration implements Configuration{
         }
     }
 
-    public String getConfigName() {
-        return configName;
-    }
-    
-    public void setConfigName(String configName) {
-        this.configName = configName;
-    }
-    
-    public String getFilePath() {
-        return filePath;
-    }   
-    
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-    
     private long convert(long v){
         
         long l = 0;
@@ -188,38 +204,22 @@ public class ServiceConfiguration implements Configuration{
         }
     }
     
-    public NotificationProtocolType getNotificationProtocolType() {
-        return this.notificationProtocolType;
-    }
-    public void setNotificationProtocolType(NotificationProtocolType notificationProtocolType) {
-        
-        this.notificationProtocolType = notificationProtocolType;           
-    }
-    
-    public PipelineFunctionType getPipelineFunctionType() {
-        return pipelineFunctionType;
-    }
-
-    public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
-        this.pipelineFunctionType = pipelineFunctionType;
-    }
-
     public String toString(){
         
         return "\n ServiceConfiguration{"+
-                " configName : "+configName+    
-                " | notificationProtocolType : "+notificationProtocolType+  
-                " | pipelineFunctionType : "+pipelineFunctionType+  
-                " | filePath : "+filePath+  
-                " | hostName : "+hostName+  
-                " | hostPort : "+hostPort+
-                " | notificationEndPoint : "+notificationEndPoint+              
-                " | timeout : "+timeout+
-                " | timeoutTimeUnit : "+timeoutTimeUnit+
-                " | heartbeatInterval : "+heartbeatInterval+
-                " | heartbeatTimeUnit : "+heartbeatTimeUnit+
-                " | minThreads : "+minThreads+
-                " | maxThreads : "+maxThreads+
+                " | serverHostName              : "+serverHostName+  
+                " | serverHostPort              : "+serverHostPort+
+                " | clientHostName              : "+clientHostName+  
+                " | clientHostPort              : "+clientHostPort+                    
+                " | notificationEndPoint        : "+notificationEndPoint+              
+                " | timeout                     : "+timeout+
+                " | timeoutTimeUnit             : "+timeoutTimeUnit+
+                " | heartbeatInterval           : "+heartbeatInterval+
+                " | heartbeatTimeUnit           : "+heartbeatTimeUnit+
+                " | minThreads                  : "+minThreads+
+                " | maxThreads                  : "+maxThreads+
                 "}\n";
     }
+
+
 }

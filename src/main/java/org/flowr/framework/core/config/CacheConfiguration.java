@@ -30,14 +30,22 @@ public class CacheConfiguration implements Configuration{
     
     public boolean isValid(){
         
-        boolean isValid = false;
-        
-        if( elementMaxMemory > 0 && elementTimeToLive > 0 ){
-            
-            isValid = true;
-        }
-        
-        return isValid;
+        return (hasValidSettings() && hasValidExpiryConfiguration() && hasValidElementConfiguration());
+    }
+    
+    public boolean hasValidSettings(){
+
+        return (cacheName != null && cacheStrategy != null && cachePath != null && cachePolicy != null);
+    }
+    
+    public boolean hasValidExpiryConfiguration(){
+
+        return (elementTimeToLive > 0 && elementTimeToIdle > 0 && elementExpiryDisk > 0 );
+    }
+    
+    public boolean hasValidElementConfiguration(){
+
+        return (elementMaxMemory > 0 && elementMaxHeap > 0 && elementMaxDisk > 0 );
     }
 
     public String getCacheName() {
@@ -181,6 +189,5 @@ public class CacheConfiguration implements Configuration{
                 " | elementExpiryDisk : "+elementExpiryDisk+    
                 "}\n";
     }
-
 
 }

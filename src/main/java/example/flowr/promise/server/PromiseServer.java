@@ -96,8 +96,8 @@ public class PromiseServer implements PromiseTypeServer{
     public ProgressScale invokeForProgress(String acknowledgmentIdentifier) throws PromiseException {
         
         ProgressScale scale = buildProgressScale(promisableType,increment(20.0));
-        scale.setPromiseState(PromiseState.FULFILLED);
-        scale.setPromiseStatus(PromiseStatus.COMPLETED);    
+        scale.setPromiseState(PromiseState.ASSURED);
+        scale.setPromiseStatus(PromiseStatus.PROCESSING);      
         scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
         scale.setSeverityScale(new SeverityScale(Severity.HIGH,25));
             
@@ -137,6 +137,12 @@ public class PromiseServer implements PromiseTypeServer{
             throw new PromiseException(ErrorMap.ERR_CONFIG, e.getMessage(),e);
         }
          
+        ProgressScale scale = buildProgressScale(promisableType,100);
+        scale.setPromiseState(PromiseState.FULFILLED);
+        scale.setPromiseStatus(PromiseStatus.COMPLETED);    
+        scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
+        scale.setSeverityScale(new SeverityScale(Severity.HIGH,25));
+        
         Logger.getRootLogger().info("PromiseServer : invokeWhenComplete : "+new PromiseMockResponse());
         
         return  new PromiseMockResponse();
@@ -144,7 +150,10 @@ public class PromiseServer implements PromiseTypeServer{
 
     private static double increment(double now) {
 
-        artificialNow+=now;
+        if((artificialNow+now) <= 100) {
+            artificialNow+=now;
+        }
+        
         return artificialNow;
     }
 
@@ -160,6 +169,7 @@ public class PromiseServer implements PromiseTypeServer{
         ProgressScale scale = buildProgressScale(promisableType,increment(20.0));
         scale.acceptIfApplicable(requestScale);
         scale.setPromiseState(PromiseState.NEGOTIATED);
+        scale.setPromiseStatus(PromiseStatus.REGISTERED);  
         scale.setPriorityScale(new PriorityScale(Priority.HIGH,75));
         scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
         isNegotiated = true;

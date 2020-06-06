@@ -15,6 +15,13 @@ public class ConnectionConfiguration implements Configuration{
     private String connectionPassword;
     private String connectionURL;
     private int connectionPoolSize;
+    private String dialect;
+    private String dbName;
+    
+    public boolean isValid() {
+        
+        return (isValidConnectionConfiguration() && isValidCredential() && isValidDatabaseDialect() );
+    }
 
    public boolean isValidConnectionConfiguration() {
         
@@ -26,6 +33,11 @@ public class ConnectionConfiguration implements Configuration{
         return (connectionUserName != null && connectionPassword != null && connectionURL != null );
     }
     
+    public boolean isValidDatabaseDialect() {
+        
+        return (dbName != null && dialect != null );
+    }
+    
     public String getConnectionDriverClass() {
         return connectionDriverClass;
     }
@@ -34,7 +46,7 @@ public class ConnectionConfiguration implements Configuration{
         this.connectionDriverClass = connectionDriverClass;
     }
     
- 
+
     public String getConnectionUserName() {
         return connectionUserName;
     }
@@ -68,6 +80,22 @@ public class ConnectionConfiguration implements Configuration{
         this.connectionPoolSize = connectionPoolSize;
     }
     
+    public String getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
+    }
+    
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+    
     public String toString(){
         
         return "\n ConnectionConfiguration{\n"+
@@ -75,6 +103,8 @@ public class ConnectionConfiguration implements Configuration{
                 " | connectionUserName : "+connectionUserName+  
                 " | connectionURL : "+connectionURL+
                 " | connectionPoolSize : "+connectionPoolSize+    
+                " | dialect : "+dialect+ 
+                " | dbName : "+dbName+ 
                 "}\n";
     }
 }

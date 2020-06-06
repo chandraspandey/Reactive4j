@@ -58,17 +58,7 @@ public class NodePipelineClientEndPoint implements NodeEndPoint{
         
         return null;
     }
-    
-    @Override
-    public PipelineFunctionType getPipelineFunctionType() {
-        return pipelineFunctionType;
-    }
-
-    @Override   
-    public void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType) {
-        this.pipelineFunctionType = pipelineFunctionType;
-    }
-    
+     
     public void setEndPointStatus(EndPointStatus endPointStatus) {
         this.endPointStatus = endPointStatus;
     }

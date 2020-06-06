@@ -8,6 +8,10 @@
 
 package org.flowr.framework.core.notification;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.flowr.framework.core.model.Model;
 
 public interface Notification extends Model{
@@ -49,7 +53,20 @@ public interface Notification extends Model{
         SERVER_ALL,
         SERVER_INFORMATION,
         SERVER_INTEGRATION,
-        SERVER_HEALTHCHECK
+        SERVER_HEALTHCHECK;
+        
+        public static Collection<String> toCollection() {
+            
+            Collection<String> collection = new ArrayList<>();
+            
+            Arrays.asList(values()).forEach(
+                   
+                  (ServerNotificationProtocolType c) ->  collection.add(c.name())
+                  
+            );
+            
+            return collection;
+        }
     }
     
     /**
@@ -70,7 +87,20 @@ public interface Notification extends Model{
         CLIENT_INTEGRATION_PIPELINE_PROMISE_STAGE_EVENT,
         CLIENT_INTEGRATION_PIPELINE_PROMISE_STREAM_EVENT,
         CLIENT_HEALTHCHECK,
-        CLIENT_SERVICE
+        CLIENT_SERVICE;
+        
+        public static Collection<String> toCollection() {
+            
+            Collection<String> collection = new ArrayList<>();
+            
+            Arrays.asList(values()).forEach(
+                   
+                  (ClientNotificationProtocolType c) ->  collection.add(c.name())
+                  
+            );
+            
+            return collection;
+        }
     }
     
     /* INTERNAL : The delivery of notification marked for internal consumption

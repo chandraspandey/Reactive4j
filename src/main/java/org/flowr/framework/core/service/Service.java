@@ -19,6 +19,7 @@ public interface Service extends ServiceLifecycle{
         NOTIFICATION,
         PROMISE,
         HEALTH,
+        PROMISE_DEFFERED,
         PROMISE_PHASED,
         PROMISE_SCHEDULED,
         PROMISE_STAGE,

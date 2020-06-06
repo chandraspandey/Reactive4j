@@ -19,7 +19,7 @@ public class StreamPromiseServiceImpl extends AbstractService implements StreamP
     private ServiceConfig serviceConfig     = new ServiceConfig(
                                                 true,
                                                 ServiceUnit.SINGELTON,
-                                                FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_STREAM,
+                                                FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_STREAM,
                                                 ServiceType.PROMISE_STREAM,
                                                 ServiceStatus.UNUSED,
                                                 this.getClass().getSimpleName(),

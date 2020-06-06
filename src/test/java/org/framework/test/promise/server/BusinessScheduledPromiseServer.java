@@ -1,0 +1,263 @@
+
+/**
+ * 
+ * 
+ * @author Chandra Shekhar Pandey
+ * Copyright � 2018 by Chandra Shekhar Pandey. All rights reserved.
+ */
+
+package org.framework.test.promise.server;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.UUID;
+
+import org.apache.log4j.Logger;
+import org.flowr.framework.core.constants.ErrorMap;
+import org.flowr.framework.core.exception.ConfigurationException;
+import org.flowr.framework.core.exception.PromiseException;
+import org.flowr.framework.core.model.Model.RequestModel;
+import org.flowr.framework.core.promise.Promisable.PromisableType;
+import org.flowr.framework.core.promise.Promise.PromiseState;
+import org.flowr.framework.core.promise.Promise.PromiseStatus;
+import org.flowr.framework.core.promise.Promise.ScheduleStatus;
+import org.flowr.framework.core.promise.PromiseTypeServer;
+import org.flowr.framework.core.promise.RequestScale;
+import org.flowr.framework.core.promise.Scale;
+import org.flowr.framework.core.promise.Scale.Priority;
+import org.flowr.framework.core.promise.Scale.PriorityScale;
+import org.flowr.framework.core.promise.Scale.Severity;
+import org.flowr.framework.core.promise.Scale.SeverityScale;
+import org.flowr.framework.core.promise.scheduled.ScheduledProgressScale;
+import org.flowr.framework.core.service.ServiceFramework;
+import org.flowr.framework.core.target.ReactiveTarget;
+import org.framework.fixture.mock.BusinessMock.BusinessScheduledPromiseMockResponse;
+import org.framework.test.ConfigurableTest.PromiseCallback.CallbackHandler;
+import org.framework.test.ConfigurableTest.PromiseCallback.CallbackType;
+
+public final class BusinessScheduledPromiseServer implements PromiseTypeServer{
+
+    private static double artificialNow;
+    private UUID acknowledgementId                          = UUID.randomUUID();    
+    private long artificialDelay                            = 3000; 
+    private String serverIdentifier                         = PromiseTypeServer.serverIdentifier();
+    private ScheduledProgressScale scheduledProgressScale;
+    
+    private Timestamp scheduledTimestamp;   
+    private boolean isDeferred;
+    private PromisableType promisableType                   = PromisableType.PROMISE_SCHEDULED;
+    private boolean isNegotiated;
+    private static CallbackHandler callbackHandler;
+    
+    public static void setCallbackHandler(CallbackHandler handler) {
+        
+        callbackHandler = handler;
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : setCallbackHandler : "+callbackHandler);
+    }
+    
+    @Override
+    public Scale buildProgressScale(PromisableType promisableType,double now) throws PromiseException{
+        
+        if(scheduledProgressScale == null){
+        
+            try {
+                scheduledProgressScale = (ScheduledProgressScale) ServiceFramework.getInstance().getCatalog()
+                                            .getConfigurationService().getProgressScale(
+                                                    promisableType, serverIdentifier);     
+                
+            } catch (ConfigurationException e) {
+                
+                Logger.getRootLogger().error(e);
+                Thread.currentThread().interrupt();
+                throw new PromiseException(ErrorMap.ERR_CONFIG, e.getMessage(),e);
+            } 
+        }
+        
+        scheduledProgressScale.getScaleOption().setNow(now);
+        
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : "+scheduledProgressScale);
+        
+        return scheduledProgressScale;
+    }
+    
+    @Override
+    public PromisableType getPromisableType() {
+        return promisableType;
+    }
+    
+    @Override
+    public Scale invokeAndReturn(RequestModel request, RequestScale requestScale) throws PromiseException {
+        
+        ScheduledProgressScale scale = (ScheduledProgressScale) buildProgressScale(promisableType,
+                                        increment(20.0));
+        
+        scale.setPromiseState(PromiseState.ACKNOWLEDGED);
+        scale.setPromiseStatus(PromiseStatus.INITIATED);
+        scale.setAcknowledgmentIdentifier(acknowledgementId.toString());
+        scale.setScheduleStatus(ScheduleStatus.REGISTERED);
+        scale.setSubscriptionClientId(requestScale.getSubscriptionClientId());
+        scale.setPriorityScale(new PriorityScale(Priority.HIGH, 75));
+        scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
+        
+        if(scheduledTimestamp == null){
+            
+            scheduledTimestamp = new Timestamp(Instant.now().toEpochMilli());
+            scale.setScheduledTimestamp(scheduledTimestamp);
+        }
+                
+        try {
+            Thread.sleep(artificialDelay);
+        } catch (InterruptedException e) {
+            Logger.getRootLogger().error(e);
+            Thread.currentThread().interrupt();  
+            throw new PromiseException(ErrorMap.ERR_CONFIG,e.getMessage(),e);
+        }
+        
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : invokeAndReturn : "+scale);
+        
+        callbackHandler.doCallback(
+                new SimpleEntry<>(CallbackType.SERVER,scale)
+        );
+        
+        return scale;
+    }
+    
+    // Defer by 30 milli seconds
+    public Timestamp defer() {
+                
+        
+        Timestamp deferredTimestamp = new Timestamp(Instant.now().toEpochMilli()+artificialDelay);
+        
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : Execution Deffered for  : "+deferredTimestamp);
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : Expected time lag  : "+
+                (deferredTimestamp.getTime()-scheduledTimestamp.getTime()));
+        
+        return deferredTimestamp;   
+        
+    }
+    
+    private static double increment(double now) {
+
+        if((artificialNow+now) <= 100) {
+            artificialNow+=now;
+        }
+        return artificialNow;
+    }
+
+    @Override
+    public Scale invokeForProgress(String acknowledgmentIdentifier) throws PromiseException {
+
+        ScheduledProgressScale scale = (ScheduledProgressScale) buildProgressScale(promisableType,increment(20.0)); 
+
+        scale.setPriorityScale(new PriorityScale(Priority.LOW, 25));
+        scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
+        scale.setPromiseState(PromiseState.ASSURED);
+        scale.setPromiseStatus(PromiseStatus.PROCESSING);    
+        scale.setAcknowledgmentIdentifier(acknowledgmentIdentifier);
+
+        
+        if(isDeferred()){            
+
+            if(artificialNow < 100) {
+                
+                scale.setScheduleStatus(ScheduleStatus.DEFFERED); 
+                
+                callbackHandler.doCallback( new SimpleEntry<>(CallbackType.SERVER,scale));
+            }else{
+                scale.setPromiseState(PromiseState.FULFILLED);
+                scale.setPromiseStatus(PromiseStatus.COMPLETED);    
+                scale.setScheduleStatus(ScheduleStatus.OVER); 
+                scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
+                scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
+                isDeferred = false;  
+            }
+        }else {
+                
+            scale.setScheduleStatus(ScheduleStatus.SCHEDULED); 
+            scale.setDeferredTimestamp(defer());
+            setDeferred(true);
+            Logger.getRootLogger().info("BusinessScheduledPromiseServer : Execution scheduledTimestamp at  : "+
+                    scheduledTimestamp); 
+            
+            callbackHandler.doCallback(
+                    new SimpleEntry<>(CallbackType.SERVER,scale)
+            );
+         }
+        
+        
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : invokeForProgress : "+scale);
+        
+
+        
+        return scale;
+    }
+
+    @Override
+    public String getServerIdentifier(){
+    
+        return this.serverIdentifier;
+    }
+    
+
+    @Override
+    public BusinessScheduledPromiseMockResponse invokeWhenComplete(String acknowledgmentIdentifier) 
+            throws PromiseException{
+                 
+        ScheduledProgressScale scale = (ScheduledProgressScale) buildProgressScale(promisableType,100);
+        scale.setPromiseState(PromiseState.FULFILLED);
+        scale.setPromiseStatus(PromiseStatus.COMPLETED);    
+        scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
+        scale.setSeverityScale(new SeverityScale(Severity.HIGH,25));
+        scale.setScheduleStatus(ScheduleStatus.OVER);   
+        
+        callbackHandler.doCallback(
+                new SimpleEntry<>(CallbackType.SERVER,scale)
+        );
+        
+        Logger.getRootLogger().info("BusinessScheduledPromiseServer : invokeWhenComplete : "+
+                new BusinessScheduledPromiseMockResponse());
+        
+        return  new BusinessScheduledPromiseMockResponse();
+    }
+
+    @Override
+    public ReactiveTarget getReactiveTarget() {
+        return this;
+    }
+
+    
+    @Override
+    public Scale negotiate(RequestScale requestScale) throws PromiseException {
+        
+        ScheduledProgressScale scale = (ScheduledProgressScale) 
+                buildProgressScale(promisableType,increment(20.0));
+        scale.acceptIfApplicable(requestScale);
+        scale.setPromiseState(PromiseState.NEGOTIATED);        
+        scale.setPromiseStatus(PromiseStatus.REGISTERED);
+        scale.setPriorityScale(new PriorityScale(Priority.HIGH, 75));
+        scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
+        isNegotiated = true;
+        
+        callbackHandler.doCallback(
+                new SimpleEntry<>(CallbackType.SERVER,scale)
+        );
+        
+        return scale;
+    }
+
+    @Override
+    public boolean isNegotiated() {
+        
+        return isNegotiated;
+    }
+
+    public boolean isDeferred() {
+        return isDeferred;
+    }
+
+    public void setDeferred(boolean isDeferred) {
+        this.isDeferred = isDeferred;
+    }
+
+}

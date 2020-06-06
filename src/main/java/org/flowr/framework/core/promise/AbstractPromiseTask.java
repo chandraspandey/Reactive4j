@@ -10,10 +10,12 @@ package org.flowr.framework.core.promise;
 import org.apache.log4j.Logger;
 import org.flowr.framework.core.constants.ErrorMap;
 import org.flowr.framework.core.exception.PromiseException;
+import org.flowr.framework.core.model.Model.ResponseModel;
 import org.flowr.framework.core.node.Autonomic;
 import org.flowr.framework.core.node.ha.FailsafeCallable;
 import org.flowr.framework.core.promise.Promise.PromiseState;
 import org.flowr.framework.core.promise.Promise.PromiseStatus;
+import org.flowr.framework.core.promise.Scale.ScaleOption;
 import org.flowr.framework.core.promise.deferred.ProgressScale;
 import org.flowr.framework.core.promise.phase.PhasedProgressScale;
 import org.flowr.framework.core.promise.scheduled.ScheduledProgressScale;
@@ -36,6 +38,61 @@ public abstract class AbstractPromiseTask implements FailsafeCallable<PromiseRes
     @Override
     public Scale negotiate(RequestScale requestScale) throws PromiseException {
         return reactiveTarget.negotiate(requestScale);
+    }
+    
+    protected void processPromise(PromiseRequest promiseRequest, PromiseResponse promiseResponse,Scale scale,
+        String identifier) throws PromiseException{
+        
+        PromiseState promiseState = scale.getPromiseState();
+        
+        processForPromiseCompletion(promiseResponse,scale,identifier);
+        
+        // Mark the acknowledgement id for identification for multi client/request scenario
+        promiseResponse.setAcknowledgmentIdentifier(scale.getAcknowledgmentIdentifier());
+                
+        if(promiseState == PromiseState.ERROR) {
+            promiseResponse.setStatus(ResponseCode.SERVER_ERROR.getResponseStatus());
+        }else if( promiseState == PromiseState.TIMEOUT ) {
+            promiseResponse.setStatus(ResponseCode.TIMEOUT.getResponseStatus());
+        }else {
+            promiseResponse.setStatus(ResponseCode.OK.getResponseStatus());
+        }
+        
+        // Mark the NotificationDeliveryType as per request
+        scale.setNotificationDeliveryType(promiseRequest.getPromiseContext().getRequestScale()
+                .getNotificationDeliveryType());
+        
+        // Mark the client id for identification for multi client scenario
+        scale.setSubscriptionClientId(promiseRequest.getPromiseContext().getRequestScale()
+                .getSubscriptionClientId());
+        promiseResponse.setProgressScale(scale);
+    }
+
+    protected boolean processForPromiseCompletion(PromiseResponse promiseResponse,Scale scale,
+            String identifier) throws PromiseException{
+        
+        boolean isCompletionProcessed = false;
+        
+        PromiseState promiseState = scale.getPromiseState();
+        
+        if(scale.getPromiseStatus() == PromiseStatus.COMPLETED &&
+              (  
+                      promiseState == PromiseState.FULFILLED ||
+                      promiseState == PromiseState.ERROR ||
+                      promiseState == PromiseState.TIMEOUT
+              )
+        ){
+            
+            promiseResponse.setResponse((ResponseModel) getReactiveTarget().invokeWhenComplete(identifier));
+            
+            scale.getScaleOption().setNow(100.00);              
+            isCompletionProcessed = true;
+        }
+ 
+        Logger.getRootLogger().info("AbstractPromiseTask : processForPromiseCompletion : isCompletionProcessed : "+
+                isCompletionProcessed+", \n scale :  "+scale);
+        
+        return isCompletionProcessed;
     }
 
     
@@ -86,8 +143,12 @@ public abstract class AbstractPromiseTask implements FailsafeCallable<PromiseRes
                 break;        
         }        
         
+        ScaleOption  scaleOption = new ScaleOption();
+        scale.setScaleOption(scaleOption);
+        
         scale.acceptIfApplicable(promiseRequest.getPromiseContext().getRequestScale());        
         scale.setPromiseStatus(PromiseStatus.COMPLETED);
+        scale.setPromiseState(PromiseState.FULFILLED);
         scale.getScaleOption().setNow(100.00);          
         
         // Mark the NotificationDeliveryType as per request

@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE config [
+   <!ELEMENT config (clientConfiguration,serverConfiguration,nodeConfiguration+,dataSourceConfig,policyConfig)>
+   	
+   	<!ELEMENT clientConfiguration (requestScaleConfig,serviceConfig,pipelineConfig)>
+   
+	   <!ELEMENT requestScaleConfig (min,max,progressUnit,notificationDeliveryType)>
+	   <!ELEMENT min (#PCDATA)>
+	   <!ELEMENT max (#PCDATA)>
+	   <!ELEMENT notificationDeliveryType (#PCDATA)>
+	   <!ELEMENT progressUnit (unitValue,timeUnit,interval)>
+	   <!ELEMENT unitValue (#PCDATA)>
+	   <!ELEMENT timeUnit (#PCDATA)>
+	   <!ELEMENT interval (#PCDATA)>
+	   
+	   <!ELEMENT serviceConfig (notificationEndpoint,serverHostName,serverHostPort,clientHostName?,clientHostPort?,
+	   	minThreads,maxThreads,policy)>
+	   <!ELEMENT notificationEndpoint (#PCDATA)>
+	   <!ELEMENT serverHostName (#PCDATA)>
+	   <!ELEMENT serverHostPort (#PCDATA)>
+	   <!ELEMENT clientHostName (#PCDATA)>
+	   <!ELEMENT clientHostPort (#PCDATA)>
+	   <!ELEMENT minThreads (#PCDATA)>
+	   <!ELEMENT maxThreads (#PCDATA)>	   
+	   
+	   <!ELEMENT policyName (#PCDATA)>
+	   <!ELEMENT retry (count,interval,timeUnit)>
+	   <!ELEMENT timeout (period,timeUnit)>
+	   <!ELEMENT heartbeat (interval,timeUnit)>
+	   <!ELEMENT ha (retry,timeout,heartbeat)>
+	   <!ATTLIST policy id ID #REQUIRED>
+	   <!ELEMENT policy (policyName?,ha)>
+	   <!ELEMENT policyConfig (policy+)>
+	   
+	   
+	   <!ELEMENT pipelineConfig (pipeline+)>
+	   <!ELEMENT pipeline (name,maxElements,pipelinePolicy,dispatch,endPoint)>
+	   <!ELEMENT maxElements (#PCDATA)>
+	   <!ELEMENT pipelinePolicy (#PCDATA)>
+	   <!ELEMENT dispatch (mode,size)>
+	   <!ELEMENT endPoint (name,functionType,notificationProtocolType,url)>
+	   <!ELEMENT name (#PCDATA)>
+	   <!ELEMENT functionType (#PCDATA)>
+	   <!ELEMENT type (#PCDATA)>
+	   <!ELEMENT url (#PCDATA)>	    
+	   
+	   
+	   <!ELEMENT serverConfiguration (progressScaleConfig,serviceConfig,pipelineConfig)>	   
+	   <!ELEMENT progressScaleConfig (min,max,progressUnit,notificationDeliveryType)>
+	   
+	   <!ELEMENT nodeConfiguration (inboundConfig,outboundConfig)>
+	   <!ELEMENT clientPipeline (pipeline)>
+	   <!ELEMENT serverPipeline (pipeline)>
+	   <!ELEMENT inboundConfig (serviceConfig,channelName,clientPipeline,serverPipeline)>
+	   <!ELEMENT outboundConfig (serviceConfig,channelName,clientPipeline,serverPipeline)>
+	   <!ELEMENT channelName (#PCDATA)>
+
+	   <!ELEMENT dataSourceConfig (name,jpaVersion,provider,connection,query,mapping,cache)>
+	   
+	   <!ELEMENT jpaVersion (#PCDATA)>
+	   <!ELEMENT provider (#PCDATA)>
+	   
+	   <!ELEMENT connection (dialect,driver,db,userName,url,cred,poolSize)>
+	   <!ELEMENT dialect (#PCDATA)>
+	   <!ELEMENT driver (#PCDATA)>
+	   <!ELEMENT db (#PCDATA)>
+	   <!ELEMENT userName (#PCDATA)>
+	   <!ELEMENT cred (#PCDATA)>
+	   <!ELEMENT poolSize (#PCDATA)>
+	   
+	   <!ELEMENT query (show,format,queryCache)>
+	   <!ELEMENT show (#PCDATA)>
+	   <!ELEMENT format (#PCDATA)>
+	   
+	   <!ELEMENT queryCache (enabled,defaultCache,external,provider,providerFactory,timestamp)>
+	   <!ELEMENT enabled (#PCDATA)>	 
+	   <!ELEMENT defaultCache (#PCDATA)>	
+	   <!ELEMENT external (#PCDATA)>	
+	   <!ELEMENT providerFactory (#PCDATA)>	
+	   <!ELEMENT timestamp (#PCDATA)>	  
+	   
+	   <!ELEMENT mapping (entity)>
+	   <!ELEMENT entity (#PCDATA)>	 
+	   
+	   <!ELEMENT cachePolicy (#PCDATA)>
+	   <!ELEMENT cache (name,eternal,strategy,cachePolicy,statistics,path,disk,cacheElements)>
+	   <!ELEMENT eternal (#PCDATA)>	 
+	   <!ELEMENT strategy (#PCDATA)>	
+	   <!ELEMENT statistics (#PCDATA)>	
+	   <!ELEMENT path (#PCDATA)>
+	   
+	   <!ELEMENT disk (overflow,spool,max)>
+	   <!ELEMENT overflow (#PCDATA)>
+	   <!ELEMENT spool (#PCDATA)>
+	   <!ELEMENT cacheElements (memoryMax,heapMax,diskMax,diskExpiry,timeToIdle,timeToLive)>
+	   <!ELEMENT memoryMax (#PCDATA)>
+	   <!ELEMENT heapMax (#PCDATA)>
+	   <!ELEMENT diskMax (#PCDATA)>
+	   <!ELEMENT diskExpiry (#PCDATA)>
+	   <!ELEMENT timeToIdle (#PCDATA)>
+	   <!ELEMENT timeToLive (#PCDATA)>
+]>
+ <config>
+ 	<clientConfiguration>
+	 	<requestScaleConfig>
+	 		<min>0</min>
+	 		<max>100</max>
+			<progressUnit>
+				<unitValue>10</unitValue>
+				<timeUnit>SECONDS</timeUnit>
+				<interval>1000</interval>
+			</progressUnit>	
+			<!-- Refer NotificationDeliveryType Enum for configuration-->
+			<notificationDeliveryType>EXTERNAL</notificationDeliveryType>
+		</requestScaleConfig>	
+		
+		<serviceConfig>
+			<notificationEndpoint>10.10.10.10</notificationEndpoint>
+			<serverHostName>dns.notification.client</serverHostName>
+			<serverHostPort>9090</serverHostPort>
+			<minThreads>1</minThreads>
+			<maxThreads>5</maxThreads>
+			<policy id="ClientPolicy">
+				<policyName>HA</policyName>
+				<ha>
+					<retry>
+						<count>1</count>
+						<interval>1000</interval>
+						<timeUnit>SECONDS</timeUnit>
+					</retry>
+					<timeout>
+						<period>200</period>
+						<timeUnit>SECONDS</timeUnit>
+					</timeout>
+					<heartbeat>
+						<interval>300000</interval>
+						<timeUnit>SECONDS</timeUnit>
+					</heartbeat>
+				</ha>
+			</policy>			
+		</serviceConfig>
+		<pipelineConfig>
+			<pipeline>
+				<name>ClientEmailPipeline</name>
+				<maxElements>10000</maxElements>
+				<!-- Refer PipelinePolicy Enum for configuration-->
+				<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+				<dispatch>
+					<mode>BATCH</mode>
+					<size>1</size>
+				</dispatch>
+				<endPoint>
+					<name>EmailApp-1</name>
+					<!-- Refer PipelineFunctionType Enum for configuration-->
+					<functionType>PIPELINE_PROMISE_EVENT</functionType>
+					<!-- Refer ClientNotificationProtocolType Enum for configuration-->
+					<notificationProtocolType>CLIENT_INTEGRATION</notificationProtocolType>
+					<url>http://localhost:8080/connect.do</url>
+				</endPoint>	
+			</pipeline>
+			<pipeline>
+				<name>ClientSmsPipeline</name>
+				<maxElements>10000</maxElements>
+				<!-- Refer PipelinePolicy Enum for configuration-->
+				<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+				<dispatch>
+					<mode>BATCH</mode>
+					<size>1</size>
+				</dispatch>
+				<endPoint>
+					<name>SmsApp-1</name>
+					<!-- Refer PipelineFunctionType Enum for configuration-->
+					<functionType>PIPELINE_PROMISE_EVENT</functionType>
+					<!-- Refer ClientNotificationProtocolType Enum for configuration-->
+					<notificationProtocolType>CLIENT_INTEGRATION</notificationProtocolType>
+					<url>http://localhost:8081/connect.do</url>
+				</endPoint>	
+			</pipeline>
+			<pipeline>
+				<name>ClientNotificationPipeline</name>
+				<maxElements>10000</maxElements>				
+				<!-- Refer PipelinePolicy Enum for configuration-->
+				<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+				<dispatch>
+					<mode>BATCH</mode>
+					<size>1</size>
+				</dispatch>
+				<endPoint>
+					<name>NotificationApp-1</name>
+					<!-- Refer PipelineFunctionType Enum for configuration-->
+					<functionType>PIPELINE_PROMISE_EVENT</functionType>
+					<!-- Refer ClientNotificationProtocolType Enum for configuration-->
+					<notificationProtocolType>CLIENT_INTEGRATION</notificationProtocolType>
+					<url>http://localhost:8082/connect.do</url>
+				</endPoint>	
+			</pipeline>
+		</pipelineConfig>
+	</clientConfiguration>	
+	<serverConfiguration>
+	 	<progressScaleConfig>
+	 		<min>0</min>
+	 		<max>100</max>
+			<progressUnit>
+				<unitValue>10</unitValue>
+				<timeUnit>SECONDS</timeUnit>
+				<interval>1000</interval>
+			</progressUnit>	
+			<!-- Refer NotificationDeliveryType Enum for configuration-->
+			<notificationDeliveryType>EXTERNAL</notificationDeliveryType>
+		</progressScaleConfig>	
+		<serviceConfig>
+			<notificationEndpoint>localhost</notificationEndpoint>
+			<serverHostName>dns.notification.server</serverHostName>
+			<serverHostPort>8080</serverHostPort>
+			<minThreads>1</minThreads>
+			<maxThreads>5</maxThreads>
+			<policy id="ServerPolicy">
+				<policyName>HA</policyName>
+				<ha>
+					<retry>
+						<count>1</count>
+						<interval>1000</interval>
+						<timeUnit>SECONDS</timeUnit>
+					</retry>
+					<timeout>
+						<period>200</period>
+						<timeUnit>SECONDS</timeUnit>
+					</timeout>
+					<heartbeat>
+						<interval>300000</interval>
+						<timeUnit>SECONDS</timeUnit>
+					</heartbeat>
+				</ha>
+			</policy>
+		</serviceConfig>
+		<pipelineConfig>
+			<pipeline>
+				<name>ServerPipeline</name>
+				<maxElements>10000</maxElements>
+				<!-- Refer PipelinePolicy Enum for configuration-->
+				<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+				<dispatch>
+					<mode>BATCH</mode>
+					<size>1</size>
+				</dispatch>
+				<endPoint>
+					<name>HNT-Node-1</name>
+					<!-- Refer PipelineFunctionType Enum for configuration-->
+					<functionType>PIPELINE_PROMISE_EVENT</functionType>
+					<!-- Refer ServerNotificationProtocolType Enum for configuration-->
+					<notificationProtocolType>SERVER_INTEGRATION</notificationProtocolType>
+					<url>http://localhost:6060/connect.do</url>
+				</endPoint>	
+			</pipeline>
+			<pipeline>
+				<name>ServerSmsPipeline</name>
+				<maxElements>10000</maxElements>
+				<!-- Refer PipelinePolicy Enum for configuration-->
+				<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+				<dispatch>
+					<mode>BATCH</mode>
+					<size>1</size>
+				</dispatch>
+				<endPoint>
+					<name>HNT-Node-2</name>
+					<!-- Refer PipelineFunctionType Enum for configuration-->
+					<functionType>PIPELINE_PROMISE_EVENT</functionType>
+					<!-- Refer ServerNotificationProtocolType Enum for configuration-->
+					<notificationProtocolType>SERVER_INTEGRATION</notificationProtocolType>
+					<url>http://localhost:7070/connect.do</url>
+				</endPoint>	
+			</pipeline>
+		</pipelineConfig>
+	</serverConfiguration>	
+	<nodeConfiguration>
+
+	 	<inboundConfig>
+	 		<serviceConfig>
+				<notificationEndpoint>localhost</notificationEndpoint>
+				<!-- dns.notification.server -->
+				<serverHostName>localhost</serverHostName>
+				<serverHostPort>6060</serverHostPort>
+				<clientHostName>localhost</clientHostName>
+				<clientHostPort>7070</clientHostPort>
+				<minThreads>1</minThreads>
+				<maxThreads>5</maxThreads>
+				<policy id="NodeInboundPolicy">
+					<policyName>HA</policyName>
+					<ha>
+						<retry>
+							<count>1</count>
+							<interval>1000</interval>
+							<timeUnit>SECONDS</timeUnit>
+						</retry>
+						<timeout>
+							<period>200</period>
+							<timeUnit>SECONDS</timeUnit>
+						</timeout>
+						<heartbeat>
+							<interval>300000</interval>
+							<timeUnit>SECONDS</timeUnit>
+						</heartbeat>
+					</ha>
+				</policy>
+			</serviceConfig>
+	 		<channelName>CH55-TRANSMITTER</channelName>
+	 		<clientPipeline>
+				<pipeline>
+					<name>Node-MediaServer-IN</name>				
+					<maxElements>10000</maxElements>
+					<!-- Refer PipelinePolicy Enum for configuration-->
+					<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+					<dispatch>
+						<mode>BATCH</mode>
+						<size>1</size>
+					</dispatch>
+					<endPoint>
+						<name>Media-In-Node-1</name>
+						<!-- Refer PipelineFunctionType Enum for configuration-->
+						<functionType>PIPELINE_SERVER_SERVICE</functionType>
+						<!-- Refer ClientNotificationProtocolType Enum for configuration-->
+						<notificationProtocolType>CLIENT_INTEGRATION</notificationProtocolType>
+						<url>http://localhost:5050/connect.do</url>
+					</endPoint>	
+				</pipeline>
+			</clientPipeline>	
+			<serverPipeline>
+				<pipeline>
+					<name>Node-MediaClient-IN</name>
+					<maxElements>10000</maxElements>
+					<!-- Refer PipelinePolicy Enum for configuration-->
+					<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+					<dispatch>
+						<mode>BATCH</mode>
+						<size>1</size>
+					</dispatch>
+					<endPoint>
+						<name>Media-In-Node-2</name>
+						<!-- Refer PipelineFunctionType Enum for configuration-->
+						<functionType>PIPELINE_SERVER_SERVICE</functionType>
+						<!-- Refer ServerNotificationProtocolType Enum for configuration-->
+						<notificationProtocolType>SERVER_INTEGRATION</notificationProtocolType>
+						<url>http://localhost:7070/connect.do</url>
+					</endPoint>	
+				</pipeline>
+			</serverPipeline>
+		</inboundConfig>
+		<outboundConfig>
+			<serviceConfig>
+				<notificationEndpoint>localhost</notificationEndpoint>
+				<!-- dns.notification.server -->
+				<serverHostName>localhost</serverHostName>
+				<serverHostPort>6061</serverHostPort>
+				<clientHostName>localhost</clientHostName>
+				<clientHostPort>7071</clientHostPort>
+				<minThreads>1</minThreads>
+				<maxThreads>5</maxThreads>
+				<policy id="NodeOutboundPolicy">
+					<policyName>HA</policyName>
+					<ha>
+						<retry>
+							<count>1</count>
+							<interval>1000</interval>
+							<timeUnit>SECONDS</timeUnit>
+						</retry>
+						<timeout>
+							<period>200</period>
+							<timeUnit>SECONDS</timeUnit>
+						</timeout>
+						<heartbeat>
+							<interval>300000</interval>
+							<timeUnit>SECONDS</timeUnit>
+						</heartbeat>
+					</ha>
+				</policy>
+			</serviceConfig>
+			<channelName>CH55-RECIEVER</channelName>
+			<clientPipeline>
+				<pipeline>
+					<name>ServerPipeline</name>
+					<maxElements>10000</maxElements>
+					<!-- Refer PipelinePolicy Enum for configuration-->
+					<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+					<dispatch>
+						<mode>BATCH</mode>
+						<size>1</size>
+					</dispatch>
+					<endPoint>
+						<name>Media-Out-Node-1</name>
+						<!-- Refer PipelineFunctionType Enum for configuration-->
+						<functionType>PIPELINE_PROMISE_EVENT</functionType>
+						<!-- Refer ClientNotificationProtocolType Enum for configuration-->
+						<notificationProtocolType>CLIENT_INTEGRATION</notificationProtocolType>
+						<url>http://localhost:6060/connect.do</url>
+					</endPoint>	
+				</pipeline>
+			</clientPipeline>
+			<serverPipeline>
+				<pipeline>
+					<name>Node-MediaClient-OUT</name>
+					<maxElements>10000</maxElements>
+					<!-- Refer PipelinePolicy Enum for configuration-->
+					<pipelinePolicy>DISPOSE_AFTER_PROCESSING</pipelinePolicy>
+					<dispatch>
+						<mode>BATCH</mode>
+						<size>1</size>
+					</dispatch>
+					<endPoint>
+						<name>Media-Out-Node-2</name>
+						<!-- Refer PipelineFunctionType Enum for configuration-->
+						<functionType>PIPELINE_SERVER_SERVICE</functionType>
+						<!-- Refer ServerNotificationProtocolType Enum for configuration-->
+						<notificationProtocolType>SERVER_INTEGRATION</notificationProtocolType>
+						<url>http://localhost:6061/connect.do</url>
+					</endPoint>	
+				</pipeline>
+			</serverPipeline>
+		</outboundConfig>
+	</nodeConfiguration>	
+	
+	<dataSourceConfig>
+		<name>HIBERNATE</name>
+		<jpaVersion>2.1</jpaVersion>
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<connection>
+			<dialect>org.hibernate.dialect.MySQLDialect</dialect>			
+			<driver>com.mysql.cj.jdbc.Driver</driver>
+			<db>example</db>
+			<userName>root</userName>
+			<url>jdbc:mysql://localhost:3306/datasource</url>
+			<cred></cred>
+			<poolSize>2</poolSize>
+		</connection>
+		<query>
+			<show>true</show>
+			<format>true</format>
+			<queryCache>
+				<enabled>true</enabled>
+				<defaultCache>org.hibernate.cache.internal.StandardQueryCache</defaultCache>
+				<external>true</external>
+				<provider>org.hibernate.cache.EhCacheProvider</provider>
+				<providerFactory>org.hibernate.cache.ehcache.EhCacheRegionFactory</providerFactory>
+				<timestamp>org.hibernate.cache.spi.UpdateTimestampsCache</timestamp>
+			</queryCache>
+		</query>
+		<mapping>
+			<entity>example.flowr.node.User</entity>
+		</mapping>
+		<cache>
+			<name>DEFAULT</name>
+			<eternal>DEFAULT</eternal>
+			<strategy>LOCALTEMPSWAP</strategy>
+			<cachePolicy>LRU</cachePolicy>
+			<statistics>true</statistics>
+			<path>java.io.tmpdir/ehcache</path>
+			<disk>
+				<overflow>false</overflow>
+				<spool>30</spool>
+				<max>100</max>
+			</disk>
+			<cacheElements>
+				<memoryMax>5000</memoryMax>
+				<heapMax>10000</heapMax>
+				<diskMax>10000000</diskMax>
+				<diskExpiry>120</diskExpiry>
+				<timeToIdle>120</timeToIdle>
+				<timeToLive>120</timeToLive>
+			</cacheElements>
+		</cache>
+	</dataSourceConfig>
+	<policyConfig>
+		<policy id="P1">
+			<policyName>HA</policyName>
+			<ha>
+				<retry>
+					<count>1</count>
+					<interval>1000</interval>
+					<timeUnit>SECONDS</timeUnit>
+				</retry>
+				<timeout>
+					<period>200</period>
+					<timeUnit>SECONDS</timeUnit>
+				</timeout>
+				<heartbeat>
+					<interval>300000</interval>
+					<timeUnit>SECONDS</timeUnit>
+				</heartbeat>
+			</ha>
+		</policy>
+	</policyConfig>
+</config>	
+

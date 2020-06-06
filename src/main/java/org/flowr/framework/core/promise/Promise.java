@@ -50,8 +50,9 @@ public interface Promise {
     }
     
     /**
-     * INITIATED    : When the processing has been started sucessfully & the state
-     * has been changed to ASSURED.  *  
+     * REGISTERED   : When the promise is registered, corresponds to  PromiseState of NEGOTIATED
+     * INITIATED    : When the processing has been started successfully & the state
+     * has been changed to ASSURED.    
      * PROCESSING   : The client can make an assumption that promise would held 
      * good & the state as FULFILLED should happen in normal course.
      * COMPLETED    : The client can make definitive conclusion of processing
@@ -59,6 +60,7 @@ public interface Promise {
      * ERROR state is valid existence. 
      */
     public enum PromiseStatus{
+        REGISTERED,
         INITIATED,
         PROCESSING,
         COMPLETED

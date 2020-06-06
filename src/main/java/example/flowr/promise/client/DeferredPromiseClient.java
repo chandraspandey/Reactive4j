@@ -11,7 +11,7 @@ package example.flowr.promise.client;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
-import org.flowr.framework.core.config.NotificationConfig;
+import org.flowr.framework.core.config.Configuration.NotificationConfig;
 import org.flowr.framework.core.constants.ErrorMap;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.exception.PromiseException;
@@ -87,8 +87,11 @@ public class DeferredPromiseClient extends AbstractPromiseClient  {
                 
                 PromiseResponse promiseResponse = processProvider.service(promiseRequest);
                 
+                Logger.getRootLogger().info("PromiseClient : promiseResponse = "+promiseResponse);  
+                
                 response = promiseResponse.getResponse();
                 
+                                  
                 Logger.getRootLogger().info("PromiseClient : Response = "+response);    
             
                 setSessionTimeline(Optional.of(promiseResponse.getTimeline()));

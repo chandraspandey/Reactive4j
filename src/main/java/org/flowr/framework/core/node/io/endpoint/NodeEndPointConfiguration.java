@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import org.flowr.framework.core.node.NodeManager.NetworkIntegrationConfig;
 import org.flowr.framework.core.node.NodeManager.NodeEndPointConfig;
+import org.flowr.framework.core.node.NodeManager.ProtocolConfig;
 import org.flowr.framework.core.node.io.flow.handler.IntegrationPipelineHandler;
 import org.flowr.framework.core.node.io.flow.handler.IntegrationProcessRequest;
 import org.flowr.framework.core.node.io.flow.handler.IntegrationProcessResponse;
@@ -19,10 +20,9 @@ import org.flowr.framework.core.node.io.flow.metric.NetworkMetric;
 import org.flowr.framework.core.node.io.flow.metric.NetworkMetric.ProtocolPublishType;
 import org.flowr.framework.core.node.io.network.NetworkGroup.NetworkGroupType;
 
-
-
 public class NodeEndPointConfiguration {
 
+    private ProtocolConfig  protocolConfig;
     private String inboundPipelineName; 
     private String inboundPipelineHostName; 
     private int inboundPipelinePortNumber;
@@ -42,6 +42,7 @@ public class NodeEndPointConfiguration {
             NetworkIntegrationConfig networkIntegrationConfig
     ) {
 
+        this.protocolConfig             = nodeEndPointConfig.getNetworkPipelineConfig().getProtocolConfig();
         this.inboundPipelineName        = nodeEndPointConfig.getInboundPipelineName();
         this.inboundPipelineHostName    = nodeEndPointConfig.getInboundPipelineHostName();
         this.inboundPipelinePortNumber  = nodeEndPointConfig.getInboundPipelinePortNumber();
@@ -113,6 +114,10 @@ public class NodeEndPointConfiguration {
     public SimpleEntry<IntegrationPipelineHandler, IntegrationPipelineHandler> getPipelineHandler() {
         return pipelineHandler;
     }
+    
+    public ProtocolConfig getProtocolConfig() {
+        return protocolConfig;
+    }
 
     public String toString(){
         
@@ -130,9 +135,12 @@ public class NodeEndPointConfiguration {
                 " |\n handleAs : "+handleAs+                
                 " |\n pipelineMetricSubscriber : "+pipelineMetricSubscriber+
                 " |\n pipelineHandler : "+pipelineHandler+
+                " |\n protocolConfig : "+protocolConfig+
                 "\n}";
 
     }
+
+
 
     
 }

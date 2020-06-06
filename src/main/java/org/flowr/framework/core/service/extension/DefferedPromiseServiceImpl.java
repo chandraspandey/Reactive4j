@@ -25,8 +25,8 @@ public class DefferedPromiseServiceImpl extends AbstractService implements Deffe
     private ServiceConfig serviceConfig                 = new ServiceConfig(
                                                             true,
                                                             ServiceUnit.SINGELTON,
-                                                            FrameworkConstants.FRAMEWORK_PIPELINE_PROMISE_DEFFERED,
-                                                            ServiceType.PROMISE,
+                                                            FrameworkConstants.FRAMEWORK_SERVICE_PROMISE_DEFFERED,
+                                                            ServiceType.PROMISE_DEFFERED,
                                                             ServiceStatus.UNUSED,
                                                             this.getClass().getSimpleName(),
                                                             DependencyType.MANDATORY

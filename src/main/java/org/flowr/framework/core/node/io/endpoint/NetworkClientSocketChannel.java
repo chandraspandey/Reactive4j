@@ -259,6 +259,33 @@ public class NetworkClientSocketChannel implements FlowSocketChannel{
         }   
     
     }
+    
+    public void writeToPipeline(NetworkByteBuffer buffer) {
+        
+        if(buffer != null ) {
+            
+            channelState    = ChannelState.WRITE_INITIATED;
+                
+            socketChannel.write(buffer.getByteBuffer(), channelPublisher,
+                    new CompletionHandler<Integer,NetworkProcessor>() {
+    
+                @Override
+                public void completed(Integer arg0, NetworkProcessor channelProcessor) {
+                    channelProcessor.onNext(ChannelMetric.writeSuccessMetric(networkPipeline));
+                }
+    
+                @Override
+                public void failed(Throwable throwable, NetworkProcessor channelProcessor) {
+                    channelProcessor.onError(throwable);
+                    channelProcessor.onNext(ChannelMetric.writeErrorMetric(networkPipeline));
+                }
+                
+            });
+            
+            channelState    = ChannelState.WRITE_COMPLETED;         
+        }   
+    
+    }
 
     @Override
     public ChannelFlowType getChannelFlowType() {

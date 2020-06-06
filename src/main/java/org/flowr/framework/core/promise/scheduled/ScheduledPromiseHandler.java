@@ -241,6 +241,9 @@ public class ScheduledPromiseHandler implements ScheduledPromise{
                 PromiseServerState.COMPLETE,PromiseServerStatus.RUNNING, snapshotScale.getSubscriptionClientId(),
                 this.getClass().getName()));
         
+
+        publishClientEvent(EventType.CLIENT,promiseResponse.getProgressScale());
+        
         if(promiseRequest.isTimelineRequired()){        
             
             promiseResponse.setTimeline(timeline);

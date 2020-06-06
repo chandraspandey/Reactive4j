@@ -23,8 +23,8 @@ import org.flowr.framework.core.config.DataSourceConfiguration;
 import org.flowr.framework.core.config.NodeServiceConfiguration;
 import org.flowr.framework.core.config.PipelineConfiguration;
 import org.flowr.framework.core.config.ServiceConfiguration;
-import org.flowr.framework.core.constants.ErrorMap;
 import org.flowr.framework.core.constants.Constant.FrameworkConstants;
+import org.flowr.framework.core.constants.ErrorMap;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.promise.Promisable.PromisableType;
 import org.flowr.framework.core.promise.RequestScale;
@@ -88,13 +88,13 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
     @Override
     public CacheConfiguration getCacheConfiguration() throws ConfigurationException{
         
-        return Configuration.getCacheConfiguration(ConfigurationType.NODE.name(), configPath);
+        return Configuration.getCacheConfiguration();
     }
     
     @Override
     public List<DataSourceConfiguration> getDataSourceConfiguration() throws ConfigurationException{
         
-        return Configuration.getDataSourceConfiguration(ConfigurationType.NODE.name(), configPath);
+        return Configuration.getDataSourceConfiguration();
     }
     
     
@@ -120,11 +120,7 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
     @Override
     public RequestScale getRequestScale(String clientSubscriptionId) throws ConfigurationException {
 
-        RequestScale  requestScale = Configuration.getRequestScale(
-                                        clientSubscriptionId,
-                                        ConfigurationType.CLIENT.name(),
-                                        configPath
-                                    );  
+        RequestScale  requestScale = Configuration.getRequestScale(clientSubscriptionId);  
 
         requestScale.setSubscriptionClientId(clientSubscriptionId);
         
@@ -139,12 +135,10 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
             
             switch(iter.next()) {
                 case CLIENT:
-                    clientConfiguration = Configuration.getClientConfiguration(ConfigurationType.CLIENT.name(),
-                                            configPath);
+                    clientConfiguration = Configuration.getClientConfiguration();
                     break;
                 case SERVER:
-                    serverConfiguration = Configuration.getServerConfiguration(ConfigurationType.SERVER.name(),
-                                            configPath);
+                    serverConfiguration = Configuration.getServerConfiguration();
                     break;
                 default:
                     break;      
@@ -204,12 +198,10 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
             
     
                 case INTEGRATION_INBOUND:{
-                    nodeInboundConfiguration = Configuration.getNodeInboundEndPointConfiguration(
-                            ConfigurationType.INTEGRATION_INBOUND.name(), configPath);
+                    nodeInboundConfiguration = Configuration.getNodeInboundEndPointConfiguration();
                     break;          
                 }case INTEGRATION_OUTBOUND:{
-                    nodeOutboundConfiguration = Configuration.getNodeOutboundEndPointConfiguration(
-                            ConfigurationType.INTEGRATION_OUTBOUND.name(), configPath);
+                    nodeOutboundConfiguration = Configuration.getNodeOutboundEndPointConfiguration();
                     break;          
                 }default:{
                     break;
@@ -226,12 +218,10 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
             
             switch(iter.next()) {
                 case CLIENT:
-                    clientPipelineConfiguration = Configuration.getClientPipelineConfiguration(
-                            ConfigurationType.CLIENT.name(), configPath);
+                    clientPipelineConfiguration = Configuration.getClientPipelineConfiguration();
                     break;
                 case SERVER:
-                    serverPipelineConfiguration = Configuration.getServerPipelineConfiguration(
-                            ConfigurationType.SERVER.name(), configPath);
+                    serverPipelineConfiguration = Configuration.getServerPipelineConfiguration();
                     break;
                 default:
                     break;      
@@ -246,21 +236,21 @@ public class ConfigurationServiceImpl extends AbstractService implements Configu
         switch(promisableType) {
 
             case PROMISE:
-                scale =  Configuration.getProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID, configPath);  
+                scale =  Configuration.getProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);  
                 break;
             case PROMISE_DEFFERED:
-                scale =  Configuration.getProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID,configPath);              
+                scale =  Configuration.getDefferedProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);              
                 break;
             case PROMISE_PHASED:
-                scale = Configuration.getPhasedProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID,configPath);
+                scale = Configuration.getPhasedProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);
                 break;
             case PROMISE_SCHEDULED:    
-                scale =  Configuration.getScheduledProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID,configPath);
+                scale =  Configuration.getScheduledProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);
                 break;
             case PROMISE_STAGED:
                 break;
             default:
-                scale = Configuration.getProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID,configPath);  
+                scale = Configuration.getProgressScale(FRAMEWORK_SUBSCRIPTION_DEFAULT_ID);  
                 break;        
         }
     

@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.config.NodeServiceConfiguration;
+import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.io.endpoint.NodePipelineClient;
 import org.flowr.framework.core.node.io.endpoint.NodePipelineServer;
@@ -25,6 +26,7 @@ import org.flowr.framework.core.node.io.flow.handler.MetricHandler;
 import org.flowr.framework.core.node.io.flow.metric.NetworkMetric;
 import org.flowr.framework.core.node.io.network.NetworkGroup.NetworkGroupType;
 import org.flowr.framework.core.node.io.pipeline.NetworkBus;
+import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 import org.flowr.framework.core.security.Identity.IdentityConfig;
 import org.flowr.framework.core.service.Service.ServiceStatus;
 
@@ -54,7 +56,7 @@ public interface NodeManager extends MetricHandler{
     ServiceStatus closeNetworkBusExecutor(Optional<Properties> configProperties) throws ConfigurationException;
     
     public class NodeEndPointConfig{
-        
+
         private String inboundPipelineName;
         private String inboundPipelineHostName;
         private int inboundPipelinePortNumber; 
@@ -71,7 +73,7 @@ public interface NodeManager extends MetricHandler{
                 String inboundPipelineHostName, int inboundPipelinePortNumber, 
                 String outboundPipelineHostName, int outboundPipelinePortNumber,
                 String channelName) {
-            
+
             this.networkPipelineConfig      = networkPipelineConfig;
             this.inboundPipelineName        = networkPipelineConfig.inboundConfiguration.getNodePipelineName();
             this.outboundPipelineName       = networkPipelineConfig.outboundConfiguration.getNodePipelineName();
@@ -138,7 +140,43 @@ public interface NodeManager extends MetricHandler{
                     + ", pipelineMetricSubscriber=" + pipelineMetricSubscriber + ", channelName=" + channelName
                     + ", networkGroupType=" + networkGroupType + ", reuseNetworkGroup=" + reuseNetworkGroup + "]";
         }
+
+
         
+    }
+    
+    public class ProtocolConfig{
+        
+        private NotificationProtocolType notificationProtocolType;
+        private PipelineFunctionType pipelineFunctionType;  
+        private String configName;
+        
+        public ProtocolConfig(NotificationProtocolType notificationProtocolType,
+                PipelineFunctionType pipelineFunctionType, String configName) {
+            super();
+            this.notificationProtocolType = notificationProtocolType;
+            this.pipelineFunctionType = pipelineFunctionType;
+            this.configName = configName;
+        }
+
+        public NotificationProtocolType getNotificationProtocolType() {
+            return notificationProtocolType;
+        }
+
+        public PipelineFunctionType getPipelineFunctionType() {
+            return pipelineFunctionType;
+        }
+
+        public String getConfigName() {
+            return configName;
+        }
+
+        @Override
+        public String toString() {
+            return "ProtocolConfig [notificationProtocolType=" + notificationProtocolType + ", pipelineFunctionType="
+                    + pipelineFunctionType + ", configName=" + configName + "]";
+        }
+
     }
     
     public class NetworkPipelineConfig{
@@ -148,6 +186,7 @@ public interface NodeManager extends MetricHandler{
         private NetworkGroupType networkGroupType;
         private NetworkMetric pipelineMetricSubscriber;
         private boolean reuseNetworkGroup;
+        private ProtocolConfig protocolConfig;
         
         public NetworkPipelineConfig() {
             
@@ -155,13 +194,14 @@ public interface NodeManager extends MetricHandler{
         
         public NetworkPipelineConfig(NodeServiceConfiguration inboundConfiguration,
             NodeServiceConfiguration outboundConfiguration, NetworkGroupType networkGroupType,
-            NetworkMetric pipelineMetricSubscriber, boolean reuseNetworkGroup) {
+            NetworkMetric pipelineMetricSubscriber, boolean reuseNetworkGroup, ProtocolConfig protocolConfig) {
             
             this.inboundConfiguration       = inboundConfiguration;
             this.outboundConfiguration      = outboundConfiguration;
             this.networkGroupType           = networkGroupType;
             this.pipelineMetricSubscriber   = pipelineMetricSubscriber;
             this.reuseNetworkGroup          = reuseNetworkGroup;
+            this.protocolConfig             = protocolConfig;
         }
 
         public NodeServiceConfiguration getInboundConfiguration() {
@@ -203,14 +243,20 @@ public interface NodeManager extends MetricHandler{
         public void setReuseNetworkGroup(boolean reuseNetworkGroup) {
             this.reuseNetworkGroup = reuseNetworkGroup;
         }   
+        
+        public ProtocolConfig getProtocolConfig() {
+            return protocolConfig;
+        }
 
         @Override
         public String toString() {
             return "NetworkPipelineConfig [inboundConfiguration=" + inboundConfiguration + ", outboundConfiguration="
                     + outboundConfiguration + ", outboundNetworkGroupType=" + networkGroupType
                     + ", pipelineMetricSubscriber=" + pipelineMetricSubscriber + ", reuseNetworkGroup="
-                    + reuseNetworkGroup + "]";
+                    + reuseNetworkGroup + ", protocolConfig="+ protocolConfig + "]";
         }
+
+
 
     
     }
@@ -281,6 +327,7 @@ public interface NodeManager extends MetricHandler{
         private Optional<SimpleEntry<Integer,Integer>> processMinMaxLimitOption = Optional.empty();
         private Optional<Properties> propertiesOption  = Optional.empty();  
         private IdentityConfig  identityConfig;
+        private ProtocolConfig protocolConfig; 
          
         public NodePipelineConfig(
                 NodeServiceConfiguration inboundConfiguration,
@@ -289,7 +336,8 @@ public interface NodeManager extends MetricHandler{
                 IntegrationBridge outboundBridge, 
                 Optional<SimpleEntry<Integer, Integer>> processMinMaxLimitOption,
                 Optional<Properties> propertiesOption,
-                IdentityConfig  identityConfig
+                IdentityConfig  identityConfig,
+                ProtocolConfig protocolConfig
         ) {
             this.inboundConfiguration       = inboundConfiguration;
             this.outboundConfiguration      = outboundConfiguration;
@@ -298,6 +346,7 @@ public interface NodeManager extends MetricHandler{
             this.processMinMaxLimitOption   = processMinMaxLimitOption;
             this.propertiesOption           = propertiesOption;
             this.identityConfig             = identityConfig;
+            this.protocolConfig             = protocolConfig;
         }
 
         public NodeServiceConfiguration getInboundConfiguration() {
@@ -328,6 +377,10 @@ public interface NodeManager extends MetricHandler{
             return identityConfig;
         }
         
+        public ProtocolConfig getProtocolConfig() {
+            return protocolConfig;
+        }
+        
         public String toString(){
             
             return "\n NodePipelineConfig{"+
@@ -338,9 +391,9 @@ public interface NodeManager extends MetricHandler{
                     "\n | processMinMaxLimit    : "+processMinMaxLimitOption+ 
                     "\n | properties            : "+propertiesOption+ 
                     "\n | identityConfig        : "+identityConfig+ 
+                    "\n | protocolConfig        : "+protocolConfig+ 
                     "\n}\n";
         }
-
 
     }
 

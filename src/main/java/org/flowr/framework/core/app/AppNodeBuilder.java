@@ -32,6 +32,7 @@ import org.flowr.framework.core.node.NodeManager.NetworkIntegrationConfig;
 import org.flowr.framework.core.node.NodeManager.NetworkPipelineConfig;
 import org.flowr.framework.core.node.NodeManager.NodeEndPointConfig;
 import org.flowr.framework.core.node.NodeManager.NodePipelineConfig;
+import org.flowr.framework.core.node.NodeManager.ProtocolConfig;
 import org.flowr.framework.core.node.io.endpoint.NodeEndPointConfiguration;
 import org.flowr.framework.core.node.io.endpoint.NodePipelineClient;
 import org.flowr.framework.core.node.io.endpoint.NodePipelineClientEndPoint;
@@ -277,11 +278,18 @@ public interface AppNodeBuilder extends Builder{
     
    public class NetworkPipelineConfigBuilder implements Builder{
      
+        private ProtocolConfig  protocolConfig;
         private NodeServiceConfiguration inboundConfiguration;
         private NodeServiceConfiguration outboundConfiguration;
         private NetworkGroupType networkGroupType;
         private NetworkMetric pipelineMetricSubscriber;
         private boolean reuseNetworkGroup;    
+        
+        public NetworkPipelineConfigBuilder withProtocolConfigAs(ProtocolConfig  protocolConfig) {
+            
+            this.protocolConfig = protocolConfig;
+            return this;
+        }
         
         public NetworkPipelineConfigBuilder withInboundConfigurationAs(NodeServiceConfiguration 
                 inboundConfiguration) {
@@ -319,14 +327,15 @@ public interface AppNodeBuilder extends Builder{
             
             NetworkPipelineConfig config;
             
-            if(inboundConfiguration != null  && outboundConfiguration != null) {
+            if(inboundConfiguration != null  && outboundConfiguration != null && protocolConfig != null) {
             
                 config = new NetworkPipelineConfig(             
                             inboundConfiguration,
                             outboundConfiguration,
                             networkGroupType,
                             pipelineMetricSubscriber,
-                            reuseNetworkGroup
+                            reuseNetworkGroup,
+                            protocolConfig
                         );                
             }else {
                 
@@ -520,7 +529,14 @@ public interface AppNodeBuilder extends Builder{
     private Optional<SimpleEntry<Integer,Integer>> processMinMaxLimitOption = Optional.empty();
     private Optional<Properties> propertiesOption  = Optional.empty();      
     private IdentityConfig  identityConfig;
+    private ProtocolConfig protocolConfig; 
       
+    public NodePipelineConfigBuilder withProtocolConfigAs(ProtocolConfig protocolConfig) {
+        
+        this.protocolConfig = protocolConfig;
+        return this;
+    }  
+    
     public NodePipelineConfigBuilder withInboundConfigurationAs(NodeServiceConfiguration inboundConfiguration) {
     
         this.inboundConfiguration = inboundConfiguration;
@@ -568,7 +584,8 @@ public interface AppNodeBuilder extends Builder{
         
         NodePipelineConfig config;
         
-        if(inboundConfiguration != null  && outboundConfiguration != null && identityConfig != null) {
+        if(inboundConfiguration != null  && outboundConfiguration != null && identityConfig != null &&
+                protocolConfig != null ) {
         
             config = new NodePipelineConfig(
                         inboundConfiguration,
@@ -577,7 +594,8 @@ public interface AppNodeBuilder extends Builder{
                         outboundBridge,
                         processMinMaxLimitOption,
                         propertiesOption,
-                        identityConfig
+                        identityConfig,
+                        protocolConfig
                     );    
         }else {
             
@@ -590,7 +608,7 @@ public interface AppNodeBuilder extends Builder{
             sb.append("\n processMinMaxLimitOption  : "+processMinMaxLimitOption);
             sb.append("\n propertiesOption          : "+propertiesOption);
             sb.append("\n identityConfig            : "+identityConfig);
-            
+            sb.append("\n protocolConfig            : "+protocolConfig);
             
             Logger.getRootLogger().error(sb.toString());
             throw new ConfigurationException(
@@ -681,9 +699,9 @@ public interface AppNodeBuilder extends Builder{
                 nodePipelineServerEndPoint.setEndPointStatus(EndPointStatus.REACHABLE);
                 nodePipelineServerEndPoint.setLastUpdated(Timestamp.from(Instant.now()));
                 nodePipelineServerEndPoint.setNotificationProtocolType(
-                        inboundServiceConfiguration.getNotificationProtocolType());
+                        nodeEndPointServerConfiguration.getProtocolConfig().getNotificationProtocolType());
                 nodePipelineServerEndPoint.setPipelineFunctionType(
-                        inboundServiceConfiguration.getPipelineFunctionType());
+                        nodeEndPointServerConfiguration.getProtocolConfig().getPipelineFunctionType());
                 
                 nodePipelineServer = (NodePipelineServer) nodePipelineServerEndPoint.configureAsPipeline(
                         nodeEndPointServerConfiguration);
@@ -761,14 +779,14 @@ public interface AppNodeBuilder extends Builder{
                 SimpleEntry<String, Integer> inboundHostPortConfig  = entry.getKey();
                 SimpleEntry<String, Integer> outboundHostPortConfig = entry.getValue();   
             
-                nodeEndPointConfig.getNetworkPipelineConfig().getInboundConfiguration().setHostName(
+                nodeEndPointConfig.getNetworkPipelineConfig().getInboundConfiguration().setServerHostName(
                         inboundHostPortConfig.getKey());
-                nodeEndPointConfig.getNetworkPipelineConfig().getInboundConfiguration().setHostPort(
+                nodeEndPointConfig.getNetworkPipelineConfig().getInboundConfiguration().setServerHostPort(
                         inboundHostPortConfig.getValue());
 
-                nodeEndPointConfig.getNetworkPipelineConfig().getOutboundConfiguration().setHostName(
+                nodeEndPointConfig.getNetworkPipelineConfig().getOutboundConfiguration().setServerHostName(
                         outboundHostPortConfig.getKey());
-                nodeEndPointConfig.getNetworkPipelineConfig().getOutboundConfiguration().setHostPort(
+                nodeEndPointConfig.getNetworkPipelineConfig().getOutboundConfiguration().setServerHostPort(
                         outboundHostPortConfig.getValue());
 
                 nodeEndPointConfigurationList.add(
@@ -802,10 +820,8 @@ public interface AppNodeBuilder extends Builder{
                     clientEndPoint.setEndPointStatus(EndPointStatus.REACHABLE);
                     clientEndPoint.setLastUpdated(Timestamp.from(Instant.now()));
                     clientEndPoint.setNotificationProtocolType(
-                            outboundServiceConfiguration.getNotificationProtocolType());
-                    clientEndPoint.setPipelineFunctionType(
-                            outboundServiceConfiguration.getPipelineFunctionType());
-
+                            nodeEndPointConfig.getNetworkPipelineConfig().getProtocolConfig()
+                            .getNotificationProtocolType());
                     
                     nodePipelineClientList.add((NodePipelineClient) clientEndPoint.configureAsPipeline(c));
                 }

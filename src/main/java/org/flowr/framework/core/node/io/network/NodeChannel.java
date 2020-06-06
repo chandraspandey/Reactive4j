@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.node.io.endpoint.NodeConfig;
 import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
+import org.flowr.framework.core.node.io.flow.protocol.FlowSocketChannel;
 
 public interface NodeChannel extends NodeChannelLifeCycle{
 
@@ -49,6 +50,8 @@ public interface NodeChannel extends NodeChannelLifeCycle{
     NodeConfig getNodeConfig();
     
     NetworkGroup getNetworkGroup();
+    
+    FlowSocketChannel getSocketChannel(ChannelFlowType channelFlowType);
 
     static NodeChannelSocketOption getNodeChannelSocketOption() {
         

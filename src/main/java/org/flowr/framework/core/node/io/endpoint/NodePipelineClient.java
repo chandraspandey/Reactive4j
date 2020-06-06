@@ -279,6 +279,28 @@ public class NodePipelineClient extends AbstractPipelineComponent implements Run
         }
         return channelState;
     }
+    
+    @Override
+    public NetworkClientSocketChannel getSocketChannel(ChannelFlowType channelFlowType) {
+
+        NetworkClientSocketChannel socketChannel = null;
+        
+        switch(channelFlowType) {
+        
+            case INBOUND:{
+                
+                socketChannel = inSocketChannel;
+                break;
+            }case OUTBOUND:{
+                
+                socketChannel = outSocketChannel;
+                break;
+            }default:{
+                break;
+            }
+        }
+        return socketChannel;
+    }
 
     @Override
     public NetworkGroupStatus close()  {

@@ -9,7 +9,6 @@
 package org.flowr.framework.core.app;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.concurrent.Flow.Subscriber;
 
 import org.apache.log4j.Logger;
@@ -56,11 +55,11 @@ public abstract class AbstractNodePipelineManager extends AbstractNodeBusExecuto
                 fromClient.getChannelStatus(ChannelFlowType.OUTBOUND) == ChannelStatus.CONNECTED 
         ) {
         
-            fromClient.getNodeConfig().getOut().add(new NetworkByteBuffer(ByteBuffer.wrap(
-                        "ECHO".getBytes(Charset.defaultCharset()))));
+            
+            fromClient.getNodeConfig().getOut().add(new NetworkByteBuffer(ByteBuffer.wrap(in)));
             fromClient.writeToNetwork();            
             ByteBuffer buffer = toServer.readFromNetwork();     
-            
+            buffer.flip();
             out = new byte[buffer.limit()];
             
             buffer.get(out);
@@ -83,12 +82,11 @@ public abstract class AbstractNodePipelineManager extends AbstractNodeBusExecuto
                 fromServer.getChannelStatus(ChannelFlowType.OUTBOUND) == ChannelStatus.CONNECTED && 
                 toClient.getChannelStatus(ChannelFlowType.INBOUND) == ChannelStatus.CONNECTED 
         ) {
-            
-            fromServer.getNodeConfig().getIn().add(new NetworkByteBuffer(ByteBuffer.wrap("ECHO".getBytes(
-                    Charset.defaultCharset()))));
+                        
+            fromServer.getNodeConfig().getIn().add(new NetworkByteBuffer(ByteBuffer.wrap(in)));
             
             ByteBuffer buffer = toClient.readFromNetwork();         
-    
+            buffer.flip();
             out = new byte[buffer.limit()];
             
             buffer.get(out);            

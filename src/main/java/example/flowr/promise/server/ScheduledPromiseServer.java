@@ -133,57 +133,37 @@ public class ScheduledPromiseServer implements PromiseTypeServer{
     @Override
     public Scale invokeForProgress(String acknowledgmentIdentifier) throws PromiseException {
 
-        ScheduledProgressScale scale = null;
+        ScheduledProgressScale scale = (ScheduledProgressScale) buildProgressScale(promisableType,increment(20.0)); 
+
+        scale.setPriorityScale(new PriorityScale(Priority.LOW, 25));
+        scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
+        scale.setPromiseState(PromiseState.ASSURED);
+        scale.setPromiseStatus(PromiseStatus.PROCESSING);    
+        scale.setAcknowledgmentIdentifier(acknowledgmentIdentifier);
+
         
-        if(!isDeferred()){
-            
-            scale = (ScheduledProgressScale) buildProgressScale(promisableType,increment(20.0));  
-            scale.setDeferredTimestamp(defer());
-            scale.setPriorityScale(new PriorityScale(Priority.LOW, 25));
-            scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
-                        
-            this.setDeferred(true);
-            
-            Logger.getRootLogger().info("ScheduledPromiseServer : Execution scheduledTimestamp at  : "+
-                    scheduledTimestamp); 
-        
-        }
-        
-        if(scale != null && isDeferred() && artificialNow < 80.0){
-            
-            scale = (ScheduledProgressScale) buildProgressScale(promisableType,increment(20.0));  
-            
-            scale.setScheduleStatus(ScheduleStatus.DEFFERED);
-            scale.setPromiseState(PromiseState.ASSURED);
-            scale.setPromiseStatus(PromiseStatus.INITIATED);
-            scale.setPriorityScale(new PriorityScale(Priority.LOW, 25));
-            scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
-            
-            isDeferred = false;
-        }else{
-            
-            
-            if(artificialNow < 100.0){
+        if(isDeferred()){            
+
+            if(artificialNow < 100) {
                 
-                scale = (ScheduledProgressScale) buildProgressScale(promisableType,increment(20.0)); 
-                
-                scale.setPromiseState(PromiseState.ASSURED);
-                scale.setPromiseStatus(PromiseStatus.PROCESSING);
-                scale.setPriorityScale(new PriorityScale(Priority.LOW, 25));
-                scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
-                
+                scale.setScheduleStatus(ScheduleStatus.DEFFERED); 
             }else{
-                scale = (ScheduledProgressScale) buildProgressScale(promisableType,artificialNow); 
                 scale.setPromiseState(PromiseState.FULFILLED);
                 scale.setPromiseStatus(PromiseStatus.COMPLETED);    
-                scale.setScheduleStatus(ScheduleStatus.OVER);
-                scale.setPriorityScale(new PriorityScale(Priority.HIGH, 75));
+                scale.setScheduleStatus(ScheduleStatus.OVER); 
+                scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
                 scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
+                isDeferred = false;  
             }
-            
-        }
-    
-        scale.setAcknowledgmentIdentifier(acknowledgmentIdentifier);
+        }else {
+                
+            scale.setScheduleStatus(ScheduleStatus.SCHEDULED); 
+            scale.setDeferredTimestamp(defer());
+            setDeferred(true);
+            Logger.getRootLogger().info("BusinessScheduledPromiseServer : Execution scheduledTimestamp at  : "+
+                    scheduledTimestamp); 
+         }
+
         
         Logger.getRootLogger().info("ScheduledPromiseServer : invokeForProgress : "+scale);
         
@@ -200,13 +180,12 @@ public class ScheduledPromiseServer implements PromiseTypeServer{
     @Override
     public ScheduledPromiseMockResponse invokeWhenComplete(String acknowledgmentIdentifier) throws PromiseException{
         
-        try {
-            Thread.sleep(artificialDelay);
-        } catch (InterruptedException e) {
-            Logger.getRootLogger().error(e);
-            Thread.currentThread().interrupt();
-            throw new PromiseException(ErrorMap.ERR_CONFIG, e.getMessage(),e);
-        }
+        ScheduledProgressScale scale = (ScheduledProgressScale) buildProgressScale(promisableType,100);
+        scale.setPromiseState(PromiseState.FULFILLED);
+        scale.setPromiseStatus(PromiseStatus.COMPLETED);    
+        scale.setPriorityScale(new PriorityScale(Priority.HIGH, 25));
+        scale.setSeverityScale(new SeverityScale(Severity.HIGH,25));
+        scale.setScheduleStatus(ScheduleStatus.OVER);   
   
         Logger.getRootLogger().info("ScheduledPromiseServer : invokeWhenComplete : "+
                 new ScheduledPromiseMockResponse());
@@ -226,7 +205,8 @@ public class ScheduledPromiseServer implements PromiseTypeServer{
         ScheduledProgressScale scale = (ScheduledProgressScale) 
                 buildProgressScale(promisableType,increment(20.0));
         scale.acceptIfApplicable(requestScale);
-        scale.setPromiseState(PromiseState.NEGOTIATED);
+        scale.setPromiseState(PromiseState.NEGOTIATED);        
+        scale.setPromiseStatus(PromiseStatus.REGISTERED);
         scale.setPriorityScale(new PriorityScale(Priority.HIGH, 75));
         scale.setSeverityScale(new SeverityScale(Severity.LOW,25));
         isNegotiated = true;

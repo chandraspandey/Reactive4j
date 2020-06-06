@@ -214,6 +214,8 @@ public class PhasedPromiseHandler implements PhasedPromise{
         processHandler.publishProcessEvent(EventType.SERVER,Context.getProcessLifecycleContext(serverIdentifier, 
                 PromiseServerState.COMPLETE,PromiseServerStatus.RUNNING, snapshotScale.getSubscriptionClientId(),
                 this.getClass().getName()));
+        
+        publishClientEvent(EventType.CLIENT,promiseResponse.getProgressScale());
                 
         if(promiseRequest.isTimelineRequired()){        
             

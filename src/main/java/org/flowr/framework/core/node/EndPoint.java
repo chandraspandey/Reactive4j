@@ -11,9 +11,7 @@ package org.flowr.framework.core.node;
 import java.sql.Timestamp;
 
 import org.flowr.framework.core.config.ServiceConfiguration;
-import org.flowr.framework.core.event.pipeline.Pipeline.PipelineFunctionType;
 import org.flowr.framework.core.node.io.flow.ByteEnumerableType;
-import org.flowr.framework.core.notification.Notification.NotificationProtocolType;
 
 public interface EndPoint {
 
@@ -79,17 +77,9 @@ public interface EndPoint {
         }
     }
     
-    void setNotificationProtocolType(NotificationProtocolType notificationProtocolType);
-    
-    NotificationProtocolType getNotificationProtocolType();
-    
     EndPointStatus getEndPointStatus();
     
     ServiceConfiguration getServiceConfiguration();
     
     Timestamp getLastUpdated();
-
-    PipelineFunctionType getPipelineFunctionType();
-
-    void setPipelineFunctionType(PipelineFunctionType pipelineFunctionType);
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.flowr.framework.core.config.Configuration.ConfigurationType;
-import org.flowr.framework.core.config.OperationConfig;
+import org.flowr.framework.core.config.Configuration.OperationConfig;
 import org.flowr.framework.core.config.ServiceConfiguration;
 import org.flowr.framework.core.exception.ConfigurationException;
 import org.flowr.framework.core.model.Model.RequestModel;
